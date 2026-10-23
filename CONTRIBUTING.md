@@ -74,13 +74,14 @@ This appends a verifiable sign-off line:
 Signed-off-by: Your Name <your.email@example.com>
 ```
 
-### 2. Email Privacy Advisory (Should your email be redacted?)
-* **Public Email:** If you want recruiters, maintainers, and community members to reach you directly, you may use your standard public email address (e.g. `your.name@domain.com`).
-* **Privacy Alias (Recommended if you want spam protection):** To avoid web scrapers indexing your personal email address from public markdown files, you may use your **GitHub No-Reply Email**:
-  ```text
-  <username>@users.noreply.github.com
-  ```
-  You can find your private GitHub address under [GitHub Settings > Emails > Keep my email addresses private](https://github.com/settings/emails).
+### 2. Standard Email Practice: GitHub Privacy Alias (Recommended)
+Following standard open-source industry practice and to protect community members against automated web scrapers and spambots, we recommend signing off with your **GitHub Privacy No-Reply Email**:
+```text
+<username>@users.noreply.github.com
+```
+You can find your private GitHub address under [GitHub Settings > Emails > Keep my email addresses private](https://github.com/settings/emails).
+
+For direct professional networking, we encourage contributors to link their **LinkedIn Profile** or **Google Developer Profile** instead of exposing personal mailboxes. Standard public emails are also accepted if preferred.
 
 ### 3. Professional Profiles (LinkedIn & Google Developer)
 To showcase your cloud and AI engineering credentials, you are encouraged to link:

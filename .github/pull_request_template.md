@@ -21,15 +21,16 @@
 ## ✍️ Contributor Sign-Off
 
 <!--
-Privacy Advisory:
-- If you prefer not to expose your personal email to web scrapers, you may use your GitHub privacy email (<username>@users.noreply.github.com).
-- Providing LinkedIn or Google Developer profiles is optional but encouraged for professional attribution.
+Standard Sign-Off Practice:
+- To protect your personal mailbox from web scrapers, we recommend your GitHub Privacy Alias (<username>@users.noreply.github.com).
+- Providing LinkedIn or Google Developer profiles is optional but strongly encouraged for professional attribution.
 -->
 
 - **Full Name:** 
-- **Email / Privacy Alias:** 
+- **GitHub Privacy Email (or Contact Email):** `<username>@users.noreply.github.com`
 - **LinkedIn Profile:** *(Optional)* 
 - **Google Developer Profile:** *(Optional)* 
 - **Added to `CONTRIBUTORS.md`:** [ ] Yes
 
 By submitting this pull request, I certify that this contribution adheres to the **Developer Certificate of Origin (DCO)** and is licensed under the Apache-2.0 License.
+
