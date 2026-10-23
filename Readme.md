@@ -410,40 +410,37 @@ If I had to pick one concrete stack today, I'd use:
 - **MCP servers:** filesystem, git, fetch, custom memory bridge
 
 ## Agent skills, rules, safety and content moderation
-Agent skills are the building blocks of agent capabilities, but they require a rigorous internal verification and approval process by Google teams to ensure quality, security, and compliance. We do not accept direct contributions to the skill repository from external contributors due to the sensitive nature of these components and the need for a high level of technical accuracy and security assurance.
+Agent skills are the building blocks of agent capabilities. They require a rigorous verification and approval process to ensure quality, security, and architectural integrity.
 
-Decentralized location for all skills that would be used by the agent, with a clear specification for how they should be structured and documented. This allows for consistent development and maintenance of skills across different agent teams/orchestrations and products within cloud service providers (CSPs), across different domains and use cases.
+A structured catalog for all skills used by autonomous agents provides a clear specification for how they should be structured and documented. This allows for consistent development and maintenance of skills across different agent teams, orchestrations, and cloud service providers (CSPs).
 
-```treetable
-- skills/
-  - csp/
-    - gcp/
-      - skills/
-    - azure/
-      - skills/
-    - aws/
-      - skills/
-  - Programming/
-    - python/
-      - skills/
-    - javascript/
-      - skills/
-    - go/
-      - skills/
-    - java/
-      - skills/
-  - DevOps/
-    - kubernetes/
-      - skills/
-    - docker/
-      - skills/
-    - ci-cd/
-      - skills/
-  - DataScience/
-    - ml/
-      - skills/
-    - data-analysis/
-      - skills/
+```text
+skills/
+├── csp/                        # Cloud Service Providers
+│   ├── aws/
+│   ├── azure/
+│   └── gcp/
+├── programming/                # Language-specific idiomatic patterns & testing
+│   ├── dart/
+│   ├── python/
+│   ├── javascript/
+│   ├── go/
+│   └── java/
+├── devops/                     # Infrastructure & Continuous Delivery
+│   ├── iac/                    # Terraform, OpenTofu, Pulumi
+│   ├── kubernetes/             # Cluster operations & manifests
+│   ├── docker/                 # Container hardening & multi-stage builds
+│   ├── ci-cd/                  # GitHub Actions, ArgoCD GitOps
+│   └── observability/          # OpenTelemetry, PromQL, Golden Signals
+├── security/                   # Enterprise Governance & Hardening
+│   ├── compliance/             # CIS Benchmarks, SOC 2, NIST
+│   ├── iam-least-privilege/    # Zero trust & role boundaries
+│   └── secret-management/      # Vault, KMS, secret rotation
+└── data-science/               # Data & Machine Learning Operations
+    ├── mlops/                  # Model serving & pipeline orchestration
+    └── data-analysis/          # Data warehouse optimization & notebooks
 ```
 
-**However, we welcome your feedback and suggestions for improving the skills. If you find any issues, have ideas for new skills, or want to share your remixes, please let us know through the issue tracker. Your input is invaluable in helping us enhance the quality and coverage of these skills for the entire community.**
+For full details on authoring skills, refer to the [Skills Catalog Documentation](./skills/README.md).
+
+**We welcome community feedback, RFCs, and skill contributions. If you find any issues, have ideas for new skills, or want to share improvements, please check [CONTRIBUTING.md](./CONTRIBUTING.md).**
