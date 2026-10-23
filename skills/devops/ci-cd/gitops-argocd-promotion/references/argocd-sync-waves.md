@@ -28,3 +28,4 @@ spec:
           image: app-migrator:sha-12345
       restartPolicy: Never
 ```
+

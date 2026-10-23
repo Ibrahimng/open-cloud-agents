@@ -26,3 +26,4 @@ def test_production_flag_disabled(monkeypatch):
     monkeypatch.setenv("DEBUG", "true")
     assert is_debug_mode() is True
 ```
+

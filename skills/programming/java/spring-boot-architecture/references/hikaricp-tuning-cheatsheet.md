@@ -20,3 +20,4 @@ spring:
       connection-timeout: 20000   # 20 seconds
       leak-detection-threshold: 5000 # Logs warning if thread holds connection > 5 seconds
 ```
+

@@ -14,3 +14,4 @@
 1. Never execute `USER root` in the final stage.
 2. Never store API keys in `ENV` instructions (they remain in image layer history).
 3. Always add a `.dockerignore` excluding `.git`, `node_modules`, `.env*`, and build caches.
+

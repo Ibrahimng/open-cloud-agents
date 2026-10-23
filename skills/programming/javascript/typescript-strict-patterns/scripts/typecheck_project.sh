@@ -17,3 +17,4 @@ else
 fi
 
 echo "[PASS] TypeScript compilation check passed with zero type errors."
+

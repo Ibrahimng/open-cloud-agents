@@ -18,3 +18,4 @@ When serializing encrypted payloads to storage:
 └─────────────────┴──────────────┴──────────────────┴──────────────┘
 ```
 - **AES-GCM (Galois/Counter Mode)** provides both confidentiality and authenticated integrity. If the ciphertext or nonce is modified in transit, decryption will fail immediately.
+

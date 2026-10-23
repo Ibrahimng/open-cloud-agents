@@ -28,3 +28,4 @@ All error responses should conform to RFC 7807 (Problem Details):
   "instance": "/v1/users/usr_123"
 }
 ```
+

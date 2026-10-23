@@ -31,3 +31,4 @@ fi
 
 echo "[PASS] Successfully updated $KUSTOMIZE_FILE to tag $NEW_TAG."
 echo "Review git diff and commit with: git commit -m 'chore(gitops): promote $TARGET_ENV to $NEW_TAG'"
+

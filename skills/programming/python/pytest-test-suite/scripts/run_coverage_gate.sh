@@ -13,3 +13,4 @@ fi
 
 pytest --cov=src --cov-report=term-missing --cov-fail-under="$MIN_COVERAGE"
 echo "[PASS] Test suite and coverage gate passed successfully."
+

@@ -19,3 +19,4 @@ When an agent extracts a novel rule or edge case from a session transcript, the 
 ```text
 - [Date: 2026-10-23] [Scope: aws/rds-postgres] [Severity: BLOCKER] Never modify parameter group family on live Aurora clusters in-place; triggers immediate cluster recreation and 40+ min outage.
 ```
+

@@ -11,3 +11,4 @@
 - [ ] **Resource Limits:** Both `requests` and `limits` defined for CPU and memory.
 - [ ] **Pod Anti-Affinity:** Soft anti-affinity (`preferredDuringSchedulingIgnoredDuringExecution`) across topology zones to prevent co-locating replicas on a single worker node.
 - [ ] **values.schema.json Present:** Strictly enforces types for all `values.yaml` inputs.
+

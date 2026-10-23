@@ -27,3 +27,4 @@
 | **`143`** | `SIGTERM` | Graceful termination signal sent during pod eviction or rollout. | Normal during deploy; if unexpected, check node autoscaler / spot termination. |
 | **`1`** | General Error | Application syntax error, uncaught exception, or missing env var. | Check `kubectl logs <pod> --previous`. |
 | **`2`** | Misuse of Shell | Missing command executable or invalid shell arguments in `command: []`. | Verify entrypoint binary exists in the container image. |
+

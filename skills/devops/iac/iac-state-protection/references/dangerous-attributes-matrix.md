@@ -41,3 +41,4 @@ This matrix documents the exact resource attributes across AWS, Azure, and Googl
 | `google_sql_database_instance` | `database_version` (major) | **RECREATES DB** | In-place major version upgrade requires `gcloud sql instances patch --upgrade-database-version`. |
 | `google_compute_subnetwork` | `ip_cidr_range` (shrink) | **FAILS / DESTROYS** | Subnets can only be expanded (`/24` $\rightarrow$ `/23`), never shrunk. |
 | `google_storage_bucket` | `name` | **DELETES BUCKET** | Globally unique and immutable. |
+

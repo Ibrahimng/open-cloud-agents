@@ -21,3 +21,4 @@
   `sum(rate(container_cpu_cfs_throttled_periods_total[5m])) / sum(rate(container_cpu_cfs_periods_total[5m])) * 100`
 - **OOM Kill Count:**
   `sum(kube_pod_container_status_terminated_reason{reason="OOMKilled"}) by (namespace, pod)`
+

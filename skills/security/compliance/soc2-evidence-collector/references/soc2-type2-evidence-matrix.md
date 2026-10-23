@@ -10,3 +10,4 @@
 | **CC6.7** | Data Transmission Encryption | ALB, CloudFront, and Ingress TLS configuration exports enforcing minimum TLS 1.2 with HSTS. | 12 Months |
 | **CC7.1** | Infrastructure Monitoring | Alert rule definitions in Prometheus / CloudWatch and on-call escalation policies (PagerDuty/Opsgenie). | 12 Months |
 | **CC8.1** | Change Management | Git commit history, pull request approvals, peer reviews, and automated CI test results prior to prod merge. | 12 Months |
+

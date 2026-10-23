@@ -39,3 +39,4 @@ else
   echo "[PASS] All active cloud checks passed baseline CIS requirements."
   exit 0
 fi
+

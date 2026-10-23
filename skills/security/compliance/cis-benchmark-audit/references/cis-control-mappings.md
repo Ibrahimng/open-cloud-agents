@@ -9,3 +9,4 @@
 | **Networking** | Section 5.1–5.4 | Section 6.1–6.6 | Section 3.1–3.8 | Disallow 0.0.0.0/0 on ports 22 (SSH) and 3389 (RDP). |
 | **Storage Security** | Section 2.1.1–2.1.5 | Section 3.1–3.8 | Section 5.1–5.2 | Block Public Access enabled at account & bucket level; TLS 1.2+ mandatory. |
 | **Database Encryption** | Section 2.3.1 | Section 4.1–4.4 | Section 6.1–6.3 | Mandatory storage encryption at rest with customer-managed keys (CMEK). |
+

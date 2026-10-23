@@ -26,3 +26,4 @@ Revoke token via Slack Web API:
 ```bash
 curl -X POST https://slack.com/api/auth.revoke -d "token=<LEAKED_SLACK_TOKEN>"
 ```
+

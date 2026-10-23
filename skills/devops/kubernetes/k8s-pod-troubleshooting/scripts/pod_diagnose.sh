@@ -32,3 +32,4 @@ kubectl logs "$POD_NAME" -n "$NAMESPACE" --tail=30 2>&1 || true
 
 echo "========================================================"
 echo "Diagnostic collection complete."
+

@@ -38,3 +38,4 @@ In Microsoft Entra ID (Azure AD), configure a Federated Credential on the target
   - `google.subject` = `assertion.sub`
   - `attribute.repository` = `assertion.repository`
   - `attribute.actor` = `assertion.actor`
+

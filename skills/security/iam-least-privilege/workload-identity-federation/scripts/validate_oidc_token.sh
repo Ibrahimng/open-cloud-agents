@@ -24,3 +24,4 @@ fi
 echo "Decoded OIDC Token Claims:"
 echo "=========================================="
 echo "$PAYLOAD" | base64 -d 2>/dev/null | jq . || echo "$PAYLOAD" | base64 -D 2>/dev/null | jq .
+

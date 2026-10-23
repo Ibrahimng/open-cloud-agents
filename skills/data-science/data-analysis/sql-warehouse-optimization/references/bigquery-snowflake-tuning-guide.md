@@ -18,3 +18,4 @@
 - **Repeated Subqueries:** Use Common Table Expressions (CTEs) or temporary tables rather than repeating the same subquery across multiple joins.
 - **`COUNT(DISTINCT)` on High Cardinality:** Replace with HyperLogLog++ approximate aggregation:
   `APPROX_COUNT_DISTINCT(user_id)` (Reduces memory pressure by 90%+ with 99% accuracy).
+

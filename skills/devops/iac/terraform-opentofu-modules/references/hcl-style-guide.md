@@ -38,3 +38,4 @@ output "database_password" {
   sensitive   = true
 }
 ```
+

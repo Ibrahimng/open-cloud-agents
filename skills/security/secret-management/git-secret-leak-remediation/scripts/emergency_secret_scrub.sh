@@ -30,3 +30,4 @@ git-filter-repo --replace-text "$TMP_FILE" --force
 rm -f "$TMP_FILE"
 echo "[PASS] Secret string successfully scrubbed from all commits and trees."
 echo "To push scrubbed history: git push origin --force --all && git push origin --force --tags"
+

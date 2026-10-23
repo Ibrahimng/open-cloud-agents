@@ -35,3 +35,4 @@ const validEndpoint: Endpoint = 'GET /v1/users'; // Valid
   }
 }
 ```
+

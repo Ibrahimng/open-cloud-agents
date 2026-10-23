@@ -22,3 +22,4 @@
 | `aud` | `sts.amazonaws.com` (or Azure Client ID) | Target audience |
 | `sub` | `repo:<org>/<repo>:ref:refs/heads/main` | Subject repository and branch filter |
 | `job_workflow_ref` | `org/repo/.github/workflows/deploy.yml@refs/heads/main` | Workflow execution provenance |
+

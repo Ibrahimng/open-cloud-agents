@@ -22,3 +22,4 @@
   - `rpc.service`: `billing.v1.PaymentService`
   - `rpc.method`: `ProcessPayment`
   - `rpc.grpc.status_code`: `0` (OK), `14` (UNAVAILABLE)
+
