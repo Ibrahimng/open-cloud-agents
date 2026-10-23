@@ -39,10 +39,15 @@ Have an idea for a specialized agent (e.g., `mlops-engineer`, `database-reliabil
    git checkout -b feat/my-new-agent
    ```
 2. **Make Your Changes** following our engineering standards (see [`docs/engineering-standards.md`](./docs/engineering-standards.md)).
-3. **Run the Local Validation Suite:**
+3. **Run the Local Validation Suite & CI (`act`):**
    Before pushing, verify all skill specs, permissions, and markdown links pass:
    ```bash
+   # Option A: Fast lightweight check (Python):
    python3 scripts/ci/validate_repo.py
+   python3 scripts/agents/agent_pipeline.py --validate
+
+   # Option B: Run the full GitHub Actions CI suite locally in Docker with act:
+   act --container-architecture linux/amd64
    ```
 4. **Guardrail Checklist:**
    - [ ] No hardcoded secrets, keys, or credentials (verified by Gitleaks in CI).

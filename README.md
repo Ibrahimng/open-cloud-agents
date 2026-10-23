@@ -231,6 +231,22 @@ We actively welcome and review pull requests from everyone:
 * **Add New Skills & Automation Scripts:** Contribute verified Python/Bash scripts and reference documentation.
 * **Harden Prompt Guardrails:** Help eliminate subtle hallucinations, destructive commands, and cloud quota edge cases.
 
+### 🧪 Local Testing with `act`
+
+Before opening a pull request, you can run the exact GitHub Actions CI suite locally on your machine using [`act`](https://github.com/nektos/act):
+
+```bash
+# 1. Install act (if not already installed)
+brew install act
+
+# 2. Run the complete CI suite locally inside Docker:
+act --container-architecture linux/amd64
+
+# 3. Or run the lightweight Python validators directly:
+python3 scripts/ci/validate_repo.py
+python3 scripts/agents/agent_pipeline.py --validate
+```
+
 Please review our [**Contributing Guide (CONTRIBUTING.md)**](./CONTRIBUTING.md) and [**Engineering Standards**](./docs/engineering-standards.md) to get started!
 
 ---
