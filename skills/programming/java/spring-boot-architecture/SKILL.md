@@ -91,6 +91,6 @@ public class OrderService {
 
 When the agent triages a connection exhaustion outage:
 1. **Isolate Architectural Flaw:** Detect `@Transactional` wrapping external network or messaging calls.
-2. **Auto-Generate Static Analysis Rule:** Add an architectural check in [`agents/7-agent-master-suite/devsecops-reviewer.md`](../../../agents/7-agent-master-suite/devsecops-reviewer.md) to flag `@Transactional` on methods calling external REST/gRPC clients.
+2. **Auto-Generate Static Analysis Rule:** Add an architectural check in [`agents/7-agent-master-suite/devsecops-reviewer.md`](../../../../agents/7-agent-master-suite/devsecops-reviewer.md) to flag `@Transactional` on methods calling external REST/gRPC clients.
 3. **Update Memory:** Record the HikariCP `leak-detection-threshold` debugging trick in `AGENTS.md` under `## Learned JVM Runtime Facts`.
 

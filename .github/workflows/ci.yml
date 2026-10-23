@@ -1,0 +1,65 @@
+name: CI Guardrails
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-repo:
+    name: Repository Hygiene & Skill Specs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Repository Validator
+        run: python3 scripts/ci/validate_repo.py
+
+  shell-lint:
+    name: Shell Script Syntax & Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck on all Scripts
+        run: |
+          echo "Linting all shell scripts..."
+          find . -name "*.sh" -not -path "*/.*" -not -path "./ai_brain/*" | while read -r script; do
+            echo "Checking: $script"
+            shellcheck -x "$script"
+          done
+
+  secret-scan:
+    name: Secret Leak Detection
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Gitleaks
+        run: |
+          GITLEAKS_VERSION="8.18.2"
+          wget -q "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          tar -xzf "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          sudo mv gitleaks /usr/local/bin/
+
+      - name: Run Gitleaks Audit
+        run: |
+          gitleaks detect --source . --verbose --redact

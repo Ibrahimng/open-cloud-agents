@@ -39,12 +39,18 @@ Have an idea for a specialized agent (e.g., `mlops-engineer`, `database-reliabil
    git checkout -b feat/my-new-agent
    ```
 2. **Make Your Changes** following our engineering standards (see [`docs/engineering-standards.md`](./docs/engineering-standards.md)).
-3. **Guardrail Checklist:**
-   - [ ] No hardcoded secrets, keys, or credentials.
-   - [ ] Preserves non-destructive defaults (e.g., no raw drops or forced replacements without confirmation).
-   - [ ] Markdown links and relative paths are verified.
-   - [ ] Follows conventional commits (`feat:`, `fix:`, `docs:`, `refactor:`).
-4. **Submit a Pull Request** with a concise description of your changes, the rationale, and any sample outputs or tests.
+3. **Run the Local Validation Suite:**
+   Before pushing, verify all skill specs, permissions, and markdown links pass:
+   ```bash
+   python3 scripts/ci/validate_repo.py
+   ```
+4. **Guardrail Checklist:**
+   - [ ] No hardcoded secrets, keys, or credentials (verified by Gitleaks in CI).
+   - [ ] All shell scripts have executable bits (`chmod +x scripts/*.sh`).
+   - [ ] Skill specs have valid YAML frontmatter (`name:`, `description:`).
+   - [ ] Internal markdown links resolve properly without broken relative paths.
+   - [ ] Follows conventional commits (`feat:`, `fix:`, `docs:`, `chore:`).
+5. **Submit a Pull Request** with a concise description of your changes, the rationale, and any sample outputs or tests.
 
 ---
 
