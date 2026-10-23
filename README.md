@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="./docs/images/social-preview.png" alt="Open Cloud Agents - Autonomous Multi-Agent Cloud Engineering" width="100%" />
+
 # ☁️ Open Cloud Agents
 
 ### *Autonomous, Well-Architected Cloud Engineering for Any AI Agent or IDE*
