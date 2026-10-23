@@ -25,3 +25,4 @@ skills/programming/
 2. **Automated Test Parity**: Every new feature or bug fix must include automated test coverage (unit or integration).
 3. **Structured Concurrency**: Prevent goroutine/thread/promise leaks by binding concurrent operations to cancellation contexts (`context.Context`, `asyncio.TaskGroup`, Project Loom scopes).
 4. **Zero Hardcoded Secrets**: Secrets and environment configurations must be injected via environment variables or secret managers, never embedded in source code.
+
