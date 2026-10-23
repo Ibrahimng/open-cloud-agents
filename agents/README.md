@@ -64,3 +64,27 @@ Every formal pillar of the **AWS, Google Cloud, and Azure Well-Architected Frame
 | **Pillar 5: Continuous Delivery** | [`gitops-release-manager.md`](./7-agent-master-suite/gitops-release-manager.md) | **Release & GitOps Delivery Specialist** | Multi-environment promotion (`dev` ➔ `uat` ➔ `prod`) via ArgoCD/Kargo/Flux/Harness, progressive Canary rollouts, mandatory human sign-off gates. |
 | **Pillar 6: Reliability & Performance** | [`sre-reliability-engineer.md`](./7-agent-master-suite/sre-reliability-engineer.md) | **Site Reliability & Incident Commander** | Four Golden Signals, SLI/SLO/SLA burn-rate alerting, client endpoint RCA (`502/503/504`), instant downtime containment, blameless PIRs. |
 | **Pillar 7: Cost Optimization (FinOps)** | [`finops-cloud-cost-optimizer.md`](./7-agent-master-suite/finops-cloud-cost-optimizer.md) | **Cloud Financial Engineer (FinOps)** | Idle waste elimination, container/VM rightsizing, storage tiering lifecycles (S3/Glacier), NAT gateway cost traps, Savings Plans/Spot modeling. |
+
+---
+
+### 🔄 Multi-Agent Orchestration Pipeline
+
+The 7 agents operate as an integrated delivery pipeline with structured handoffs. You can execute or simulate this pipeline locally and in CI:
+
+#### 1. Local CLI Pipeline Runner
+Execute the 6-stage handoff simulation on any architectural task:
+```bash
+# Validate all agent contracts, frontmatter, and token limits:
+python3 scripts/agents/agent_pipeline.py --validate
+
+# Run end-to-end multi-agent handoff pipeline:
+python3 scripts/agents/agent_pipeline.py --simulate
+
+# Run with a custom architectural scenario:
+python3 scripts/agents/agent_pipeline.py --task "Architect zero-downtime payments failover with Aurora Global Database"
+```
+
+#### 2. Automated GitHub Actions Pipeline (`.github/workflows/agents-pipeline.yml`)
+- **Agent Contract Validation:** Ensures every persona has explicit tool boundaries, clear non-goals, and fits within an 8,000-token context budget.
+- **Handoff Chain Simulation:** Validates that upstream outputs (ADRs, threat models, task plans) satisfy downstream agent inputs.
+- **Automated PR Auditor:** Analyzes incoming pull request diffs using the **DevSecOps Reviewer** persona to detect state-destruction traps and open ingress rules.

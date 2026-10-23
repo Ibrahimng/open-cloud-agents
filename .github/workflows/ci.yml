@@ -63,3 +63,4 @@ jobs:
       - name: Run Gitleaks Audit
         run: |
           gitleaks detect --source . --verbose --redact
+
