@@ -54,7 +54,9 @@ jobs:
           fi
 
       - name: Upload Pipeline Execution Trace Artifact
+        if: ${{ !env.ACT }}
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
           name: agent-execution-trace
           path: execution_trace.json
