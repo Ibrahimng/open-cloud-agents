@@ -36,3 +36,4 @@ FROM `analytics_prod.events_partitioned`
 WHERE event_timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
 GROUP BY 1;
 ```
+

@@ -30,3 +30,4 @@ done
 # Verify CloudTrail multi-region logging
 aws cloudtrail describe-trails --query 'trailList[*].[Name,IsMultiRegionTrail,KmsKeyId]' --output table
 ```
+

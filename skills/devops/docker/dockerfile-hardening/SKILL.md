@@ -52,3 +52,4 @@ Before pushing any image to a container registry, scan for CVEs:
 ```bash
 trivy image --severity HIGH,CRITICAL --exit-code 1 <image-name>:<tag>
 ```
+

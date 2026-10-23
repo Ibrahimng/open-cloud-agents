@@ -46,3 +46,4 @@ description: Transform overly broad wildcard IAM permissions (*:*) into precise,
 2. **Remove Write/Delete Privileges:** Isolate read operations (`Get*`, `List*`, `Describe*`) from mutation operations (`Put*`, `Create*`, `Delete*`).
 3. **Bind to Specific ARNs:** Replace `Resource: "*"` with exact resource ARNs.
 4. **Attach Security Conditions:** Enforce `aws:SecureTransport: true` (HTTPS only) and IP / VPC endpoint restriction condition keys.
+

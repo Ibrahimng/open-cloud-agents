@@ -57,3 +57,4 @@ kubectl debug -it <pod-name> -n <namespace> --image=curlimages/curl --target=<co
 ## Guardrails
 - Never execute destructive namespace deletions or force pod teardowns (`--grace-period=0 --force`) without confirming state persistence.
 - Do not blindly increase resource limits without checking for memory leaks via heap dumps or telemetry.
+

@@ -43,3 +43,4 @@ async def test_currency_conversion_async(mock_currency_service):
 ```bash
 pytest --cov=src --cov-report=term-missing --cov-fail-under=85
 ```
+

@@ -46,3 +46,4 @@ metadata:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/order-processor-pod-role
 ```
 The AWS SDK automatically retrieves temporary credentials via the mounted projected service account token.
+

@@ -47,3 +47,4 @@ def encrypt_payload(data: bytes, kms_key_id: str) -> dict:
         'nonce': nonce
     }
 ```
+

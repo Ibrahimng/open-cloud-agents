@@ -52,3 +52,4 @@ my-app/
   ```bash
   helm template test-release my-app/ | kubeconform -strict -summary
   ```
+

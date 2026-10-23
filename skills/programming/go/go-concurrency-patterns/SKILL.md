@@ -48,3 +48,4 @@ func fetchProfile(ctx context.Context, id string) error {
 - Never launch a goroutine without knowing how and when it terminates.
 - Always check `ctx.Done()` when reading/writing unbuffered channels or waiting on IO.
 - Always run the race detector in tests: `go test -race ./...`.
+

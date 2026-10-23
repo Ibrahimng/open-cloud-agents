@@ -53,3 +53,4 @@ spec:
 
 ## Guardrails
 - **Production Gating:** Never configure automatic auto-sync with automated pruning directly on production without an active Canary analysis or manual approval step.
+

@@ -36,3 +36,4 @@ Add Gitleaks pre-commit scanning to block secrets before commit creation:
 brew install gitleaks
 gitleaks detect --source . -v
 ```
+

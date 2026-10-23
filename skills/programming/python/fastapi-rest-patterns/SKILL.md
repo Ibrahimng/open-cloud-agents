@@ -49,3 +49,4 @@ async def create_user(
     user = await db.users.create(payload)
     return user
 ```
+

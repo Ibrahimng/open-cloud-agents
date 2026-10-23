@@ -46,3 +46,4 @@ def predict(request: PredictRequest):
 def health():
     return {"status": "ready"}
 ```
+
