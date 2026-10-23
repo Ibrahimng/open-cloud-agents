@@ -33,3 +33,4 @@ Every architectural recommendation and infrastructure configuration must adhere 
 ### 4. Operational Excellence & Reliability (Pillar 4)
 - **The Four Golden Signals:** All service designs must output telemetry for **Latency**, **Traffic**, **Errors**, and **Saturation**.
 - **SLI/SLO Alerting:** Alerts must be based on multi-window SLO burn rates rather than noisy static CPU spikes.
+

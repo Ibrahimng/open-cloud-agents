@@ -32,3 +32,4 @@ When applying a fix or implementing a feature:
 1. Target only the minimum required file(s).
 2. Validate that the targeted changes pass automated local tests.
 3. Generate clean, atomic git commits using Conventional Commits format (`feat:`, `fix:`, `refactor:`, `docs:`).
+

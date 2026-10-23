@@ -1,0 +1,3 @@
+# Gitleaks ignore file for documented mock Terraform examples in historical commits
+479a7b138149c39d17643e1da41e5746e3fc77a4:skills/csp/gcp/skills/alloydb-basics/references/iac-usage.md:hashicorp-tf-password:44
+479a7b138149c39d17643e1da41e5746e3fc77a4:skills/csp/gcp/skills/cloud-sql-basics/references/iac-usage.md:hashicorp-tf-password:35

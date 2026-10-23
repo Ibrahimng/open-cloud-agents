@@ -32,7 +32,7 @@ resource "google_sql_database" "database" {
 resource "google_sql_user" "users" {
   name     = "me"
   instance = google_sql_database_instance.default.name
-  password = "changeme"
+  password = var.db_password # Sourced from Secret Manager
 }
 ```
 

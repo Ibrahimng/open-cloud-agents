@@ -28,3 +28,4 @@ Whenever authenticating workloads:
 ### 3. Log Redaction & Telemetry Sanitization
 - Never print raw payload secrets, tokens, or PII into standard out, standard error, or application logs.
 - When generating logging interceptors or OpenTelemetry tracers, mandate regex sanitization for Authorization headers, cookies, and sensitive query parameters.
+

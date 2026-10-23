@@ -42,3 +42,4 @@ Rules represent **non-negotiable system invariants and behavioral guardrails** t
 - **Native Agent Runtimes (Antigravity / Gemini / Claude Code / Cline):** Automatically read and enforce [`AGENTS.md`](../AGENTS.md) at the repository root.
 - **Cursor / VS Code:** Configured via [`.cursorrules`](../.cursorrules) to reference the canonical `rules/` directory.
 - **CI Enforcement:** The automated GitHub Actions CI pipeline ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)) tests all commits against these rules.
+

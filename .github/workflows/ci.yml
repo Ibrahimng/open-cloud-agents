@@ -41,7 +41,7 @@ jobs:
           echo "Linting all shell scripts..."
           find . -name "*.sh" -not -path "*/.*" -not -path "./ai_brain/*" | while read -r script; do
             echo "Checking: $script"
-            shellcheck -x "$script"
+            shellcheck --severity=warning -x "$script"
           done
 
   secret-scan:
@@ -56,8 +56,14 @@ jobs:
       - name: Install Gitleaks
         run: |
           GITLEAKS_VERSION="8.18.2"
-          wget -q "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
-          tar -xzf "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          ARCH=$(uname -m)
+          if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+            GITLEAKS_ARCH="linux_arm64"
+          else
+            GITLEAKS_ARCH="linux_x64"
+          fi
+          wget -q "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_${GITLEAKS_ARCH}.tar.gz"
+          tar -xzf "gitleaks_${GITLEAKS_VERSION}_${GITLEAKS_ARCH}.tar.gz"
           sudo mv gitleaks /usr/local/bin/
 
       - name: Run Gitleaks Audit

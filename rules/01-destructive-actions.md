@@ -46,3 +46,4 @@ When a user explicitly asks to destroy or replace a resource:
 2. **Verify Backup:** Check for existing snapshots or state backups.
 3. **Present Warning:** Present an executive warning detailing the irreversible impact.
 4. **Await User Confirmation:** Do not proceed until the user explicitly responds with affirmative approval.
+

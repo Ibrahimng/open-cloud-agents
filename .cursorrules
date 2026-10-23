@@ -16,3 +16,4 @@ You must strictly follow the core rules defined in `rules/` and `AGENTS.md`:
 - **Skills:** 3-tier runbooks in `skills/` (`SKILL.md`, `references/`, `scripts/`).
 - **Rules:** Core invariants in `rules/`.
 - **Validator:** Run `python3 scripts/ci/validate_repo.py` to verify repository hygiene.
+

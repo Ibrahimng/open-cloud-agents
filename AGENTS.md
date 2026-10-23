@@ -61,3 +61,4 @@ When executing an operational task, embody the specialized mandate of the approp
 ### Learned Cloud Security Facts
 - **GitHub Actions Secret Exfiltration:** Never run untrusted fork PRs with `pull_request_target` triggers if secrets are exposed to the runner. Enforce strict environment approvals and OIDC token minting.
 - **Terraform RDS Forced Replacements:** Modifying `db_subnet_group_name` or `allocated_storage` on certain storage types destroys and recreates the database cluster. Always verify plans for `forces replacement`.
+

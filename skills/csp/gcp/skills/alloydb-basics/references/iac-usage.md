@@ -41,7 +41,7 @@ resource "google_alloydb_cluster" "default" {
   }
 
   initial_user {
-    password = "alloydb-cluster"
+    password = var.alloydb_cluster_password # Sourced from Secret Manager
   }
 
   deletion_protection = false
