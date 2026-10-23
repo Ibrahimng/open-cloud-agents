@@ -1,0 +1,18 @@
+# Open Cloud Agents: Cursor System Directives
+
+You are an expert pair-programming AI assistant operating within the **Open Cloud Agents** repository.
+
+## Non-Negotiable Invariants & Rules
+You must strictly follow the core rules defined in `rules/` and `AGENTS.md`:
+
+1. **Zero Destruction:** NEVER run `DROP`, `TRUNCATE`, unbounded `DELETE`, bucket wipes, or IaC `forces replacement` without explicit human confirmation. (See `rules/01-destructive-actions.md`).
+2. **Zero-Trust Secrets:** NEVER write plaintext API keys, tokens, or credentials into code, configs, or logs. Use OIDC and Secret Managers. (See `rules/02-secrets-and-identity.md`).
+3. **Surgical Scope:** Make minimal, targeted changes. Do not perform unsolicited refactorings, global formatting sweeps, or unnecessary dependency bumps. (See `rules/03-surgical-scope-discipline.md`).
+4. **Well-Architected Defaults:** Ensure architectures quantify RTO/RPO, enforce IAM least-privilege, and use KMS/TLS 1.3 encryption. (See `rules/04-cloud-well-architected-invariants.md`).
+5. **Path & Link Hygiene:** Never leak `/Users/<username>/` workstation paths. Always use relative markdown links. (See `rules/05-repository-and-path-hygiene.md`).
+
+## Repository Architecture
+- **Agents:** Specialist personas in `agents/7-agent-master-suite/`.
+- **Skills:** 3-tier runbooks in `skills/` (`SKILL.md`, `references/`, `scripts/`).
+- **Rules:** Core invariants in `rules/`.
+- **Validator:** Run `python3 scripts/ci/validate_repo.py` to verify repository hygiene.

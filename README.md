@@ -15,6 +15,7 @@ From High-Level Design (HLD) and threat modeling to surgical code fixes, progres
 
 [The Core Philosophy](#the-core-philosophy) •
 [The 7-Agent Master Suite](#the-7-agent-master-suite) •
+[Inviolable Rules](#inviolable-rules--operational-guardrails) •
 [How to Use with Any AI Agent / IDE](#how-to-consume-with-any-ai-agent-or-ide) •
 [Skills Catalog](#the-3-tier-enterprise-skills-ecosystem) •
 [Contributing](#community--contributing)
@@ -175,6 +176,22 @@ skills/<domain>/<tech>/<skill-name>/
 * **Security & Governance ([`skills/security/`](./skills/security/README.md)):** CIS Foundation audits, SOC 2 Type II evidence harvesting, IAM least-privilege synthesis, Workload Identity federation, emergency Git secret scrub runbooks, and KMS envelope encryption.
 * **Programming Languages ([`skills/programming/`](./skills/programming/README.md)):** Idiomatic patterns and automated test suites across **Dart** (11 skills), **Python** (FastAPI / pytest), **TypeScript/JavaScript** (strict types), **Go** (structured concurrency), and **Java** (Spring Boot / HikariCP).
 * **Continual Learning ([`skills/continual-learning/`](./skills/continual-learning/README.md)): Transcript mining loops and automated translation of SRE incident postmortems into pre-merge DevSecOps guardrails.
+
+---
+
+## 🛡️ Inviolable Rules & Operational Guardrails
+
+While **Agents** define cognitive personas and **Skills** provide operational runbooks, **Rules ([`rules/`](./rules/README.md))** define non-negotiable boundaries that protect production systems from AI-induced failure:
+
+| Rule | File | Mandate |
+|---|---|---|
+| **Zero Destruction** | [`rules/01-destructive-actions.md`](./rules/01-destructive-actions.md) | Bans `DROP`, `TRUNCATE`, bucket wipes, and IaC `forces replacement` without explicit human confirmation. |
+| **Zero-Trust Secrets** | [`rules/02-secrets-and-identity.md`](./rules/02-secrets-and-identity.md) | Prohibits hardcoded credentials, static long-lived keys, and unredacted logs. Mandates OIDC token exchange. |
+| **Surgical Scope** | [`rules/03-surgical-scope-discipline.md`](./rules/03-surgical-scope-discipline.md) | Banning unsolicited mass refactorings, global reformatting sweeps, and unsolicited dependency modifications. |
+| **Well-Architected Defaults** | [`rules/04-cloud-well-architected-invariants.md`](./rules/04-cloud-well-architected-invariants.md) | Mandates explicit RTO/RPO targets, multi-AZ/region redundancy, KMS envelope encryption, and IAM least privilege. |
+| **Path & Link Hygiene** | [`rules/05-repository-and-path-hygiene.md`](./rules/05-repository-and-path-hygiene.md) | Forbids leaking local workstation paths (`/Users/<username>/`) and enforces relative link resolution. |
+
+Universal system directives are consolidated in [**`AGENTS.md`**](./AGENTS.md) and [**`.cursorrules`**](./.cursorrules).
 
 ---
 

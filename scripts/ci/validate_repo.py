@@ -107,8 +107,9 @@ def check_markdown_links() -> list[str]:
                 try:
                     with open(path, "r", encoding="utf-8", errors="ignore") as fh:
                         content = fh.read()
-                    # Strip code blocks
+                    # Strip code blocks and inline code spans
                     content_clean = re.sub(r"```.*?```", "", content, flags=re.DOTALL)
+                    content_clean = re.sub(r"`[^`\n]+`", "", content_clean)
                     for m in link_pattern.finditer(content_clean):
                         target = m.group(2).strip()
                         # Ignore absolute external URLs, anchors, or pseudo-schemes
