@@ -1,0 +1,48 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# Local Personal / IDE Caches & Large Brain Artifacts
+ai_brain/
+.cursor/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment & Secrets (Never commit secrets)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.id_rsa
+*.secret
+
+# Logs & Diagnostics
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug-logs/
+
+# Build & Dependency Artifacts
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+.dart_tool/
+.packages
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
