@@ -247,7 +247,7 @@ python3 scripts/ci/validate_repo.py
 python3 scripts/agents/agent_pipeline.py --validate
 ```
 
-Please review our [**Contributing Guide (CONTRIBUTING.md)**](./CONTRIBUTING.md) and [**Engineering Standards**](./docs/engineering-standards.md) to get started!
+Please review our [**Contributing Guide (CONTRIBUTING.md)**](./CONTRIBUTING.md) and [**Engineering Standards**](./docs/engineering-standards.md) to get started, and meet the engineers behind this project in our [**Contributor Hall of Fame (CONTRIBUTORS.md)**](./CONTRIBUTORS.md)!
 
 ---
 

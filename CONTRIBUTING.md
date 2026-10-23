@@ -56,6 +56,39 @@ Have an idea for a specialized agent (e.g., `mlops-engineer`, `database-reliabil
    - [ ] Internal markdown links resolve properly without broken relative paths.
    - [ ] Follows conventional commits (`feat:`, `fix:`, `docs:`, `chore:`).
 5. **Submit a Pull Request** with a concise description of your changes, the rationale, and any sample outputs or tests.
+6. **Sign Off & Join the Roster:** Fill out the Contributor Sign-Off section in your PR and add your entry to [**`CONTRIBUTORS.md`**](./CONTRIBUTORS.md).
+
+---
+
+## ✍️ Contributor Sign-Off & Recognition
+
+We believe every contributor deserves public recognition for their work. When you contribute to Open Cloud Agents, you can sign off your contribution and join our [**Contributors Hall of Fame (CONTRIBUTORS.md)**](./CONTRIBUTORS.md).
+
+### 1. Developer Certificate of Origin (DCO) Sign-Off
+We enforce standard DCO sign-offs on all commits. You can automatically sign off commits using the `-s` flag:
+```bash
+git commit -s -m "feat(skills): add automated canary rollback verification script"
+```
+This appends a verifiable sign-off line:
+```text
+Signed-off-by: Your Name <your.email@example.com>
+```
+
+### 2. Email Privacy Advisory (Should your email be redacted?)
+* **Public Email:** If you want recruiters, maintainers, and community members to reach you directly, you may use your standard public email address (e.g. `your.name@domain.com`).
+* **Privacy Alias (Recommended if you want spam protection):** To avoid web scrapers indexing your personal email address from public markdown files, you may use your **GitHub No-Reply Email**:
+  ```text
+  <username>@users.noreply.github.com
+  ```
+  You can find your private GitHub address under [GitHub Settings > Emails > Keep my email addresses private](https://github.com/settings/emails).
+
+### 3. Professional Profiles (LinkedIn & Google Developer)
+To showcase your cloud and AI engineering credentials, you are encouraged to link:
+* **LinkedIn Profile:** e.g., `https://www.linkedin.com/in/<username>`
+* **Google Developer Profile:** e.g., `https://g.dev/<username>`
+
+### 4. Adding Yourself to `CONTRIBUTORS.md`
+With your pull request, feel free to add your name, focus area, and profile badges directly to [**`CONTRIBUTORS.md`**](./CONTRIBUTORS.md)!
 
 ---
 
