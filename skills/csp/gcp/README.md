@@ -1,69 +1,44 @@
-# Agent Skills
+# Google Cloud Platform (GCP) Skills — Open Cloud Agents Remix
 
-[![Install via skills.sh](https://img.shields.io/badge/skills.sh-install-green)](https://skills.sh/google/skills)
+Curated agent skills for Google Cloud Platform (GCP), remixed and integrated into the **Open Cloud Agents** ecosystem.
 
-This repository contains [Agent Skills](https://agentskills.io/home) for Google
-products and technologies, including [Google Cloud](https://cloud.google.com).
+This catalog provides deep operational expertise across Google Cloud runtime services, data warehouse platforms, networking observability, and the **Google Cloud Well-Architected Framework (WAF)**.
 
-> [!NOTE]
-> This repository is under active development.
+---
 
-## Installation
+## Directory Structure
 
-```bash
-npx skills add google/skills
+```text
+skills/csp/gcp/
+├── skills/
+│   ├── gke-basics/             # Google Kubernetes Engine cluster creation, autoscaling, security
+│   ├── gke-upgrades/           # GKE cluster control plane & node pool upgrade runbooks
+│   ├── cloud-run-basics/       # Serverless container deployments, traffic splitting, env configuration
+│   ├── bigquery-basics/        # Dataset creation, SQL transformations, table optimizations
+│   ├── cloud-sql-basics/       # Managed MySQL/PostgreSQL/SQL Server provisioning & backup
+│   ├── alloydb-basics/         # High-performance PostgreSQL-compatible database clustering
+│   ├── google-cloud-storage/   # Object lifecycles, IAM uniform bucket access, CMEK encryption
+│   ├── google-cloud-networking-observability/ # VPC Flow Logs, Connectivity Tests, Firewall insights
+│   ├── google-cloud-waf-security/              # WAF Security Pillar controls
+│   ├── google-cloud-waf-reliability/           # WAF Reliability Pillar designs
+│   ├── google-cloud-waf-cost-optimization/     # WAF Cost Optimization (FinOps)
+│   ├── google-cloud-waf-operational-excellence/# WAF Operational Excellence standards
+│   ├── google-cloud-waf-performance-optimization/ # WAF Performance Efficiency
+│   └── google-cloud-waf-sustainability/        # WAF Carbon footprint reduction
+└── README.md
 ```
 
-From the `npx install` command, you can select the specific skills from this
-repo to install.
+---
 
-## Available Skills
+## Key Capabilities by Well-Architected Pillar
 
--   [**Gemini API on Agent Platform**](./skills/cloud/gemini-api)
--   [**Gemini Interactions API on Agent Platform**](./skills/cloud/gemini-api)
--   [**Managed Agents API on Agent Platform**](./skills/cloud/gemini-agents-api)
--   [**Skill Registry API on Agent Platform**](./skills/cloud/agent-platform-skill-registry)
--   [**AlloyDB Basics**](./skills/cloud/alloydb-basics)
--   [**BigQuery Basics**](./skills/cloud/bigquery-basics)
--   [**Bigtable Basics**](./skills/cloud/bigtable-basics)
--   [**Cloud Run Basics**](./skills/cloud/cloud-run-basics)
--   [**Cloud SQL Basics**](./skills/cloud/cloud-sql-basics)
--   [**Firebase Basics**](./skills/cloud/firebase-basics)
--   [**Kubernetes Engine (GKE) Basics**](./skills/cloud/gke-basics)
--   [**Workload Manager Basics**](./skills/cloud/workload-manager-basics)
--   [**Recipe: Onboarding to Google Cloud**](./skills/cloud/google-cloud-recipe-onboarding)
--   [**Recipe: Authenticating to Google Cloud**](./skills/cloud/google-cloud-recipe-auth)
--   [**Recipe: Google Cloud Network Observability**](./skills/cloud/google-cloud-networking-observability)
--   **Google Cloud Well-Architected Framework**:
-    - [Security](./skills/cloud/google-cloud-waf-security)
-    - [Reliability](./skills/cloud/google-cloud-waf-reliability)
-    - [Cost optimization](./skills/cloud/google-cloud-waf-cost-optimization)
-    - [Operational excellence](./skills/cloud/google-cloud-waf-operational-excellence)
-    - [Performance optimization](./skills/cloud/google-cloud-waf-performance-optimization)
-    - [Sustainability](./skills/cloud/google-cloud-waf-sustainability)
+* **Security:** SAIF (Secure AI Framework) risk factors, GCS uniform bucket-level access, Workload Identity federation.
+* **Reliability:** Regional GKE clusters, Cloud SQL cross-region read replicas, and Spanner multi-region configurations.
+* **Cost Optimization (FinOps):** BigQuery slot reservations vs on-demand pricing, GCS Nearline/Coldline tiering, and idle VM downsizing.
+* **Operational Excellence:** `gcloud` CLI workflows, Workload Manager compliance evaluation, and automated runbook templates.
 
-## Additional Google skills
+---
 
--   [**Flutter Skills**](https://github.com/flutter/skills)
--   [**Dart Skills**](https://github.com/dart-lang/skills)
--   [**Advanced Google Cloud Storage Skills**](https://github.com/gemini-cli-extensions/google-cloud-storage)
+## Upstream Attribution
 
-## Support
-
-If you need help or encounter issues with these skills, search for existing
-issues or open a new one in the
-[GitHub Issue Tracker](https://github.com/google/skills/issues).
-
-## Contributing
-
-We welcome contributions to improve our skills. You can help by:
-
-*   [Reporting bugs or inaccuracies](https://github.com/google/skills/issues) in
-    the skill Markdown files.
-*   Suggesting new skills to add to this repository (for example, Google
-    technologies or recipes) by filing a feature request.
-
-## License
-
-You are free to copy, modify, and distribute these skills under the terms of the
-Apache 2.0 license. See the `LICENSE` file for details.
+Original foundation adapted from the [Google Agent Skills](https://github.com/google/skills) repository, licensed under the [Apache License 2.0](./LICENSE).

@@ -57,3 +57,4 @@ deny[msg] {
 
 ### 4. Register in Agent Suite
 Add the guardrail description to [`agents/7-agent-master-suite/devsecops-reviewer.md`](file:///Users/ijimoh/openIDE/agents/7-agent-master-suite/devsecops-reviewer.md) under the active audit checklist.
+
