@@ -6,3 +6,4 @@ Curated agent skills for data warehouse modeling, analytical SQL queries, and au
 - **`sql-warehouse-optimization`**: Partitioning, clustering, and cost reduction for BigQuery, Snowflake, and Redshift.
 - **`polars-pandas-analytics`**: Fast columnar operations, data frame transformations, and memory-efficient batch processing.
 - **`data-quality-great-expectations`**: Automated assertion checks on incoming schemas and data distributions.
+

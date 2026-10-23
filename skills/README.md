@@ -68,3 +68,4 @@ The procedural workflow, commands, and rules the agent must execute.
 ## Guardrails & Non-Goals
 Explicit safety boundaries, forbidden commands, and destructive action preventions.
 ```
+

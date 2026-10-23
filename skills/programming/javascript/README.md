@@ -7,3 +7,4 @@ Curated agent skills for JavaScript and TypeScript development across client and
 - **`node-microservices`**: Fastify/Express patterns, stream processing, and graceful teardowns.
 - **`vitest-testing`**: Unit and integration test orchestration with modern mocking.
 - **`esm-package-management`**: Clean ESM exports, monorepo workspaces (pnpm/npm), and build tooling.
+

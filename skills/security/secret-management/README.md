@@ -6,3 +6,4 @@ Curated agent skills for preventing secret leakage, managing encryption keys, an
 - **`git-secret-leak-remediation`**: Scanning commits with Gitleaks/TruffleHog and safely revoking compromised credentials.
 - **`kms-envelope-encryption`**: Managing customer-managed encryption keys (CMEK) and key rotation policies.
 - **`vault-secret-rotation`**: Dynamic database and cloud credential generation via HashiCorp Vault.
+

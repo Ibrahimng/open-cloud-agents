@@ -7,3 +7,4 @@ Curated agent skills for Python development, focusing on modern Python (3.11+), 
 - **`pytest-test-suite`**: Parametrization, fixtures, mock architectures, and coverage reporting.
 - **`asyncio-concurrency`**: Task groups, rate limiting, and safe async execution patterns.
 - **`poetry-uv-packaging`**: Modern dependency resolution, lockfile validation, and virtualenv management.
+
