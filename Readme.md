@@ -436,9 +436,12 @@ skills/
 │   ├── compliance/             # CIS Benchmarks, SOC 2, NIST
 │   ├── iam-least-privilege/    # Zero trust & role boundaries
 │   └── secret-management/      # Vault, KMS, secret rotation
-└── data-science/               # Data & Machine Learning Operations
-    ├── mlops/                  # Model serving & pipeline orchestration
-    └── data-analysis/          # Data warehouse optimization & notebooks
+├── data-science/               # Data & Machine Learning Operations
+│   ├── mlops/                  # Model serving & pipeline orchestration
+│   └── data-analysis/          # Data warehouse optimization & notebooks
+└── continual-learning/         # Self-Knowledge Enhancement & Postmortem Flywheel
+    ├── knowledge-enhancement-loop/       # Live transcript mining & skill auto-patching
+    └── incident-postmortem-to-guardrail/ # Converts SRE findings to DevSecOps rules
 ```
 
 For full details on authoring skills, refer to the [Skills Catalog Documentation](./skills/README.md).

@@ -1,39 +1,74 @@
 ---
 name: git-secret-leak-remediation
-description: Detect leaked API keys, tokens, or credentials in Git history and execute immediate revocation, rotation, and commit history rewriting using git-filter-repo.
+description: Detect leaked API keys, tokens, or credentials in Git history and execute immediate revocation, rotation, and CloudTrail blast-radius forensics based on real-world incident runbooks.
 ---
 
 # Git Secret Leak Triage & Remediation Runbook
 
-## Immediate Priority Rule: Revoke First, Rewrite Second
-> [!CAUTION]
-> If a secret (AWS key, Stripe token, database password) has been pushed to a remote Git repository, **assume it is compromised immediately**. Rewriting Git history alone does NOT secure the system. You must **revoke/rotate the credential in the cloud provider before touching Git**.
+## Purpose & Scope
+This skill provides an emergency response protocol for compromised cloud credentials, tokens, or private certificates pushed to source control or logged in CI/CD artifacts.
 
-## Step-by-Step Incident Workflow
+---
 
-### Step 1: Revoke & Rotate
-1. Deactivate or delete the compromised credential in the target provider.
-2. Issue a replacement credential and update secret management stores (Vault, AWS Secrets Manager, GitHub Secrets).
-3. Check access logs (CloudTrail, audit logs) for unauthorized API calls using the leaked key ID.
+## Real-Life Incident Case: Compromised IAM Key via Public Fork PR
 
-### Step 2: Remove Secret from Git History with `git-filter-repo`
-Do NOT use `git reset` or delete-commit PRs; the secret remains in Git reflogs.
+### Background & What Happened
+A developer submitted a pull request from a public fork. The GitHub Actions CI workflow utilized `pull_request_target` instead of `pull_request`, exposing repository secrets to untrusted code. 
+An attacker injected a curl command into the test runner to exfiltrate an AWS administrator access key (`AKIA...`) to an external webhook. Within 7 minutes, automated adversary scanners began enumerating S3 buckets and launching GPU EC2 instances for crypto-mining.
+
+---
+
+## Real-Time Emergency Triage Protocol (Order of Operations)
+
+### Phase 1: Instant Neutralization (First 60 Seconds)
+Do NOT spend time investigating or rewriting Git history first. **Deactivate the key immediately**:
 ```bash
-# 1. Install git-filter-repo if missing
+# Deactivate key via AWS CLI immediately
+aws iam update-access-key --access-key-id <LEAKED_KEY_ID> --status Inactive --user-name <USER_NAME>
+
+# Attach an explicit DENY-ALL inline policy to the user identity to sever any active STS sessions
+aws iam put-user-policy --user-name <USER_NAME> --policy-name EmergencyDenyAll --policy-document '{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Deny",
+    "Action": "*",
+    "Resource": "*"
+  }]
+}'
+```
+
+### Phase 2: Live CloudTrail Blast-Radius Forensics
+Identify what actions the attacker performed between exfiltration and deactivation:
+```bash
+# Query CloudTrail for all API calls initiated by the compromised Access Key ID
+aws cloudtrail lookup-events \
+  --lookup-attributes AttributeKey=AccessKeyId,AttributeValue=<LEAKED_KEY_ID> \
+  --start-time $(date -u -v-2H +%Y-%m-%dT%H:%M:%SZ) \
+  --query 'Events[*].[EventTime,EventName,SourceIPAddress,ReadOnly]' \
+  --output table
+```
+Inspect especially for:
+- `CreateUser`, `CreateAccessKey` (Backdoor persistence)
+- `RunInstances` (Crypto-mining or compute hijacking)
+- `PutBucketPolicy`, `ModifyVpcPeeringConnection` (Perimeter breach)
+
+### Phase 3: Scrub Secret from Git Reflogs & Tree
+Once the key is deactivated and forensic logs are collected:
+```bash
+# Scrub exact key string from all commits and branches
 pip install git-filter-repo
+git filter-repo --replace-text <(echo '<LEAKED_KEY_SECRET>==>REVOKED_AND_ROTATED')
 
-# 2. Scrub specific string across all commits and tags
-git filter-repo --replace-text <(echo 'compromised_secret_value==>REDACTED_SECRET')
-
-# 3. Force push cleaned history to remote
+# Force push scrubbed history
 git push origin --force --all
 git push origin --force --tags
 ```
 
-### Step 3: Prevent Future Leaks with Pre-commit Hooks
-Add Gitleaks pre-commit scanning to block secrets before commit creation:
-```bash
-brew install gitleaks
-gitleaks detect --source . -v
-```
+---
 
+## Continuous Self-Knowledge Enhancement Loop
+
+When the security incident is contained:
+1. **Analyze Vulnerability Vector:** (e.g. `pull_request_target` event in GitHub Actions).
+2. **Auto-Generate Preventative Policy:** Add a check in [`skills/devops/ci-cd/github-actions-hardening/SKILL.md`](file:///Users/ijimoh/openIDE/skills/devops/ci-cd/github-actions-hardening/SKILL.md) banning `pull_request_target` with secrets.
+3. **Update Pre-Merge Auditor Rules:** Update [`agents/7-agent-master-suite/devsecops-reviewer.md`](file:///Users/ijimoh/openIDE/agents/7-agent-master-suite/devsecops-reviewer.md) to flag any workflow change introducing secret access in fork PRs.

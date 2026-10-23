@@ -30,9 +30,12 @@ skills/
 │   ├── compliance/             # CIS Benchmarks, SOC 2 Type II, NIST, ISO 27001
 │   ├── iam-least-privilege/    # Zero trust, role boundaries, IAM condition keys
 │   └── secret-management/      # HashiCorp Vault, AWS Secrets Manager, KMS, SOPS
-└── data-science/               # Data & Machine Learning Operations
-    ├── mlops/                  # Model serving, training pipelines, evaluation
-    └── data-analysis/          # SQL analytics, data pipelines, notebook execution
+├── data-science/               # Data & Machine Learning Operations
+│   ├── mlops/                  # Model serving, training pipelines, evaluation
+│   └── data-analysis/          # SQL analytics, data pipelines, notebook execution
+└── continual-learning/         # Reflection, Self-Improvement & Guardrail Synthesis
+    ├── knowledge-enhancement-loop/       # Live transcript mining & skill auto-patching
+    └── incident-postmortem-to-guardrail/ # Converts SRE findings to DevSecOps rules
 ```
 
 ---
