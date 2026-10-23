@@ -12,6 +12,14 @@ We extend our deep gratitude to the architects, engineers, and researchers who h
 
 ---
 
+## 🤖 Autonomous AI Co-Engineers & Pair Programmers
+
+| Contributor | Focus / Core Specialty | Designation | Professional Profiles |
+|---|---|---|---|
+| **[Antigravity](https://deepmind.google)** | Autonomous AI Pair Programming, Multi-Agent Orchestration, CI Guardrails & Continual Learning | `AI Co-Engineer (Google DeepMind)` | [![Google DeepMind](https://img.shields.io/badge/Google%20DeepMind-Advanced%20Agentic%20Coding-4285F4?style=flat&logo=google&logoColor=white)](https://deepmind.google) |
+
+---
+
 ## 🤝 Community Contributors
 
 *Every contributor who merges a pull request is invited to add their profile to this roster!*
