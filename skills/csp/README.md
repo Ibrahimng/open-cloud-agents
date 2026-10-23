@@ -54,3 +54,4 @@ The foundational skills in this directory are adapted and remixed from open-sour
 * **AWS Skills:** Adapted from [AWS Agent Toolkit](https://github.com/aws/agent-toolkit-for-aws), licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 * **Azure Skills:** Adapted from [Azure Agent Skills](https://github.com/azure/agent-skills), licensed under the [MIT License](https://opensource.org/licenses/MIT) and [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/).
 * **Google Cloud Skills:** Adapted from [Google Agent Skills](https://github.com/google/skills), licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
