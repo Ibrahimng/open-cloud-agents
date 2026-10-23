@@ -70,5 +70,5 @@ git push origin --force --tags
 
 When the security incident is contained:
 1. **Analyze Vulnerability Vector:** (e.g. `pull_request_target` event in GitHub Actions).
-2. **Auto-Generate Preventative Policy:** Add a check in [`skills/devops/ci-cd/github-actions-hardening/SKILL.md`](file:///Users/ijimoh/openIDE/skills/devops/ci-cd/github-actions-hardening/SKILL.md) banning `pull_request_target` with secrets.
-3. **Update Pre-Merge Auditor Rules:** Update [`agents/7-agent-master-suite/devsecops-reviewer.md`](file:///Users/ijimoh/openIDE/agents/7-agent-master-suite/devsecops-reviewer.md) to flag any workflow change introducing secret access in fork PRs.
+2. **Auto-Generate Preventative Policy:** Add a check in [`skills/devops/ci-cd/github-actions-hardening/SKILL.md`](../../devops/ci-cd/github-actions-hardening/SKILL.md) banning `pull_request_target` with secrets.
+3. **Update Pre-Merge Auditor Rules:** Update [`agents/7-agent-master-suite/devsecops-reviewer.md`](../../../agents/7-agent-master-suite/devsecops-reviewer.md) to flag any workflow change introducing secret access in fork PRs.

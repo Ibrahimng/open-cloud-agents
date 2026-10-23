@@ -1,12 +1,12 @@
-# OpenIDE: Full Architecture & MVP Specification
+# Open Cloud Agents: Architecture & Runtime Engine Specification
 
-This document details the underlying service boundaries, API contracts, deployment models, and build sequence for the **OpenIDE** runtime architecture.
+This document details the underlying service boundaries, API contracts, deployment models, and build sequence for the **Open Cloud Agents** runtime engine.
 
 ---
 
 ## 1. Architectural Philosophy
 
-OpenIDE is designed as a thin IDE client over a small set of backend services, focusing on a local-first, multi-agent IDE for software development and AI-assisted coding with the aim to **bring your own LLM provider**.
+Open Cloud Agents is designed as a modular runtime engine over a focused set of backend services, enabling a local-first, multi-agent development and engineering environment with the aim to **bring your own LLM provider**.
 
 ### Core Tenets
 1. **Strict Service Boundaries:** Separation of concerns between UI/Editor, Agent Orchestration, Model Routing, and Tool Execution.
@@ -99,3 +99,4 @@ GET  /v1/tool-policies
 4. **Sandbox Runner:** Dockerized execution environment for tests and shell tasks.
 5. **Memory Service:** Postgres + pgvector for session indexing and workspace knowledge.
 6. **Policy & Audit Layer:** Guardrails for destructive commands and sensitive data leaks.
+

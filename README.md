@@ -178,9 +178,9 @@ skills/<domain>/<tech>/<skill-name>/
 
 ---
 
-## 🏗️ OpenIDE Runtime Architecture
+## 🏗️ Open Cloud Agents Runtime Architecture
 
-For teams building local-first development environments, Open Cloud Agents is backed by the **OpenIDE architectural blueprint**:
+For teams building local-first development environments or dedicated IDE integrations, Open Cloud Agents is powered by a modular, local-first runtime architecture:
 ```text
 ┌────────────────────────────────────────────────────────┐
 │                        IDE Host                        │

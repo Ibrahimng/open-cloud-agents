@@ -71,5 +71,5 @@ ss -tna | grep -c CLOSE-WAIT
 
 Whenever an agent identifies a subtle networking or runtime edge case:
 1. **Isolate Root Cause Trigger:** (e.g. CoreDNS UDP packet drops at > 10,000 QPS).
-2. **Auto-Generate a Preventative Check:** Propose a rule in [`skills/devops/kubernetes/helm-chart-scaffold/SKILL.md`](file:///Users/ijimoh/openIDE/skills/devops/kubernetes/helm-chart-scaffold/SKILL.md) to mandate `dnsConfig.options` on high-throughput deployments.
+2. **Auto-Generate a Preventative Check:** Propose a rule in [`skills/devops/kubernetes/helm-chart-scaffold/SKILL.md`](../helm-chart-scaffold/SKILL.md) to mandate `dnsConfig.options` on high-throughput deployments.
 3. **Record in Knowledge Base:** Update `AGENTS.md` under `## Learned Kubernetes Networking Facts` so the SRE Incident Commander checks DNS latency immediately whenever 502/504 errors appear with low CPU usage.
