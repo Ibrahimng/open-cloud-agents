@@ -1,0 +1,72 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag to publish (e.g. v1.0.0)"
+        required: true
+        default: "v1.0.0"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine Target Tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Extract Release Notes from CHANGELOG.md
+        id: notes
+        run: |
+          python3 -c "
+          import re, os
+          target_tag = '${{ steps.tag.outputs.version }}'.lstrip('v')
+          with open('CHANGELOG.md', 'r') as f:
+              content = f.read()
+          pattern = rf'## \[{re.escape(target_tag)}\][^\n]*\n(.*?)(?=\n## |\Z)'
+          match = re.search(pattern, content, re.DOTALL)
+          if match:
+              notes = match.group(1).strip()
+          else:
+              notes = f'Release ${{ steps.tag.outputs.version }}'
+          with open('release_notes.md', 'w') as f:
+              f.write(notes)
+          "
+
+      - name: Preview Release Notes (Local act mode)
+        if: ${{ env.ACT }}
+        run: |
+          echo "Running in local act runner. Skipping live GitHub API release call."
+          echo "=== Extracted Release Notes Preview ==="
+          cat release_notes.md
+          echo "======================================"
+
+      - name: Publish GitHub Release
+        if: ${{ !env.ACT }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.version }}
+          name: "Open Cloud Agents ${{ steps.tag.outputs.version }}"
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          make_latest: true
+
