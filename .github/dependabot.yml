@@ -1,0 +1,49 @@
+# ==============================================================================
+# Open Cloud Agents: Dependabot Configuration
+#
+# Daily automated dependency and vulnerability scanning.
+# Scheduled daily at 04:00 UTC.
+# Notifications and PR reviews assigned to @ibrahimng.
+# ==============================================================================
+
+version: 2
+updates:
+  # 1. GitHub Actions CI/CD Workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "Etc/UTC"
+    reviewers:
+      - "ibrahimng"
+    assignees:
+      - "ibrahimng"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "ci(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "automated"
+
+  # 2. Python Dependencies (CI, Documentation & Scripts)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "Etc/UTC"
+    reviewers:
+      - "ibrahimng"
+    assignees:
+      - "ibrahimng"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "python"
