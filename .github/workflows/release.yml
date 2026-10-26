@@ -51,7 +51,16 @@ jobs:
               f.write(notes)
           "
 
+      - name: Preview Release Notes (Local act mode)
+        if: ${{ env.ACT }}
+        run: |
+          echo "Running in local act runner. Skipping live GitHub API release call."
+          echo "=== Extracted Release Notes Preview ==="
+          cat release_notes.md
+          echo "======================================"
+
       - name: Publish GitHub Release
+        if: ${{ !env.ACT }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.version }}
@@ -60,3 +69,4 @@ jobs:
           draft: false
           prerelease: false
           make_latest: true
+
