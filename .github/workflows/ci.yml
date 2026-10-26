@@ -2,7 +2,7 @@ name: CI Guardrails
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, "feat/**" ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -20,6 +20,22 @@ jobs:
 
       - name: Run Repository Validator
         run: python3 scripts/ci/validate_repo.py
+
+  finops-waste-scan:
+    name: FinOps Cloud Waste Reaper Regression
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Execute Cloud Waste Reaper (Mock Mode)
+        run: |
+          ./skills/finops/cloud-waste-reaper/scripts/reap_cloud_waste.sh \
+            --mock \
+            --export-json /tmp/waste_report.json \
+            --export-markdown /tmp/waste_report.md
+          echo "=== Waste Report Preview ==="
+          cat /tmp/waste_report.md
 
   shell-lint:
     name: Shell Script Syntax & Linting

@@ -62,3 +62,8 @@ When executing an operational task, embody the specialized mandate of the approp
 - **GitHub Actions Secret Exfiltration:** Never run untrusted fork PRs with `pull_request_target` triggers if secrets are exposed to the runner. Enforce strict environment approvals and OIDC token minting.
 - **Terraform RDS Forced Replacements:** Modifying `db_subnet_group_name` or `allocated_storage` on certain storage types destroys and recreates the database cluster. Always verify plans for `forces replacement`.
 
+### Learned Cloud FinOps Facts
+- **Idle NAT Gateway Leak:** Tearing down Kubernetes namespaces does not delete underlying Cloud NAT Gateways provisioned by IaC. Idle NATs continuously accrue hourly base fees (\$32.40/mo per AZ) plus idle connection maintenance fees. Always verify VPC route table dependencies before de-provisioning.
+- **Orphaned Snapshot Drift:** EBS and Persistent Disk snapshot lifecycles do not delete automatically when the parent volume is deleted. Always enforce automated lifecycle expiration policies (`retention_days = 30`).
+
+
