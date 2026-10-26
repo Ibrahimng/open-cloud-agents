@@ -61,7 +61,7 @@ jobs:
 
       - name: Publish GitHub Release
         if: ${{ !env.ACT }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.tag.outputs.version }}
           name: "Open Cloud Agents ${{ steps.tag.outputs.version }}"
