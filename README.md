@@ -178,6 +178,7 @@ skills/<domain>/<tech>/<skill-name>/
 * **Security & Governance ([`skills/security/`](./skills/security/README.md)):** CIS Foundation audits, SOC 2 Type II evidence harvesting, IAM least-privilege synthesis, Workload Identity federation, emergency Git secret scrub runbooks, and KMS envelope encryption.
 * **Programming Languages ([`skills/programming/`](./skills/programming/README.md)):** Idiomatic patterns and automated test suites across **Dart** (11 skills), **Python** (FastAPI / pytest), **TypeScript/JavaScript** (strict types), **Go** (structured concurrency), and **Java** (Spring Boot / HikariCP).
 * **Continual Learning ([`skills/continual-learning/`](./skills/continual-learning/README.md)): Transcript mining loops and automated translation of SRE incident postmortems into pre-merge DevSecOps guardrails.
+* **FinOps & Cost Optimization ([`skills/finops/`](./skills/finops/README.md)):** Autonomous discovery and reclamation of unattached disks, unassociated Elastic IPs, idle NAT gateways, and orphan snapshots with dry-run safety.
 
 ---
 
