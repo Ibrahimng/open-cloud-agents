@@ -2,7 +2,13 @@ name: CI Guardrails
 
 on:
   push:
-    branches: [ main, "feat/**" ]
+    branches:
+      - main
+      - "feat/**"
+      - "fix/**"
+      - "docs/**"
+      - "chore/**"
+      - "refactor/**"
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -11,6 +17,39 @@ permissions:
   contents: read
 
 jobs:
+  detect-changes:
+    name: Detect Changed Subsystems
+    runs-on: ubuntu-latest
+    outputs:
+      scripts: ${{ steps.filter.outputs.scripts }}
+      finops: ${{ steps.filter.outputs.finops }}
+      docs_only: ${{ steps.filter.outputs.docs_only }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Filter Changed Paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            scripts:
+              - '**/*.sh'
+              - 'scripts/**'
+              - '.github/workflows/ci.yml'
+            finops:
+              - 'skills/finops/**'
+              - '.github/workflows/ci.yml'
+            docs_only:
+              - 'docs/**'
+              - 'README.md'
+              - 'CHANGELOG.md'
+              - 'CONTRIBUTING.md'
+              - 'CONTRIBUTORS.md'
+              - 'mkdocs.yml'
+
   validate-repo:
     name: Repository Hygiene & Skill Specs
     runs-on: ubuntu-latest
@@ -23,6 +62,8 @@ jobs:
 
   finops-waste-scan:
     name: FinOps Cloud Waste Reaper Regression
+    needs: detect-changes
+    if: needs.detect-changes.outputs.finops == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -39,6 +80,8 @@ jobs:
 
   shell-lint:
     name: Shell Script Syntax & Linting
+    needs: detect-changes
+    if: needs.detect-changes.outputs.scripts == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -57,6 +100,8 @@ jobs:
 
   secret-scan:
     name: Secret Leak Detection
+    needs: detect-changes
+    if: github.event_name == 'pull_request' || needs.detect-changes.outputs.docs_only != 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -80,4 +125,3 @@ jobs:
       - name: Run Gitleaks Audit
         run: |
           gitleaks detect --source . --verbose --redact
-
