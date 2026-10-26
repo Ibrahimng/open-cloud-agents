@@ -7,6 +7,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-10-26
+
+### 💰 FinOps Cloud Waste Reaper, Docs-as-Code & Automated Governance
+This minor release introduces the complete **FinOps & Cost Optimization** domain, an automated **Docs-as-Code** static site on GitHub Pages, selective CI change detection, and automated **Dependabot** daily security auditing across 12 merged Pull Requests (#1–#12).
+
+---
+
+### ✨ Added
+
+#### 1. FinOps Cloud Waste Reaper ([`skills/finops/cloud-waste-reaper/`](./skills/finops/cloud-waste-reaper/SKILL.md))
+* **3-Tier Skill Architecture:** Runbook, quantitative metrics matrix, multi-cloud query syntax, and executable automation script.
+* **Multi-Cloud Waste Hunter Script (`reap_cloud_waste.sh`):**
+  * **AWS Scanning:** Unattached EBS volumes (`gp3`/`io2`), unassociated Elastic IPs, idle NAT Gateways, and empty ALBs.
+  * **GCP Scanning:** Unattached Persistent Disks (`pd-standard`/`pd-ssd`) and reserved static IPs.
+  * **Azure Scanning:** Unattached Managed Disks and unassociated Public IPs.
+  * **Deterministic Mock Engine:** Simulated multi-cloud environment producing \$107.90/mo (\$1,294.80/yr) waste baseline for CI and local verification.
+  * **Reporting Formats:** Generates structured JSON (`--export-json`) and GitHub-flavored Markdown PR summary tables (`--export-markdown`).
+* **Real-World Incident Cases:** Documented root-cause postmortems for the \$14,000 Abandoned NAT Gateway, 80,000 Orphaned Snapshots, and Ghost Kubernetes StatefulSet PVC leaks.
+* **Non-Destructive Safety Gate:** Strict compliance with Rule 01 (dry-run by default; requires explicit DevSecOps handoff and human sign-off before reclamation).
+
+#### 2. Docs-as-Code Static Site on GitHub Pages
+* **Live Documentation Portal:** Public searchable documentation website hosted at [https://ibrahimng.github.io/open-cloud-agents/](https://ibrahimng.github.io/open-cloud-agents/).
+* **Single Source of Truth (`scripts/docs/prepare_docs.py`):** Automatically aggregates in-repo Markdown documents (agents, skills, rules, specs, changelog) with zero documentation drift.
+* **Theme & Features (`mkdocs.yml`):** MkDocs Material with light/dark mode auto-detection, Mermaid diagram rendering, instant client-side search, and hierarchical sidebar navigation.
+* **Automated CD Workflow (`.github/workflows/docs.yml`):** Automatic deployment to GitHub Pages upon pushes to `main`.
+
+#### 3. Subsystem Selective Change Detection in CI
+* **Pre-Flight Filter (`dorny/paths-filter`):** Evaluates changed files in ~1.5s to trigger only relevant test jobs (`scripts`, `finops`, `docs_only`).
+* **Conventional Branch Triggers:** Expanded CI triggers across `feat/**`, `fix/**`, `docs/**`, `chore/**`, and `refactor/**`.
+* **Zero Runner Waste:** Documentation-only pull requests complete in ~3 seconds while preserving all branch protection status checks.
+
+#### 4. Automated Governance & Daily Auditing
+* **Code Ownership ([`.github/CODEOWNERS`](./.github/CODEOWNERS)):** Enforces mandatory review and sign-off from `@ibrahimng` on protected branches.
+* **Dependabot Configuration ([`.github/dependabot.yml`](./.github/dependabot.yml)):** Daily automated dependency and vulnerability scanning at 04:00 UTC for GitHub Actions and Python tooling.
+* **Scheduled Daily Codebase Audit ([`.github/workflows/scheduled-audit.yml`](./.github/workflows/scheduled-audit.yml)):** Daily 4:00 AM regression runner testing repository hygiene, agent contracts, simulation, and FinOps reaper, with automated GitHub Issue alerts on failure.
+
+---
+
+### 🔄 Changed
+* **Upgraded GitHub Actions Toolchain (PRs #3–#12):** Bumped all workflow actions to Node 24–compatible releases (`actions/checkout@v7`, `actions/deploy-pages@v5`, `actions/upload-pages-artifact@v5`, `actions/configure-pages@v6`, `actions/setup-python@v7`, `actions/upload-artifact@v7`, `actions/github-script@v9`, `softprops/action-gh-release@v3`, `dorny/paths-filter@v4`).
+* **Python Tooling:** Pinned `requirements.txt` with `mkdocs-material` and `pyyaml>=6.0.3` (PR #2, PR #3).
+* **Local `act` Runner:** Configured `.actrc` with `catthehacker/ubuntu:act-latest` on `linux/amd64` to prevent interactive prompts and Apple Silicon warnings.
+
+---
+
+### 🏆 Merged Pull Requests in this Release
+* **PR #1:** `feat(finops): introduce cloud waste reaper 3-tier skill and automated discovery script`
+* **PR #2:** `chore(deps): update mkdocs-material requirement`
+* **PR #3:** `chore(deps): update pyyaml requirement from >=6.0.1 to >=6.0.3`
+* **PR #4:** `ci(deps): bump actions/upload-artifact from 4 to 7`
+* **PR #5:** `ci(deps): bump actions/checkout from 4 to 7`
+* **PR #6:** `ci(deps): bump softprops/action-gh-release from 2 to 3`
+* **PR #7:** `ci(deps): bump actions/configure-pages from 5 to 6`
+* **PR #8:** `ci(deps): bump actions/deploy-pages from 4 to 5`
+* **PR #9:** `ci(deps): bump dorny/paths-filter from 3 to 4`
+* **PR #10:** `ci(deps): bump actions/upload-pages-artifact from 3 to 5`
+* **PR #11:** `ci(deps): bump actions/setup-python from 5 to 7`
+* **PR #12:** `ci(deps): bump actions/github-script from 7 to 9`
+
+---
+
 ## [1.0.0] - 2026-10-26
 
 ### 🚀 Initial General Availability (GA) Release
