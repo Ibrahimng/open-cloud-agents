@@ -1,0 +1,69 @@
+name: Deploy Documentation (Docs-as-Code)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "mkdocs.yml"
+      - "docs/**"
+      - "agents/**"
+      - "skills/**"
+      - "rules/**"
+      - "scripts/docs/**"
+      - ".github/workflows/docs.yml"
+      - "README.md"
+      - "AGENTS.md"
+      - "CHANGELOG.md"
+      - "CONTRIBUTING.md"
+      - "CONTRIBUTORS.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install MkDocs Material
+        run: |
+          pip install --upgrade pip
+          pip install mkdocs-material
+
+      - name: Stage In-Repo Documentation
+        run: python3 scripts/docs/prepare_docs.py
+
+      - name: Build Static Site with MkDocs
+        run: mkdocs build -f mkdocs.yml
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

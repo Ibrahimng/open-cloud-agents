@@ -1,0 +1,96 @@
+site_name: Open Cloud Agents
+site_description: Autonomous, Well-Architected Cloud Engineering for Any AI Agent or IDE
+site_author: Ibrahim Jimoh
+site_url: https://ibrahimng.github.io/open-cloud-agents/
+repo_url: https://github.com/Ibrahimng/open-cloud-agents
+repo_name: Ibrahimng/open-cloud-agents
+edit_uri: edit/main/
+
+docs_dir: build_docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  palette:
+    # Scheme toggle for light mode
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Scheme toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Master Directive: AGENTS.md
+  - 7-Agent Master Suite:
+      - Overview: agents/README.md
+      - Principal Cloud Architect: agents/7-agent-master-suite/principal-cloud-architect.md
+      - Security Compliance Commander: agents/7-agent-master-suite/security-compliance-commander.md
+      - FinOps Cost Optimizer: agents/7-agent-master-suite/finops-cloud-cost-optimizer.md
+      - DevSecOps Reviewer: agents/7-agent-master-suite/devsecops-reviewer.md
+      - DevSecOps Engineer: agents/7-agent-master-suite/devsecops-engineer.md
+      - GitOps Release Manager: agents/7-agent-master-suite/gitops-release-manager.md
+      - SRE Reliability Engineer: agents/7-agent-master-suite/sre-reliability-engineer.md
+  - Core Inviolable Rules:
+      - Rules Framework: rules/README.md
+      - Rule 01 Destructive Actions: rules/01-destructive-actions.md
+      - Rule 02 Secrets & Identity: rules/02-secrets-and-identity.md
+      - Rule 03 Surgical Scope Discipline: rules/03-surgical-scope-discipline.md
+      - Rule 04 Well-Architected Invariants: rules/04-cloud-well-architected-invariants.md
+      - Rule 05 Repository Hygiene: rules/05-repository-and-path-hygiene.md
+  - Skills Catalog:
+      - Skills Architecture: skills/README.md
+      - FinOps Waste Reaper: skills/finops/cloud-waste-reaper/SKILL.md
+      - Dart Engineering: skills/programming/dart/README.md
+  - Runtime Architecture:
+      - Architecture MVP Spec: architecture-mvp-spec.md
+      - Engineering Standards: engineering-standards.md
+  - Community & Governance:
+      - Release Changelog: CHANGELOG.md
+      - Contributing Guide: CONTRIBUTING.md
+      - Hall of Fame: CONTRIBUTORS.md

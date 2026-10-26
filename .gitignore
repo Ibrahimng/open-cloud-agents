@@ -37,6 +37,9 @@ debug-logs/
 node_modules/
 dist/
 build/
+site/
+build_docs/
+.cache/
 __pycache__/
 *.pyc
 .dart_tool/
