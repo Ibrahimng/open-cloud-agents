@@ -39,13 +39,19 @@ skills/finops/cloud-waste-reaper/
 ```
 
 ### Phase 1: Autonomous Waste Discovery (Dry-Run Only)
-Run the automated discovery script in dry-run mode:
+Run the automated discovery script in dry-run mode across targeted clouds:
 ```bash
-./scripts/reap_cloud_waste.sh --provider aws --dry-run --export-json /tmp/waste_report.json
-```
-For testing without live cloud credentials, run mock mode:
-```bash
-./scripts/reap_cloud_waste.sh --mock --export-json /tmp/waste_report.json
+# AWS scan with JSON and Markdown export
+./scripts/reap_cloud_waste.sh --provider aws --dry-run --export-json /tmp/waste_report.json --export-markdown /tmp/waste_report.md
+
+# GCP scan
+./scripts/reap_cloud_waste.sh --provider gcp --dry-run
+
+# Azure scan
+./scripts/reap_cloud_waste.sh --provider azure --dry-run
+
+# Mock / CI demonstration mode (no credentials required)
+./scripts/reap_cloud_waste.sh --mock --export-json /tmp/waste_report.json --export-markdown /tmp/waste_report.md
 ```
 
 ### Phase 2: Exemption Filtering
