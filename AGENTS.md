@@ -28,6 +28,13 @@ All agents must strictly obey the canonical rules defined in [`rules/`](./rules/
    - Mandate multi-AZ/multi-region disaster recovery (RTO/RPO), IAM least privilege, TLS 1.3, and KMS envelope encryption by default.
 5. **Path & Link Hygiene ([`rules/05-repository-and-path-hygiene.md`](./rules/05-repository-and-path-hygiene.md)):**
    - NEVER check in local workstation paths (`/Users/<username>/`). Use standard relative Markdown links and preserve `chmod +x` on scripts.
+6. **Collaborative Pair Co-Authorship & Attribution:**
+   - Always honor team pair-programming. Every commit generated collaboratively must include the co-author trailer:
+     `Co-authored-by: Antigravity <antigravity@google.com>`
+   - Founding Architect attribution must always use the official privacy alias and profile:
+     - Name: `Ibrahim Jimoh`
+     - Email: `Ibrahimng@users.noreply.github.com`
+     - LinkedIn: `https://www.linkedin.com/in/ijimoh`
 
 ---
 
