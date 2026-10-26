@@ -40,6 +40,7 @@ build/
 site/
 build_docs/
 .cache/
+.actrc
 __pycache__/
 *.pyc
 .dart_tool/
