@@ -1,0 +1,10 @@
+# ==============================================================================
+# Open Cloud Agents: Repository Code Ownership & Review Policy
+#
+# Declares default code owners across the repository.
+# Mandatory review and approval from @ibrahimng is required for any pull request
+# targeting protected branches (such as 'main').
+# ==============================================================================
+
+# Global rule: Ibrahim Jimoh (@ibrahimng) owns all repository paths
+* @ibrahimng
