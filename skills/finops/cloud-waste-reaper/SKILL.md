@@ -1,5 +1,5 @@
 ---
-name: Cloud Waste Reaper & Idle Asset Elimination
+name: cloud-waste-reaper
 description: "Autonomous FinOps discovery and safe reclamation of abandoned, unattached, and orphaned cloud resources across AWS, GCP, and Azure. Safely identifies unattached EBS/Persistent disks, unassociated Elastic IPs, abandoned NAT gateways, idle load balancers, and expired snapshots without disrupting production traffic."
 ---
 
@@ -24,6 +24,11 @@ This skill equips the [**FinOps & Cloud Cost Optimizer**](../../../agents/7-agen
 * **Impact:** Over two years, 80,000 orphaned snapshots accumulated, costing \$8,500 every month for storage of deleted virtual machines.
 * **Reaper Prevention:** Identify snapshots whose parent volume has been deleted for > 90 days and transition them to cold storage or purge.
 
+### Incident 3: The Ghost Kubernetes StatefulSet PVC Leak
+* **Outage / Incident Root Cause:** A continuous integration pipeline created ephemeral preview environments running Elasticsearch and Kafka on Kubernetes StatefulSets. When the namespaces were deleted (`kubectl delete ns preview-pr-412`), the StatefulSet pods were destroyed, but the cloud PersistentVolumeClaims (PVCs) backed by provisioned AWS gp3 EBS volumes retained an `Available` status because Kubernetes volumes are decoupled from namespace deletion lifecycles.
+* **Impact:** 240 unattached 100 GB EBS volumes accumulated silently across 6 months, generating \$1,920/month in compounding storage spend with 0 read/write IOPS.
+* **Reaper Prevention:** The FinOps agent filters for all cloud storage volumes whose attachment state is `available` for > 14 days and cross-references active Kubernetes cluster nodes to ensure no detached volumes persist.
+
 ---
 
 ## 3-Tier Operational Runbook
@@ -40,18 +45,20 @@ skills/finops/cloud-waste-reaper/
 
 ### Phase 1: Autonomous Waste Discovery (Dry-Run Only)
 Run the automated discovery script in dry-run mode across targeted clouds:
+
 ```bash
+# --- From repository root ---
 # AWS scan with JSON and Markdown export
-./scripts/reap_cloud_waste.sh --provider aws --dry-run --export-json /tmp/waste_report.json --export-markdown /tmp/waste_report.md
+./skills/finops/cloud-waste-reaper/scripts/reap_cloud_waste.sh --provider aws --dry-run --export-json /tmp/waste_report.json --export-markdown /tmp/waste_report.md
 
 # GCP scan
-./scripts/reap_cloud_waste.sh --provider gcp --dry-run
+./skills/finops/cloud-waste-reaper/scripts/reap_cloud_waste.sh --provider gcp --dry-run
 
 # Azure scan
-./scripts/reap_cloud_waste.sh --provider azure --dry-run
+./skills/finops/cloud-waste-reaper/scripts/reap_cloud_waste.sh --provider azure --dry-run
 
 # Mock / CI demonstration mode (no credentials required)
-./scripts/reap_cloud_waste.sh --mock --export-json /tmp/waste_report.json --export-markdown /tmp/waste_report.md
+./skills/finops/cloud-waste-reaper/scripts/reap_cloud_waste.sh --mock --export-json /tmp/waste_report.json --export-markdown /tmp/waste_report.md
 ```
 
 ### Phase 2: Exemption Filtering
@@ -61,15 +68,35 @@ Consult [`references/waste-matrix.md`](./references/waste-matrix.md) to ensure n
 
 ### Phase 3: Blast Radius Review & Task Handoff
 Do **NOT** execute autonomous deletion. In accordance with [`rules/01-destructive-actions.md`](../../../rules/01-destructive-actions.md):
-1. Format a structured Task Plan for the [**DevSecOps Engineer**](../../../agents/7-agent-master-suite/devsecops-engineer.md).
-2. Create final safety snapshots of any volumes targeted for reclamation.
-3. Present the estimated monthly cost savings to the human operator for approval.
+
+1. **Format Structured Task Plan:** Deliver an atomic, human-reviewable plan for the [**DevSecOps Engineer**](../../../agents/7-agent-master-suite/devsecops-engineer.md):
+
+```markdown
+### 🛡️ DevSecOps Handoff Task Plan: FinOps Waste Reclamation
+- **Target Provider:** AWS (us-east-1)
+- **Monthly Waste Savings:** $107.90 USD ($1,294.80/year)
+- **Destructive Action Risk:** MEDIUM (Block storage deletion requires safety snapshot)
+
+#### Surgical Action Items
+- [ ] **Task 1 (Storage):** Create point-in-time safety snapshot `snap-safety-vol-0a1b2c3d4e5f6g7h8` before purging unattached volume `vol-0a1b2c3d4e5f6g7h8` (150 GB gp3, idle 24d).
+- [ ] **Task 2 (Storage):** Create point-in-time safety snapshot `snap-safety-vol-0987654321fedcba0` before purging unattached volume `vol-0987654321fedcba0` (500 GB gp3, idle 41d).
+- [ ] **Task 3 (Networking):** Release unassociated Elastic IP `54.210.12.89` (Allocation ID `eipalloc-01234567`).
+- [ ] **Task 4 (Networking):** Release unassociated Elastic IP `52.87.110.45` (Allocation ID `eipalloc-89abcdef`).
+- [ ] **Task 5 (Gateways):** Audit VPC route tables for `vpc-0123456789abcdef0`; de-provision idle NAT Gateway `nat-0f1e2d3c4b5a6978` after human sign-off.
+
+#### Human Operator Sign-Off Gate
+- [ ] Verified no production tags (`Environment=Production`, `DoNotDelete=true`).
+- [ ] Signed off by Cloud Lead / SRE Commander.
+```
+
+2. **Snapshot Safety:** Final point-in-time snapshots must be taken prior to deleting any persistent storage volumes.
+3. **Present Savings:** Display total monthly and annualized savings to the human operator for explicit authorization before executing IaC de-provisioning.
 
 ---
 
 ## Continuous Self-Knowledge Enhancement Loop
 
 When the agent identifies an unbudgeted cloud cost leak:
-1. **Isolate Waste Vector:** (e.g. idle NAT Gateway, orphaned snapshot accumulation).
+1. **Isolate Waste Vector:** (e.g. idle NAT Gateway, orphaned snapshot accumulation, ghost PVCs).
 2. **Auto-Generate Preventative Policy:** Add a check to [`skills/devops/iac/terraform-opentofu-modules/SKILL.md`](../../devops/iac/terraform-opentofu-modules/SKILL.md) requiring lifecycle retention policies on all snapshots and dynamic NAT scaling.
 3. **Update Memory:** Record the discovered cloud pricing edge case in [`AGENTS.md`](../../../AGENTS.md) under `## Learned Cloud FinOps Facts`.
