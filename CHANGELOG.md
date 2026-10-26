@@ -54,3 +54,4 @@ This foundational release establishes **Open Cloud Agents** as an open-source, e
 * **Contributor Hall of Fame (`CONTRIBUTORS.md`):** Roster acknowledging founding and community contributors.
 * **Pull Request Template (`.github/pull_request_template.md`):** Automated PR checklist with Developer Certificate of Origin (DCO) sign-off and GitHub Privacy Alias standard.
 * **Social Preview & Hero Banner (`docs/images/social-preview.png`):** High-resolution branding card.
+
