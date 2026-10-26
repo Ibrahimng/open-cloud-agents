@@ -1,6 +1,6 @@
-<div align="center">
-
-<img src="./docs/images/social-preview.png" alt="Open Cloud Agents - Autonomous Multi-Agent Cloud Engineering" width="100%" />
+<p align="center">
+  <img src="./docs/images/social-preview.png" alt="Open Cloud Agents - Autonomous Multi-Agent Cloud Engineering" width="100%" />
+</p>
 
 # ☁️ Open Cloud Agents
 
@@ -23,8 +23,6 @@ From High-Level Design (HLD) and threat modeling to surgical code fixes, progres
 [How to Use with Any AI Agent / IDE](#how-to-consume-with-any-ai-agent-or-ide) •
 [Skills Catalog](#the-3-tier-enterprise-skills-ecosystem) •
 [Contributing](#community--contributing)
-
-</div>
 
 ---
 
