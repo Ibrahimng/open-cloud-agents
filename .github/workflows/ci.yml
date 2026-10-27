@@ -31,7 +31,7 @@ jobs:
           fetch-depth: 0
 
       - name: Filter Changed Paths
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: filter
         with:
           base: ${{ github.event.pull_request.base.ref || 'main' }}
