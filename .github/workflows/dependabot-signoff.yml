@@ -46,3 +46,4 @@ jobs:
           echo "✔ Successfully signed off Dependabot PR commit."
           echo "### ✍️ Dependabot DCO Sign-off Applied" >> $GITHUB_STEP_SUMMARY
           echo "Commit was successfully amended with \`Signed-off-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\`." >> $GITHUB_STEP_SUMMARY
+
