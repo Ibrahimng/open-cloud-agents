@@ -160,3 +160,4 @@ resource "azurerm_role_assignment" "app_storage_blob_contributor" {
   principal_id         = azurerm_user_assigned_identity.app.principal_id
 }
 ```
+

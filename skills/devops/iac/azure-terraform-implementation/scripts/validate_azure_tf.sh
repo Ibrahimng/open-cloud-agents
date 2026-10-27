@@ -39,3 +39,4 @@ fi
 
 echo "============================================================"
 echo "SUCCESS: Azure Terraform checks passed cleanly!"
+

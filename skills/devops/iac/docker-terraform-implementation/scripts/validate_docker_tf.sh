@@ -43,3 +43,4 @@ fi
 
 echo "============================================================"
 echo "SUCCESS: Docker Terraform checks passed cleanly!"
+

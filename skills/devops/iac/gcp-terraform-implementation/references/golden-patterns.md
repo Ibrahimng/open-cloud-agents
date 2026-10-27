@@ -136,3 +136,4 @@ resource "google_project_iam_member" "storage_viewer" {
   member  = "serviceAccount:${google_service_account.app_sa.email}"
 }
 ```
+

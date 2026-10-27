@@ -39,3 +39,4 @@ fi
 
 echo "============================================================"
 echo "SUCCESS: GCP Terraform checks passed cleanly!"
+

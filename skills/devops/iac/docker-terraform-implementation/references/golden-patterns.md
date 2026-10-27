@@ -108,3 +108,4 @@ resource "docker_container" "app_with_secrets" {
   }
 }
 ```
+
