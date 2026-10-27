@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-10-26
 
 ### 💰 FinOps Cloud Waste Reaper, Docs-as-Code & Automated Governance
-This minor release introduces the complete **FinOps & Cost Optimization** domain, an automated **Docs-as-Code** static site on GitHub Pages, selective CI change detection, and automated **Dependabot** daily security auditing across 12 merged Pull Requests (#1–#12).
+This minor release introduces the complete **FinOps & Cost Optimization** domain, an automated **Docs-as-Code** static site on GitHub Pages, selective CI change detection, and automated **Dependabot** daily security auditing across 12 merged Pull Requests (#1-#12).
 
 ---
 
@@ -46,7 +46,7 @@ This minor release introduces the complete **FinOps & Cost Optimization** domain
 ---
 
 ### 🔄 Changed
-* **Upgraded GitHub Actions Toolchain (PRs #3–#12):** Bumped all workflow actions to Node 24–compatible releases (`actions/checkout@v7`, `actions/deploy-pages@v5`, `actions/upload-pages-artifact@v5`, `actions/configure-pages@v6`, `actions/setup-python@v7`, `actions/upload-artifact@v7`, `actions/github-script@v9`, `softprops/action-gh-release@v3`, `dorny/paths-filter@v4`).
+* **Upgraded GitHub Actions Toolchain (PRs #3-#12):** Bumped all workflow actions to Node 24-compatible releases (`actions/checkout@v7`, `actions/deploy-pages@v5`, `actions/upload-pages-artifact@v5`, `actions/configure-pages@v6`, `actions/setup-python@v7`, `actions/upload-artifact@v7`, `actions/github-script@v9`, `softprops/action-gh-release@v3`, `dorny/paths-filter@v4`).
 * **Python Tooling:** Pinned `requirements.txt` with `mkdocs-material` and `pyyaml>=6.0.3` (PR #2, PR #3).
 * **Local `act` Runner:** Configured `.actrc` with `catthehacker/ubuntu:act-latest` on `linux/amd64` to prevent interactive prompts and Apple Silicon warnings.
 

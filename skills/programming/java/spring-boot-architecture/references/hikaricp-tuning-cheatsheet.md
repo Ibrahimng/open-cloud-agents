@@ -6,7 +6,7 @@ connections = ((core_count * 2) + effective_spindle_count)
 ```
 - E.g. For a 4-core database server with an SSD (1 spindle equivalent):
   `connections = (4 * 2) + 1 = 9 to 10 connections`.
-- **Counter-Intuitive Truth:** Adding hundreds of connections to a database slows it down due to context switching and lock thrashing. Keep pools small (10–20 connections per instance) and scale compute horizontally.
+- **Counter-Intuitive Truth:** Adding hundreds of connections to a database slows it down due to context switching and lock thrashing. Keep pools small (10-20 connections per instance) and scale compute horizontally.
 
 ## Recommended `application.yml` Parameters
 ```yaml

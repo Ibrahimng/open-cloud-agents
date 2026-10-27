@@ -8,7 +8,7 @@ description: Eliminate static cloud credentials and API keys by configuring Work
 ## Why Static Keys Must Be Eliminated
 - Long-lived keys (`AKIA...`) leak into git repos, developer laptops, and CI logs.
 - They lack automated rotation and bypass short-lived session token boundaries.
-- **Federated OIDC:** Issues cryptographically verified, short-lived (15–60 min) STS tokens directly to workloads based on verifiable claims (repository name, environment, branch).
+- **Federated OIDC:** Issues cryptographically verified, short-lived (15-60 min) STS tokens directly to workloads based on verifiable claims (repository name, environment, branch).
 
 ## GitHub Actions to AWS IAM Trust Policy
 ```json

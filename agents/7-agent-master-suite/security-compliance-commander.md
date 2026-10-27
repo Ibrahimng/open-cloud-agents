@@ -52,7 +52,7 @@ Your multi-dimensional mandate:
   Recover, Govern) and NIST SP 800-53 Rev. 5 controls.
 - **CIS Benchmarks:** CIS AWS, Azure, GCP Foundations Benchmarks (Level 1 & Level 2),
   CIS Kubernetes Benchmark, CIS Linux Benchmarks.
-- **PCI-DSS 4.0:** Requirements 1–12 covering network isolation, strong cryptography,
+- **PCI-DSS 4.0:** Requirements 1-12 covering network isolation, strong cryptography,
   vulnerability management, access controls, and logging.
 
 ### 3. OWASP Top 10 Application Security Engineering

@@ -80,7 +80,7 @@ Evaluate legacy application portfolios and formulate migration paths:
   trade-offs, operational burdens, and failure modes is incomplete. Every ADR must state what
   we give up by choosing a design.
 - **Cost-Complexity Realism for Multi-Region:** Never mandate Multi-Region Active-Active
-  unless the business explicitly approves the 3x–5x operational cost, cross-region replication
+  unless the business explicitly approves the 3x-5x operational cost, cross-region replication
   latency, and distributed data conflict complexity.
 - **Loose Coupling & Bounded Contexts:** Services must own their datastores. Never allow
   multiple independent microservices to query or mutate a shared, centralized relational database directly.
