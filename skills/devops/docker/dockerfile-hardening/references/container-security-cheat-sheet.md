@@ -4,7 +4,7 @@
 
 | Aspect | Distroless (`gcr.io/distroless/*`) | Alpine (`alpine:3.20`) | Debian / Ubuntu (`debian:bookworm`) |
 |---|---|---|---|
-| **Image Size** | Minimal (~20–60MB) | Very small (~5–15MB) | Heavy (~120–250MB) |
+| **Image Size** | Minimal (~20-60MB) | Very small (~5-15MB) | Heavy (~120-250MB) |
 | **Shell Included?** | **NO** (`/bin/sh` absent) | Yes (`/bin/sh` via busybox) | Yes (`/bin/bash`, `/bin/sh`) |
 | **Package Manager?** | **NO** (no `apt`, `apk`) | Yes (`apk`) | Yes (`apt`) |
 | **CVE Attack Surface** | Near Zero | Very low | Moderate to High |

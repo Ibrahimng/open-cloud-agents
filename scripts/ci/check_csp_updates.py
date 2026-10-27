@@ -3,7 +3,7 @@
 scripts/ci/check_csp_updates.py
 =============================================================================
 Automated Cloud Service Provider (CSP) Upstream Drift & Update Monitor
-Open Cloud Agents — Master Verification & Synchronization Suite
+Open Cloud Agents - Master Verification & Synchronization Suite
 
 Monitors upstream repositories for AWS, Azure, and GCP agent skills.
 Detects drift, identifies new commits and skills, and generates structured

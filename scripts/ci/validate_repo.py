@@ -6,6 +6,7 @@ Validates:
 2. Executable permissions on all helper and verification shell scripts (*.sh).
 3. Internal relative Markdown links across core skills, agents, docs, and root files.
 4. Absence of hardcoded local absolute user paths (/Users/ or /home/).
+5. Absence of invisible / Trojan Source characters and code confusables in scripts & IaC.
 
 Usage:
     python3 scripts/ci/validate_repo.py
@@ -165,6 +166,82 @@ def check_no_absolute_user_paths() -> list[str]:
     return errors
 
 
+def check_character_hygiene() -> list[str]:
+    log_info("Checking for invisible characters, Trojan Source, and code confusables...")
+    errors = []
+
+    # 1. Dangerous invisible and bidirectional override characters (Trojan Source)
+    # Prohibited across all files (docs, code, configs)
+    INVISIBLE_CHARS = {
+        "\u200b": "Zero-width space (U+200B)",
+        "\u200c": "Zero-width non-joiner (U+200C)",
+        "\u200d": "Zero-width joiner (U+200D)",
+        "\ufeff": "Byte-order mark outside header (U+FEFF)",
+        "\u202a": "Left-to-right embedding (U+202A)",
+        "\u202b": "Right-to-left embedding (U+202B)",
+        "\u202c": "Pop directional formatting (U+202C)",
+        "\u202d": "Left-to-right override (U+202D)",
+        "\u202e": "Right-to-left override (U+202E)",
+    }
+
+    # 2. Ambiguous / confusable characters prohibited in code and configurations
+    CODE_CONFUSABLES = {
+        "\u2013": "Unicode en-dash U+2013 (use standard ASCII '-')",
+        "\u2014": "Unicode em-dash U+2014 (use standard ASCII '-')",
+        "\u00d7": "Multiplication sign U+00D7 (use standard ASCII '*' or 'x')",
+        "\u037e": "Greek question mark U+037E (use standard ASCII ';')",
+        "\u201c": "Left smart double quote U+201C (use ASCII '\"')",
+        "\u201d": "Right smart double quote U+201D (use ASCII '\"')",
+        "\u2018": "Left smart single quote U+2018 (use ASCII '\'') ",
+        "\u2019": "Right smart single quote U+2019 (use ASCII '\'') ",
+    }
+
+    code_exts = (".sh", ".py", ".tf", ".yml", ".yaml", ".json")
+    all_exts = (".md", ".sh", ".py", ".tf", ".yml", ".yaml", ".json")
+    count = 0
+
+    for root, _, files in os.walk(REPO_ROOT):
+        if ".git" in root or "ai_brain" in root or "node_modules" in root:
+            continue
+        for f in files:
+            if not f.endswith(all_exts):
+                continue
+            p = os.path.join(root, f)
+            rel_p = os.path.relpath(p, REPO_ROOT)
+
+            # Skip settings.json and the validator script itself
+            if rel_p in (".vscode/settings.json", "scripts/ci/validate_repo.py"):
+                continue
+
+            count += 1
+            is_code_file = f.endswith(code_exts) and ("skills/csp" not in root)
+
+            try:
+                with open(p, "r", encoding="utf-8", errors="ignore") as fh:
+                    for line_num, line in enumerate(fh, 1):
+                        # Check invisible / Trojan Source characters everywhere
+                        for ch, desc in INVISIBLE_CHARS.items():
+                            if ch in line:
+                                errors.append(f"{rel_p}:{line_num}: Invisible/Trojan Source character detected: {desc}")
+
+                        # Check code confusables in core scripts, IaC, and workflows
+                        if is_code_file:
+                            for ch, desc in CODE_CONFUSABLES.items():
+                                if ch in line:
+                                    errors.append(f"{rel_p}:{line_num}: Confusable character detected: {desc} -> {line.strip()[:70]}")
+            except Exception as e:
+                errors.append(f"{rel_p}: Failed to inspect characters: {e}")
+
+    if not errors:
+        log_pass(f"No invisible characters or code confusables found across {count} files.")
+    else:
+        for err in errors[:10]:
+            log_fail(err)
+        if len(errors) > 10:
+            log_fail(f"... and {len(errors) - 10} more character hygiene errors.")
+    return errors
+
+
 def main():
     print("=" * 60)
     print(" 🛡️  Open Cloud Agents: Repository Hygiene & Validation Suite")
@@ -175,6 +252,7 @@ def main():
     all_errors.extend(check_script_permissions())
     all_errors.extend(check_markdown_links())
     all_errors.extend(check_no_absolute_user_paths())
+    all_errors.extend(check_character_hygiene())
 
     print("=" * 60)
     if all_errors:
