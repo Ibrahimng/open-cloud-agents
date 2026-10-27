@@ -78,20 +78,54 @@ jobs:
         run: |
           python3 scripts/ci/audit_pr_diff.py "${{ github.base_ref }}"
 
-      - name: Post PR Review Comment
+      - name: Antigravity-AI Autonomous DevSecOps Review & Approval
         uses: actions/github-script@v9
         if: always()
         continue-on-error: true
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            if (fs.existsSync('pr_review.md')) {
-              const body = fs.readFileSync('pr_review.md', 'utf8');
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
+            if (!fs.existsSync('pr_review.md')) {
+              console.log('No review summary found.');
+              return;
+            }
+
+            const summary = fs.readFileSync('pr_review.md', 'utf8');
+            const isClean = summary.includes('Verdict: ✅ Clean');
+
+            // Fetch existing reviews to ensure idempotency
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            const alreadyApproved = reviews.some(
+              r => r.user.login === 'github-actions[bot]' && r.state === 'APPROVED'
+            );
+
+            if (isClean) {
+              if (!alreadyApproved) {
+                await github.rest.pulls.createReview({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.issue.number,
+                  event: 'APPROVE',
+                  body: `### 🤖 Antigravity-AI: Autonomous DevSecOps Approval\n\n${summary}\n\n> *Approved autonomously by Antigravity-AI based on clean pre-merge security and Well-Architected compliance verification.*`
+                });
+                console.log('✅ Submitted formal APPROVE review as Antigravity-AI.');
+              } else {
+                console.log('ℹ️ PR already approved by Antigravity-AI.');
+              }
+            } else {
+              await github.rest.pulls.createReview({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: body
+                pull_number: context.issue.number,
+                event: 'COMMENT',
+                body: `### 🤖 Antigravity-AI: DevSecOps Review Findings\n\n${summary}\n\n> *⚠️ Human review required before merge.*`
               });
+              console.log('⚠️ Submitted findings comment due to flagged items.');
             }
 
