@@ -92,7 +92,10 @@ jobs:
             }
 
             const summary = fs.readFileSync('pr_review.md', 'utf8');
-            const isClean = summary.includes('Verdict: ✅ Clean');
+            const verdict = fs.existsSync('pr_verdict.txt')
+              ? fs.readFileSync('pr_verdict.txt', 'utf8').trim()
+              : '';
+            const isClean = verdict === 'CLEAN' || (summary.includes('Clean') && !summary.includes('Needs Human Review'));
 
             // Fetch existing reviews to ensure idempotency
             const { data: reviews } = await github.rest.pulls.listReviews({

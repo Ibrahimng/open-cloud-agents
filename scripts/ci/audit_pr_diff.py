@@ -61,5 +61,7 @@ if __name__ == "__main__":
     flags, summary = audit_diff(base)
     with open("pr_review.md", "w", encoding="utf-8") as f:
         f.write(summary)
+    with open("pr_verdict.txt", "w", encoding="utf-8") as f:
+        f.write("NEEDS_REVIEW" if flags else "CLEAN")
     print(summary)
     sys.exit(0)
