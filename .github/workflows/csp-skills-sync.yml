@@ -98,3 +98,4 @@ jobs:
               body: body,
               labels: ['bug', 'automated-audit', 'csp-sync']
             });
+
