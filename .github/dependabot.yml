@@ -4,6 +4,7 @@
 # Daily automated dependency and vulnerability scanning.
 # Scheduled daily at 04:00 EET (02:00 UTC).
 # Notifications and PR reviews assigned to @ibrahimng.
+# Commits are automatically signed off by dependabot[bot] via .github/workflows/dependabot-signoff.yml
 # ==============================================================================
 
 version: 2

@@ -1,0 +1,48 @@
+name: Dependabot Automated Sign-off
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot-signoff:
+    name: Sign Off Dependabot Commits (DCO)
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Checkout PR Branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply DCO Sign-off
+        run: |
+          git config user.name "dependabot[bot]"
+          git config user.email "49699333+dependabot[bot]@users.noreply.github.com"
+
+          LATEST_MSG=$(git log -1 --pretty=%B)
+          echo "Checking latest commit message..."
+          echo "----------------------------------------"
+          echo "$LATEST_MSG"
+          echo "----------------------------------------"
+
+          if echo "$LATEST_MSG" | grep -q "Signed-off-by: dependabot\[bot\]"; then
+            echo "✔ Commit already contains DCO sign-off. Skipping."
+            exit 0
+          fi
+
+          echo "ℹ Appending DCO sign-off to dependabot commit..."
+          git commit --amend --no-edit --signoff
+
+          echo "ℹ Force-pushing signed commit back to branch: ${{ github.event.pull_request.head.ref }}..."
+          git push --force-with-lease origin ${{ github.event.pull_request.head.ref }}
+
+          echo "✔ Successfully signed off Dependabot PR commit."
+          echo "### ✍️ Dependabot DCO Sign-off Applied" >> $GITHUB_STEP_SUMMARY
+          echo "Commit was successfully amended with \`Signed-off-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\`." >> $GITHUB_STEP_SUMMARY
