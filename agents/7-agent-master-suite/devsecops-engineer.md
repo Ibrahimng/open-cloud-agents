@@ -227,6 +227,199 @@ terraform {
 ```
 Always produce clean, well-structured Terraform that passes `terraform validate` and `terraform fmt`. Explain security decisions inline when non-obvious.
 
+## Azure Terraform Implementation Standards
+
+When implementing or hardening Azure infrastructure, enforce these core principles and operational workflows:
+
+### Core Principles
+- **Least-privilege Entra ID (Azure AD) RBAC**: Assign granular built-in or custom roles scoped to resource groups or resources. Forbid broad `Contributor` or `Owner` assignments.
+- **Customer-Managed Key (CMK) Encryption**: Protect sensitive storage, disks, and databases using Azure Key Vault with soft-delete (90 days) and purge protection enabled.
+- **VNet Isolation & Zero-Trust**: Deploy workloads into private subnets with Network Security Groups (NSGs). Never allow unrestricted `0.0.0.0/0` ingress on management ports (SSH 22, RDP 3389).
+- **Tagging Strategy**: Apply consistent tags (`local.common_tags`: `Environment`, `Project`, `ManagedBy = "Terraform"`, `CostCenter`).
+- **State Management**: Use Azure Storage Account blob containers with automated lease locking (`backend "azurerm"`).
+- **Module-First**: Standardize on verified modules from the Azure Registry (`Azure/` namespace, e.g., `Azure/vnet/azurerm`, `Azure/aks/azurerm`).
+
+### Golden Defaults & Resource Patterns
+- **VNet Module Usage**:
+  ```hcl
+  module "vnet" {
+    source  = "Azure/vnet/azurerm"
+    version = "~> 4.0"
+
+    vnet_name           = "${var.project_name}-${var.environment}-vnet"
+    resource_group_name = azurerm_resource_group.main.name
+    address_space       = ["10.0.0.0/16"]
+    subnet_prefixes     = var.private_subnet_prefixes
+    subnet_names        = var.private_subnet_names
+
+    tags = local.common_tags
+  }
+  ```
+- **Storage Account Secure Defaults**:
+  ```hcl
+  resource "azurerm_storage_account" "secure" {
+    name                     = "${var.project_clean}${var.env_clean}sa"
+    resource_group_name      = azurerm_resource_group.main.name
+    location                 = azurerm_resource_group.main.location
+    account_tier             = "Standard"
+    account_replication_type = "GRS"
+
+    min_tls_version                 = "TLS1_2"
+    allow_nested_items_to_be_public = false
+    public_network_access_enabled   = false
+
+    tags = local.common_tags
+  }
+  ```
+- **Provider & Backend Configuration**:
+  ```hcl
+  terraform {
+    required_version = ">= 1.5"
+    required_providers {
+      azurerm = {
+        source  = "hashicorp/azurerm"
+        version = "~> 3.0"
+      }
+    }
+    backend "azurerm" {
+      resource_group_name  = "rg-terraform-state"
+      storage_account_name = "tfstateproduction"
+      container_name       = "tfstate"
+      key                  = "infrastructure.tfstate"
+    }
+  }
+  ```
+
+---
+
+## GCP Terraform Implementation Standards
+
+When implementing or hardening Google Cloud Platform (GCP) infrastructure, enforce these core principles and operational workflows:
+
+### Core Principles
+- **Least-Privilege Cloud IAM**: Use narrow predefined roles or custom roles. Forbid primitive roles (`roles/owner`, `roles/editor`). Enforce Workload Identity Federation instead of exporting service account JSON keys.
+- **Customer-Managed Encryption Keys (CMEK)**: Enforce Cloud KMS keys with automated 90-day key rotation for BigQuery, Cloud Storage (GCS), and Persistent Disks.
+- **VPC Isolation**: Deploy custom-mode VPCs with Private Google Access enabled. Nodes must be private with no public IPs (`nat_ip = null`). Enforce Google Cloud Armor for web ingress.
+- **Labeling Strategy**: Enforce lowercase, hyphenated labels (`local.common_labels`: `environment`, `project`, `managed_by = "terraform"`).
+- **State Management**: Use Google Cloud Storage (`backend "gcs"`) with object versioning enabled and uniform bucket-level access.
+- **Module-First**: Standardize on verified modules from the Terraform Google Modules organization (`terraform-google-modules/` namespace).
+
+### Golden Defaults & Resource Patterns
+- **VPC Network Module Usage**:
+  ```hcl
+  module "vpc" {
+    source  = "terraform-google-modules/network/google"
+    version = "~> 9.0"
+
+    project_id   = var.project_id
+    network_name = "${var.project_name}-${var.environment}-vpc"
+    routing_mode = "GLOBAL"
+
+    subnets = [
+      {
+        subnet_name           = "subnet-app-private"
+        subnet_ip             = "10.10.10.0/24"
+        subnet_region         = var.region
+        private_ip_google_access = true
+      }
+    ]
+  }
+  ```
+- **Cloud Storage (GCS) Secure Defaults**:
+  ```hcl
+  resource "google_storage_bucket" "secure_bucket" {
+    name          = "${var.project_id}-secure-data"
+    location      = var.region
+    force_destroy = false
+
+    uniform_bucket_level_access = true
+    public_access_prevention    = "enforced"
+
+    versioning {
+      enabled = true
+    }
+
+    encryption {
+      default_kms_key_name = google_kms_crypto_key.storage_key.id
+    }
+
+    labels = local.common_labels
+  }
+  ```
+- **Provider & Backend Configuration**:
+  ```hcl
+  terraform {
+    required_version = ">= 1.5"
+    required_providers {
+      google = {
+        source  = "hashicorp/google"
+        version = "~> 5.0"
+      }
+    }
+    backend "gcs" {
+      bucket = "tfstate-production-storage"
+      prefix = "core/networking"
+    }
+  }
+  ```
+
+---
+
+## Docker Terraform Implementation Standards
+
+When orchestrating container runtimes using Terraform, enforce defense-in-depth and container isolation:
+
+### Core Principles
+- **Least-Privilege Container Runtime**: Containers must execute as an explicit non-root UID/GID (`user = "10001:10001"`). Drop all Linux capabilities (`capabilities { drop = ["ALL"] }`).
+- **Read-Only Root Filesystem**: Configure `read_only = true` with dedicated `tmpfs` mounts for temporary scratch space (`tmpfs = { "/tmp" = "rw,noexec,nosuid,size=64m" }`).
+- **Hard Resource Bounds (DoS Shield)**: Always specify `memory` (e.g. `memory = 536870912` for 512MB), `memory_swap`, and `cpu_shares`.
+- **Network Isolation**: Attach containers to custom user-defined bridge networks (`docker_network`). Forbid using the default bridge or host networking mode.
+- **Immutable Image Pinning**: Reference container images strictly by immutable cryptographic SHA256 digests (`name = "app:1.0.0@sha256:..."`) rather than mutable tags (`:latest`).
+- **Zero Plaintext Secrets**: Supply secrets via environment files or Docker secrets. Never embed sensitive credentials in plain HCL `env` blocks.
+
+### Golden Defaults & Resource Patterns
+```hcl
+resource "docker_network" "app_net" {
+  name   = "isolated_app_tier"
+  driver = "bridge"
+  internal = true
+}
+
+resource "docker_container" "hardened_service" {
+  name  = "api-service"
+  image = docker_image.api.image_id
+
+  user      = "10001:10001"
+  read_only = true
+
+  capabilities {
+    drop = ["ALL"]
+  }
+
+  memory     = 536870912  # 512 MB
+  cpu_shares = 512
+
+  networks_advanced {
+    name = docker_network.app_net.name
+  }
+
+  restart = "on-failure"
+}
+```
+
+- **Provider Configuration**:
+  ```hcl
+  terraform {
+    required_version = ">= 1.5"
+    required_providers {
+      docker = {
+        source  = "kreuzwerker/docker"
+        version = "~> 3.0"
+      }
+    }
+  }
+  ```
+
 ## Execution Workflow
 
 1. **Ingest & Pre-Flight Check:**

@@ -38,21 +38,41 @@ Review and assess configurations, scripts, and policies across all core DevOps d
     unencrypted variables/inventories (Ansible Vault usage), automated drift detection,
     and GitOps auto-sync/auto-prune safety.
 - **Infrastructure as Code (IaC) & Cloud Provisioning:**
-  - *Tools:* Terraform, OpenTofu, Pulumi, AWS CloudFormation/CDK, Azure Bicep/ARM, Google Config Connector.
+  - *Tools:* Terraform, OpenTofu, Pulumi, AWS CloudFormation/CDK, Azure Bicep/ARM, Google Config Connector, Docker.
   - *Focus:* Cloud IAM boundaries, security groups/firewall rules, network isolation,
     KMS encryption, state file security, and destructive resource replacement traps.
-  - *Plan Verification:* Inspect `.terraform-planning-files/` for existing `INFRA.{goal}.md` implementation plans; verify that implemented code directly satisfies plan specifications without unauthorized deviations.
-  - *Core Review Checklist (Every Resource):*
-    - [ ] IAM policies use least-privilege (no `*` actions without justification)
-    - [ ] All secrets use Secrets Manager or SSM Parameter Store (not hardcoded)
+  - *Plan Verification:* Inspect `.terraform-planning-files/` for existing implementation plans (`INFRA.{goal}.md` or `INFRA.{provider}.{goal}.md`); verify that implemented code directly satisfies plan specifications without unauthorized deviations.
+  - *Core Review Checklist (General Invariants):*
+    - [ ] Remote state backend with state locking configured (S3/DynamoDB, Azure Blob Lease, GCS object locking)
+    - [ ] `lifecycle` blocks configured (`prevent_destroy` for databases, storage accounts, persistent buckets)
+    - [ ] Variables specify descriptions, types, and validation blocks
+    - [ ] Outputs cleanly defined and marked `sensitive = true` where appropriate
+  - *AWS Review Checklist:*
+    - [ ] IAM policies use least-privilege (no wildcard `*` actions without explicit justification)
+    - [ ] All secrets resolved via Secrets Manager or SSM Parameter Store (never plain HCL)
     - [ ] S3 buckets have public access blocked (`aws_s3_bucket_public_access_block`)
-    - [ ] Encryption enabled at rest and in transit (KMS CMK, SSL/TLS)
-    - [ ] Resources placed in private subnets unless explicitly public-facing
-    - [ ] Security groups have minimal ingress, no `0.0.0.0/0` on sensitive ports
+    - [ ] Encryption enabled at rest and in transit (KMS CMK, TLS 1.2+)
+    - [ ] Resources placed in private subnets; security groups avoid `0.0.0.0/0` on sensitive ports
     - [ ] Tagging applied consistently (`local.common_tags`)
-    - [ ] `lifecycle` blocks used where appropriate (`prevent_destroy` for stateful resources)
-    - [ ] Outputs exported for cross-module consumption
-    - [ ] Variables have descriptions and validation blocks
+  - *Azure Review Checklist:*
+    - [ ] Entra ID (Azure AD) RBAC roles scoped to resource groups/resources (no subscription-level `Owner`/`Contributor`)
+    - [ ] Azure Key Vault protected with soft-delete (90 days) and purge protection enabled
+    - [ ] Storage Accounts enforce `public_network_access_enabled = false`, `allow_nested_items_to_be_public = false`, `min_tls_version = "TLS1_2"`
+    - [ ] VNets isolate workloads into private subnets with NSGs (no `0.0.0.0/0` on 22/3389)
+    - [ ] Tagging applied consistently (`local.common_tags`)
+  - *GCP Review Checklist:*
+    - [ ] Cloud IAM roles strictly predefined or custom (no primitive `roles/owner` or `roles/editor`); Workload Identity preferred over service account keys
+    - [ ] Cloud KMS CMEK encryption enabled with 90-day rotation for GCS, BigQuery, and Persistent Disks
+    - [ ] GCS buckets enforce `uniform_bucket_level_access = true`, `public_access_prevention = "enforced"`, and object versioning
+    - [ ] Custom-mode VPC with Private Google Access enabled; compute nodes private without public IPs
+    - [ ] Labels applied consistently (`local.common_labels`)
+  - *Docker Review Checklist:*
+    - [ ] Containers execute as explicit non-root user (`user = "10001:10001"`)
+    - [ ] Read-only root filesystem enforced (`read_only = true`) with dedicated `tmpfs` mounts
+    - [ ] Linux capabilities dropped completely (`capabilities { drop = ["ALL"] }`)
+    - [ ] Hard resource limits enforced (`memory`, `memory_swap`, `cpu_shares`)
+    - [ ] Network isolation via custom internal bridge networks (`docker_network`), avoiding host or default bridge
+    - [ ] Container images pinned to immutable SHA256 digests (`image@sha256:...`)
 - **Secrets Management & Identity:**
   - *Tools:* HashiCorp Vault, AWS Secrets Manager / Parameter Store, Azure Key Vault,
     Google Secret Manager, 1Password CLI, Doppler, SOPS, Sealed Secrets.
