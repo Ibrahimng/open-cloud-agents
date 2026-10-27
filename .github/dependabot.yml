@@ -26,6 +26,13 @@ updates:
       - "dependencies"
       - "security"
       - "automated"
+    ignore:
+      - dependency-name: "dorny/paths-filter"
+        versions: ["4.x"]
+      - dependency-name: "actions/setup-python"
+        versions: ["7.x"]
+      - dependency-name: "softprops/action-gh-release"
+        versions: ["3.x"]
 
   # 2. Python Dependencies (CI, Documentation & Scripts)
   - package-ecosystem: "pip"
