@@ -1,0 +1,284 @@
+name: Autonomous Gatekeeper & Quality Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - "feat/**"
+      - "fix/**"
+      - "docs/**"
+      - "chore/**"
+      - "refactor/**"
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Architectural task to run through the 7-Agent Master Suite"
+        required: false
+        default: "Architect zero-downtime database migration to multi-region Aurora Global Database with SOC2 compliance"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  detect-changes:
+    name: Detect Changed Subsystems
+    runs-on: ubuntu-latest
+    outputs:
+      scripts: ${{ steps.filter.outputs.scripts }}
+      finops: ${{ steps.filter.outputs.finops }}
+      agents: ${{ steps.filter.outputs.agents }}
+      docs_only: ${{ steps.filter.outputs.docs_only }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Filter Changed Paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ github.event.pull_request.base.ref || 'main' }}
+          filters: |
+            scripts:
+              - '**/*.sh'
+              - 'scripts/**'
+              - '.github/workflows/autonomous-gatekeeper.yml'
+            finops:
+              - 'skills/finops/**'
+              - '.github/workflows/autonomous-gatekeeper.yml'
+            agents:
+              - 'agents/**'
+              - 'scripts/agents/**'
+              - '.github/workflows/autonomous-gatekeeper.yml'
+            docs_only:
+              - 'docs/**'
+              - 'README.md'
+              - 'CHANGELOG.md'
+              - 'CONTRIBUTING.md'
+              - 'CONTRIBUTORS.md'
+              - 'mkdocs.yml'
+
+  validate-repo:
+    name: Repository Hygiene & Skill Specs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Run Repository Validator
+        run: python3 scripts/ci/validate_repo.py
+
+  validate-agent-specs:
+    name: Agent Persona & Contract Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Validate 7-Agent Master Suite Contracts
+        run: python3 scripts/agents/agent_pipeline.py --validate
+
+  run-agent-handoff-pipeline:
+    name: Multi-Agent Handoff Pipeline Simulation
+    needs: validate-agent-specs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Execute 6-Stage Multi-Agent Handoff
+        run: |
+          TASK_INPUT="${{ github.event.inputs.task }}"
+          if [ -z "$TASK_INPUT" ]; then
+            python3 scripts/agents/agent_pipeline.py --simulate --export-json execution_trace.json
+          else
+            python3 scripts/agents/agent_pipeline.py --task "$TASK_INPUT" --export-json execution_trace.json
+          fi
+
+      - name: Upload Pipeline Execution Trace Artifact
+        if: ${{ !env.ACT }}
+        uses: actions/upload-artifact@v7
+        continue-on-error: true
+        with:
+          name: agent-execution-trace
+          path: execution_trace.json
+          retention-days: 7
+
+  secret-scan:
+    name: Secret Leak Detection
+    needs: detect-changes
+    if: github.event_name == 'pull_request' || needs.detect-changes.outputs.docs_only != 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Install Gitleaks
+        run: |
+          GITLEAKS_VERSION="8.18.2"
+          ARCH=$(uname -m)
+          if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+            GITLEAKS_ARCH="linux_arm64"
+          else
+            GITLEAKS_ARCH="linux_x64"
+          fi
+          wget -q "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_${GITLEAKS_ARCH}.tar.gz"
+          tar -xzf "gitleaks_${GITLEAKS_VERSION}_${GITLEAKS_ARCH}.tar.gz"
+          sudo mv gitleaks /usr/local/bin/
+
+      - name: Run Gitleaks Audit
+        run: gitleaks detect --source . --verbose --redact
+
+  shell-lint:
+    name: Shell Script Syntax & Linting
+    needs: detect-changes
+    if: needs.detect-changes.outputs.scripts == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck on all Scripts
+        run: |
+          echo "Linting all shell scripts..."
+          find . -name "*.sh" -not -path "*/.*" -not -path "./ai_brain/*" | while read -r script; do
+            echo "Checking: $script"
+            shellcheck --severity=warning -x "$script"
+          done
+
+  finops-waste-scan:
+    name: FinOps Cloud Waste Reaper Regression
+    needs: detect-changes
+    if: needs.detect-changes.outputs.finops == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Execute Cloud Waste Reaper (Mock Mode)
+        run: |
+          ./skills/finops/cloud-waste-reaper/scripts/reap_cloud_waste.sh \
+            --mock \
+            --export-json /tmp/waste_report.json \
+            --export-markdown /tmp/waste_report.md
+          echo "=== Waste Report Preview ==="
+          cat /tmp/waste_report.md
+
+  autonomous-gatekeeper:
+    name: Antigravity-AI Autonomous Review & Approval Gate
+    if: always() && github.event_name == 'pull_request'
+    needs:
+      - detect-changes
+      - validate-repo
+      - validate-agent-specs
+      - run-agent-handoff-pipeline
+      - secret-scan
+      - shell-lint
+      - finops-waste-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Run DevSecOps Automated Review on Diff
+        id: review
+        run: |
+          python3 scripts/ci/audit_pr_diff.py "${{ github.base_ref }}"
+
+      - name: Antigravity-AI Final Review & Approval Decision
+        uses: actions/github-script@v9
+        env:
+          NEEDS_CONTEXT: ${{ toJSON(needs) }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // 1. Evaluate upstream job results
+            const needs = JSON.parse(process.env.NEEDS_CONTEXT || '{}');
+            const failedJobs = Object.entries(needs)
+              .filter(([name, data]) => data.result === 'failure')
+              .map(([name]) => name);
+
+            // Fetch existing reviews to ensure idempotency
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            const alreadyApproved = reviews.some(
+              r => r.user.login === 'github-actions[bot]' && r.state === 'APPROVED'
+            );
+
+            // If any upstream verification check failed:
+            if (failedJobs.length > 0) {
+              const failureList = failedJobs.map(j => `- ❌ \`${j}\` failed`).join('\n');
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                event: 'COMMENT',
+                body: `### 🤖 Antigravity-AI: Pre-Merge Verification Blocked\n\n**Verdict:** 🛑 Automated Quality Gates Failed\n\nThe following upstream CI checks failed and must be resolved before approval:\n${failureList}\n\n> *Please resolve the failing checks and re-push.*`
+              });
+              console.log('🛑 Submitted failure comment due to upstream job failures: ' + failedJobs.join(', '));
+              core.setFailed('Upstream quality gate checks failed: ' + failedJobs.join(', '));
+              return;
+            }
+
+            // 2. Evaluate DevSecOps diff audit results
+            const summary = fs.existsSync('pr_review.md')
+              ? fs.readFileSync('pr_review.md', 'utf8')
+              : 'Audit summary not found.';
+            const verdict = fs.existsSync('pr_verdict.txt')
+              ? fs.readFileSync('pr_verdict.txt', 'utf8').trim()
+              : '';
+            const isClean = verdict === 'CLEAN' || (summary.includes('Clean') && !summary.includes('Needs Human Review'));
+
+            if (isClean) {
+              if (!alreadyApproved) {
+                const approvalBody = `### 🤖 Antigravity-AI: Autonomous Gatekeeper Approval\n\n` +
+                  `**Verdict:** ✅ All Pre-Merge Quality Gates Passed\n\n` +
+                  `#### Verified Quality Gates:\n` +
+                  `- ✅ **Repository Hygiene & Skill Specs:** Validated metadata, shell permissions, and link integrity\n` +
+                  `- ✅ **Secret Leak Detection (Gitleaks):** Zero plaintext secrets, credentials, or private keys detected\n` +
+                  `- ✅ **Agent Persona & Contract Validation:** All 7-Agent Master Suite contracts verified\n` +
+                  `- ✅ **Multi-Agent Simulation:** 6-stage handoff pipeline executed cleanly with trace artifact\n` +
+                  `- ✅ **DevSecOps Diff Audit:** No destructive IaC replacements, open 0.0.0.0/0 ingress, or permission escalations\n\n` +
+                  `${summary}\n\n` +
+                  `> *Approved autonomously by Antigravity-AI as the pre-merge gatekeeper for Open Cloud Agents.*`;
+
+                await github.rest.pulls.createReview({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.issue.number,
+                  event: 'APPROVE',
+                  body: approvalBody
+                });
+                console.log('✅ Submitted formal APPROVE review as Antigravity-AI.');
+              } else {
+                console.log('ℹ️ PR already approved by Antigravity-AI.');
+              }
+            } else {
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                event: 'COMMENT',
+                body: `### 🤖 Antigravity-AI: DevSecOps Review Findings\n\n${summary}\n\n> *⚠️ Human review required before merge.*`
+              });
+              console.log('⚠️ Submitted findings comment due to flagged items.');
+              core.setFailed('DevSecOps Reviewer flagged potential security/IaC risks.');
+            }
+

@@ -84,7 +84,7 @@ python3 scripts/agents/agent_pipeline.py --simulate
 python3 scripts/agents/agent_pipeline.py --task "Architect zero-downtime payments failover with Aurora Global Database"
 ```
 
-#### 2. Automated GitHub Actions Pipeline (`.github/workflows/agents-pipeline.yml`)
+#### 2. Automated GitHub Actions Pipeline (`.github/workflows/autonomous-gatekeeper.yml`)
 - **Agent Contract Validation:** Ensures every persona has explicit tool boundaries, clear non-goals, and fits within an 8,000-token context budget.
 - **Handoff Chain Simulation:** Validates that upstream outputs (ADRs, threat models, task plans) satisfy downstream agent inputs.
 - **Automated PR Auditor:** Analyzes incoming pull request diffs using the **DevSecOps Reviewer** persona to detect state-destruction traps and open ingress rules.

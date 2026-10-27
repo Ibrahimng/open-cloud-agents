@@ -41,15 +41,15 @@ jobs:
             --update-baseline
 
           # Cat to GitHub Step Summary
-          cat /tmp/csp_summary.md >> $GITHUB_STEP_SUMMARY
+          cat /tmp/csp_summary.md >> "$GITHUB_STEP_SUMMARY"
 
           # Check if baseline was updated
           if git status --porcelain | grep -q "skills/csp/upstream-sync.json"; then
-            echo "DRIFT_FOUND=true" >> $GITHUB_ENV
-            echo "drift=true" >> $GITHUB_OUTPUT
+            echo "DRIFT_FOUND=true" >> "$GITHUB_ENV"
+            echo "drift=true" >> "$GITHUB_OUTPUT"
           else
-            echo "DRIFT_FOUND=false" >> $GITHUB_ENV
-            echo "drift=false" >> $GITHUB_OUTPUT
+            echo "DRIFT_FOUND=false" >> "$GITHUB_ENV"
+            echo "drift=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Validate Repository Hygiene
