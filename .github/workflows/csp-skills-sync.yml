@@ -1,0 +1,100 @@
+name: CSP Skills Daily Upstream Monitor
+
+on:
+  schedule:
+    # Runs daily at 04:00 AM EET (02:00 AM UTC)
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      update_baseline:
+        description: "Update upstream-sync.json baseline if drift is detected"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  csp-drift-monitor:
+    name: Monitor Upstream CSP Skills (AWS, Azure, GCP)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Run Upstream CSP Drift Check
+        id: check_drift
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 scripts/ci/check_csp_updates.py \
+            --markdown-summary /tmp/csp_summary.md \
+            --update-baseline
+
+          # Cat to GitHub Step Summary
+          cat /tmp/csp_summary.md >> $GITHUB_STEP_SUMMARY
+
+          # Check if baseline was updated
+          if git status --porcelain | grep -q "skills/csp/upstream-sync.json"; then
+            echo "DRIFT_FOUND=true" >> $GITHUB_ENV
+            echo "drift=true" >> $GITHUB_OUTPUT
+          else
+            echo "DRIFT_FOUND=false" >> $GITHUB_ENV
+            echo "drift=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate Repository Hygiene
+        if: env.DRIFT_FOUND == 'true'
+        run: |
+          python3 scripts/ci/validate_repo.py
+          python3 scripts/agents/agent_pipeline.py --validate
+
+      - name: Create Pull Request on Upstream Drift
+        if: env.DRIFT_FOUND == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore(csp): update upstream synchronization baseline
+
+            Signed-off-by: Ibrahim Jimoh <Ibrahimng@users.noreply.github.com>
+            Co-authored-by: Antigravity <antigravity@google.com>
+          committer: GitHub Actions <actions@github.com>
+          author: Ibrahim Jimoh <Ibrahimng@users.noreply.github.com>
+          branch: automated/csp-skills-sync
+          title: "chore(csp): sync upstream Cloud Service Provider (CSP) skills"
+          body-path: /tmp/csp_summary.md
+          labels: |
+            automated
+            dependencies
+            csp-sync
+          reviewers: |
+            ibrahimng
+          assignees: |
+            ibrahimng
+          delete-branch: true
+
+      - name: Notify Maintainer on Monitor Failure
+        if: failure()
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const title = `🚨 Daily CSP Monitor Alert: Upstream Check Failure [${new Date().toISOString().split('T')[0]}]`;
+            const body = `### ⚠️ Daily CSP Upstream Monitor Failure\n\nThe scheduled CSP skills drift monitor at **04:00 AM EET (02:00 AM UTC)** encountered an unexpected failure.\n\n- **Run URL:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n- **Commit:** ${context.sha}\n\ncc: @ibrahimng please investigate the workflow execution log.`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['bug', 'automated-audit', 'csp-sync']
+            });

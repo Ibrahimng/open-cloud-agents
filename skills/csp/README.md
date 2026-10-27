@@ -47,11 +47,22 @@ Each specialist agent in the suite combines cross-cloud architectural standards 
 
 ---
 
+## 🔄 Automated Upstream Synchronization & Drift Detection
+
+Open Cloud Agents includes an autonomous daily monitor to ensure all CSP skill definitions stay synchronized with upstream vendor enhancements:
+
+* **Sync Baseline:** [`upstream-sync.json`](./upstream-sync.json)
+* **Drift Detection Engine:** [`scripts/ci/check_csp_updates.py`](../../scripts/ci/check_csp_updates.py)
+* **Scheduled Pipeline:** [`.github/workflows/csp-skills-sync.yml`](../../.github/workflows/csp-skills-sync.yml) (Runs daily at **04:00 AM EET / 02:00 AM UTC**)
+* **Automated Pull Requests:** Automatically creates validated PRs assigned to `@ibrahimng` whenever upstream vendor repositories release new skills, prompt optimizations, or tool updates.
+
+---
+
 ## Upstream Attributions & Open Source Licenses
 
 The foundational skills in this directory are adapted and remixed from open-source provider projects under their respective licenses:
 
 * **AWS Skills:** Adapted from [AWS Agent Toolkit](https://github.com/aws/agent-toolkit-for-aws), licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-* **Azure Skills:** Adapted from [Azure Agent Skills](https://github.com/azure/agent-skills), licensed under the [MIT License](https://opensource.org/licenses/MIT) and [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/).
+* **Azure Skills:** Adapted from [Azure Agent Skills](https://github.com/MicrosoftDocs/Agent-Skills), licensed under the [MIT License](https://opensource.org/licenses/MIT) and [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/).
 * **Google Cloud Skills:** Adapted from [Google Agent Skills](https://github.com/google/skills), licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 

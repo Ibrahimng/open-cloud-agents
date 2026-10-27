@@ -35,4 +35,4 @@ skills/csp/azure/
 
 ## Upstream Attribution
 
-Original foundation adapted from the [Azure Agent Skills](https://github.com/azure/agent-skills) project, licensed under the [MIT License](./LICENSE) and [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+Original foundation adapted from the [Azure Agent Skills](https://github.com/MicrosoftDocs/Agent-Skills) project, licensed under the [MIT License](./LICENSE) and [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).

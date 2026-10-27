@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "description": "Canonical synchronization baseline for Cloud Service Provider (CSP) skills.",
+  "providers": {
+    "aws": {
+      "name": "Amazon Web Services (AWS)",
+      "repository": "aws/agent-toolkit-for-aws",
+      "url": "https://github.com/aws/agent-toolkit-for-aws",
+      "branch": "main",
+      "target_dir": "skills/csp/aws",
+      "last_synced_commit": "35fa6905b1e4afede203328fc1ff55b985a52e86",
+      "last_synced_date": "2026-10-27T07:31:16Z",
+      "commit_message": "chore(deps): bump jdx/mise-action (#497)"
+    },
+    "azure": {
+      "name": "Microsoft Azure",
+      "repository": "MicrosoftDocs/Agent-Skills",
+      "url": "https://github.com/MicrosoftDocs/Agent-Skills",
+      "branch": "main",
+      "target_dir": "skills/csp/azure",
+      "last_synced_commit": "95544200a6621ee7481b253beb115ac0be701689",
+      "last_synced_date": "2026-10-26T00:03:12Z",
+      "commit_message": "2026-10-25 02:48 - Generate skills from docs (code: ADO/main, target: GitHub/main) (#81)"
+    },
+    "gcp": {
+      "name": "Google Cloud Platform (GCP)",
+      "repository": "google/skills",
+      "url": "https://github.com/google/skills",
+      "branch": "main",
+      "target_dir": "skills/csp/gcp",
+      "last_synced_commit": "84e8150e4fa71bf422d5b224e215f5ba13864aa3",
+      "last_synced_date": "2026-10-26T20:19:24Z",
+      "commit_message": "Fix broken Snowflake translation documentation link in bigquery-migration-sql-translator skill."
+    }
+  }
+}
