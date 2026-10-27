@@ -2,9 +2,9 @@
 """
 validate_infra_plan.py
 =============================================================================
-Validates that an AWS Infrastructure Implementation Plan in
-.terraform-planning-files/INFRA.{goal}.md conforms to the mandatory standard:
-- Workload classification
+Validates that a Terraform Infrastructure Implementation Plan in
+.terraform-planning-files/ conforms to the mandatory standard:
+- Workload classification & provider targets
 - Well-Architected Framework alignment
 - Architecture diagrams
 - Module & resource specification matrix
