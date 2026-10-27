@@ -281,3 +281,4 @@ jobs:
               console.log('⚠️ Submitted findings comment due to flagged items.');
               core.setFailed('DevSecOps Reviewer flagged potential security/IaC risks.');
             }
+

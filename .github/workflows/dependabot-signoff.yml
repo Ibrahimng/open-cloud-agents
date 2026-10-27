@@ -22,6 +22,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Apply DCO Sign-off
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           git config user.name "dependabot[bot]"
           git config user.email "49699333+dependabot[bot]@users.noreply.github.com"
@@ -40,10 +42,10 @@ jobs:
           echo "ℹ Appending official DCO sign-off to dependabot commit..."
           git commit --amend --no-edit --signoff
 
-          echo "ℹ Force-pushing signed commit back to branch: ${{ github.event.pull_request.head.ref }}..."
-          git push --force-with-lease origin ${{ github.event.pull_request.head.ref }}
+          echo "ℹ Force-pushing signed commit back to branch: $HEAD_REF..."
+          git push --force-with-lease origin "$HEAD_REF"
 
           echo "✔ Successfully signed off Dependabot PR commit."
-          echo "### ✍️ Dependabot DCO Sign-off Applied" >> $GITHUB_STEP_SUMMARY
-          echo "Commit was successfully amended with \`Signed-off-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\`." >> $GITHUB_STEP_SUMMARY
+          echo "### ✍️ Dependabot DCO Sign-off Applied" >> "$GITHUB_STEP_SUMMARY"
+          echo "Commit was successfully amended with \`Signed-off-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\`." >> "$GITHUB_STEP_SUMMARY"
 
