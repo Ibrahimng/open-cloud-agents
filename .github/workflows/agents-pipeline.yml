@@ -76,35 +76,7 @@ jobs:
       - name: Run DevSecOps Automated Review on Diff
         id: review
         run: |
-          python3 -c "
-          import subprocess, sys
-
-          print('Auditing PR changes against Well-Architected Framework guardrails...')
-          diff_cmd = ['git', 'diff', 'origin/${{ github.base_ref }}...HEAD']
-          res = subprocess.run(diff_cmd, capture_output=True, text=True)
-          diff = res.stdout
-
-          # Basic checks for state-destruction, secrets, or unbounded security groups
-          flags = []
-          if 'forces replacement' in diff.lower() or 'force_destroy = true' in diff.lower():
-              flags.append('⚠️ Potential state destruction or force replacement detected in IaC.')
-          if '0.0.0.0/0' in diff and ('ingress' in diff or 'security_group' in diff):
-              flags.append('🚨 Open ingress to 0.0.0.0/0 detected. Ensure this is intentional.')
-          if 'chmod 777' in diff:
-              flags.append('🚨 Permissive chmod 777 detected in scripts or Dockerfiles.')
-
-          summary = '### 🛡️ DevSecOps Reviewer: Automated PR Audit Summary\n\n'
-          summary += '**Verdict:** ' + ('⚠️ Needs Human Review' if flags else '✅ Clean - No High-Risk Traps Detected') + '\n\n'
-          if flags:
-              summary += '**Flags Raised:**\n' + '\n'.join(f'- {f}' for f in flags) + '\n'
-          else:
-              summary += '- No destructive IaC replacements, open ingress rules, or credential leaks detected.\n'
-              summary += '- All changes comply with pre-merge Well-Architected safety baselines.\n'
-          
-          with open('pr_review.md', 'w') as f:
-              f.write(summary)
-          print(summary)
-          "
+          python3 scripts/ci/audit_pr_diff.py "${{ github.base_ref }}"
 
       - name: Post PR Review Comment
         uses: actions/github-script@v9

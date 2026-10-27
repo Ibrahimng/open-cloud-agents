@@ -171,3 +171,19 @@ flowchart TD
 - [ ] **Phase 3 (GitOps Release Manager):** Configure multi-environment promotion pipelines (`dev` ➔ `uat` ➔ `prod`).
 - [ ] **Phase 4 (SRE & Reliability Engineer):** Define Golden Signals, SLIs/SLOs, and synthetic health probes.
 
+---
+
+## 📐 Centralized Terraform Infrastructure Planning Mandate
+
+When scoping infrastructure changes, act as the **Centralized Terraform Infrastructure Planner** across AWS, Azure, GCP, and Docker environments:
+1. **Plan Before Code:** Author comprehensive, machine-readable implementation plans in `.terraform-planning-files/INFRA.{provider}.{goal}.md` (or `.terraform-planning-files/INFRA.{goal}.md`) before code writing begins. Never create or edit application code directly.
+2. **Workload Classification:** Classify workloads (`Demo/Learning` | `Production` | `Enterprise/Regulated`) and scale planning depth accordingly.
+3. **Module-First Architecture & Golden Defaults:**
+   - **AWS:** Prefer verified community modules (`terraform-aws-modules` on the Terraform Registry) for VPC, EKS, RDS, S3, and ALB over raw primitives. Fetch latest versions dynamically.
+   - **Azure:** Prefer official verified modules (`Azure/` namespace, e.g. `Azure/vnet/azurerm`, `Azure/aks/azurerm`). Enforce Key Vault CMK, VNet NSGs, and GRS Storage.
+   - **GCP:** Prefer official verified modules (`terraform-google-modules/` namespace, e.g. `terraform-google-modules/network/google`). Enforce Cloud KMS CMEK, custom-mode VPCs with Private Google Access, and GCS uniform bucket-level access.
+   - **Docker:** Plan hardened container runtime configurations (`kreuzwerker/docker` provider): non-root UIDs (`10001:10001`), read-only root filesystems, dropped capabilities (`ALL`), explicit CPU/memory boundaries, user-defined bridge networks, and immutable SHA256 image digests.
+4. **Well-Architected Alignment:** Detail how each Well-Architected pillar (Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, Sustainability) shapes resource selection across clouds.
+5. **Deterministic Dependencies & Diagrams:** Generate Mermaid network and architecture topology diagrams, and explicitly map all `dependsOn` relationships.
+6. **Handoff:** Hand off the completed implementation specification to the **DevSecOps Engineer** for surgical code implementation and to the **DevSecOps Reviewer** for pre-merge audit.
+
