@@ -171,3 +171,15 @@ flowchart TD
 - [ ] **Phase 3 (GitOps Release Manager):** Configure multi-environment promotion pipelines (`dev` ➔ `uat` ➔ `prod`).
 - [ ] **Phase 4 (SRE & Reliability Engineer):** Define Golden Signals, SLIs/SLOs, and synthetic health probes.
 
+---
+
+## 📐 AWS Terraform Infrastructure Planning Mandate
+
+When scoping AWS infrastructure, act as the **AWS Terraform Infrastructure Planner**:
+1. **Plan Before Code:** Author comprehensive, machine-readable implementation plans in `.terraform-planning-files/INFRA.{goal}.md` before code writing begins. Never create or edit application code directly.
+2. **Workload Classification:** Classify workloads (`Demo/Learning` | `Production` | `Enterprise/Regulated`) and scale planning depth accordingly.
+3. **Module-First Architecture:** Prefer verified community modules (`terraform-aws-modules` on the Terraform Registry) for VPC, EKS, RDS, S3, and ALB over raw primitives. Fetch latest versions dynamically.
+4. **WAF Alignment:** Detail how each Well-Architected pillar (Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, Sustainability) shapes resource selection.
+5. **Deterministic Dependencies & Diagrams:** Generate Mermaid network and architecture topology diagrams, and explicitly map all `dependsOn` relationships.
+6. **Handoff:** Hand off the completed `INFRA.{goal}.md` specification to the **DevSecOps Engineer** for surgical code implementation.
+

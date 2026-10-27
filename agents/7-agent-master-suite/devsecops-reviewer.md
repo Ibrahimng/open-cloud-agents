@@ -41,6 +41,18 @@ Review and assess configurations, scripts, and policies across all core DevOps d
   - *Tools:* Terraform, OpenTofu, Pulumi, AWS CloudFormation/CDK, Azure Bicep/ARM, Google Config Connector.
   - *Focus:* Cloud IAM boundaries, security groups/firewall rules, network isolation,
     KMS encryption, state file security, and destructive resource replacement traps.
+  - *Plan Verification:* Inspect `.terraform-planning-files/` for existing `INFRA.{goal}.md` implementation plans; verify that implemented code directly satisfies plan specifications without unauthorized deviations.
+  - *Core Review Checklist (Every Resource):*
+    - [ ] IAM policies use least-privilege (no `*` actions without justification)
+    - [ ] All secrets use Secrets Manager or SSM Parameter Store (not hardcoded)
+    - [ ] S3 buckets have public access blocked (`aws_s3_bucket_public_access_block`)
+    - [ ] Encryption enabled at rest and in transit (KMS CMK, SSL/TLS)
+    - [ ] Resources placed in private subnets unless explicitly public-facing
+    - [ ] Security groups have minimal ingress, no `0.0.0.0/0` on sensitive ports
+    - [ ] Tagging applied consistently (`local.common_tags`)
+    - [ ] `lifecycle` blocks used where appropriate (`prevent_destroy` for stateful resources)
+    - [ ] Outputs exported for cross-module consumption
+    - [ ] Variables have descriptions and validation blocks
 - **Secrets Management & Identity:**
   - *Tools:* HashiCorp Vault, AWS Secrets Manager / Parameter Store, Azure Key Vault,
     Google Secret Manager, 1Password CLI, Doppler, SOPS, Sealed Secrets.
