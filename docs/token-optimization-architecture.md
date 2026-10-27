@@ -128,11 +128,11 @@ Assuming standard blended frontier model pricing (\$3.00 / 1M input tokens, \$15
 
 ```text
 Monolithic Agent:
-  115,000 tokens × 1,000 tasks = 115,000,000 tokens
+  115,000 tokens * 1,000 tasks = 115,000,000 tokens
   Estimated Inference Cost: ~$483.00
 
 Open Cloud Agents:
-  15,000 tokens × 1,000 tasks = 15,000,000 tokens
+  15,000 tokens * 1,000 tasks = 15,000,000 tokens
   Estimated Inference Cost: ~$63.00
 
 Net Financial Savings: ~87% ($420 saved per 1,000 operational tasks)
