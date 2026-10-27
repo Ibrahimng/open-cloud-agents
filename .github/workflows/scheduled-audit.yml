@@ -2,8 +2,8 @@ name: Scheduled Daily Codebase Audit
 
 on:
   schedule:
-    # Runs daily at 04:00 UTC (4:00 AM)
-    - cron: "0 4 * * *"
+    # Runs daily at 04:00 AM EET (02:00 AM UTC)
+    - cron: "0 2 * * *"
   workflow_dispatch:
 
 permissions:
@@ -52,7 +52,7 @@ jobs:
         with:
           script: |
             const title = `🚨 Daily Audit Alert: Automated Bug/Regression Detected [${new Date().toISOString().split('T')[0]}]`;
-            const body = `### ⚠️ Daily Codebase Audit Failure Notification\n\nThe scheduled daily codebase audit at **04:00 AM UTC** encountered an unexpected failure.\n\n- **Run URL:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n- **Commit:** ${context.sha}\n- **Trigger:** Scheduled Cron (Daily 4:00 AM)\n\ncc: @ibrahimng please review the failure logs and apply necessary fixes.`;
+            const body = `### ⚠️ Daily Codebase Audit Failure Notification\n\nThe scheduled daily codebase audit at **04:00 AM EET (02:00 AM UTC)** encountered an unexpected failure.\n\n- **Run URL:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n- **Commit:** ${context.sha}\n- **Trigger:** Scheduled Cron (Daily 04:00 AM EET)\n\ncc: @ibrahimng please review the failure logs and apply necessary fixes.`;
             
             await github.rest.issues.create({
               owner: context.repo.owner,

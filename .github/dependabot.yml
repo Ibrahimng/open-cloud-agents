@@ -2,7 +2,7 @@
 # Open Cloud Agents: Dependabot Configuration
 #
 # Daily automated dependency and vulnerability scanning.
-# Scheduled daily at 04:00 UTC.
+# Scheduled daily at 04:00 EET (02:00 UTC).
 # Notifications and PR reviews assigned to @ibrahimng.
 # ==============================================================================
 
@@ -13,7 +13,7 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-      time: "04:00"
+      time: "02:00"
       timezone: "Etc/UTC"
     reviewers:
       - "ibrahimng"
@@ -33,7 +33,7 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-      time: "04:00"
+      time: "02:00"
       timezone: "Etc/UTC"
     reviewers:
       - "ibrahimng"
