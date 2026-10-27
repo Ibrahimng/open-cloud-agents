@@ -115,12 +115,12 @@ The table below contrasts token consumption for a typical multi-cloud infrastruc
 
 | Workflow Phase | Monolithic Agent Architecture | Open Cloud Agents Architecture | Token Savings |
 |---|---|---|---|
-| **System Prompt & Tool Definitions** | 45,000 tokens *(all docs, schemas, and rules)* | 3,000–5,000 tokens *(bounded persona + active skill)* | **~89% reduction** |
+| **System Prompt & Tool Definitions** | 45,000 tokens *(all docs, schemas, and rules)* | 3,000-5,000 tokens *(bounded persona + active skill)* | **~89% reduction** |
 | **Architecture Alignment & Scoping** | 12,000 tokens *(multi-turn conversational back-and-forth)* | 2,500 tokens *(`.terraform-planning-files/` plan)* | **~79% reduction** |
 | **Infrastructure Implementation** | 16,000 tokens *(writing raw primitives from scratch)* | 4,200 tokens *(module-first golden patterns)* | **~74% reduction** |
 | **Security Audit & Code Review** | 18,000 tokens *(full file dump & open-ended chat review)* | 3,800 tokens *(targeted checklist audit & handoff plan)* | **~79% reduction** |
-| **Linting, Syntax & Error Remediation** | 24,000 tokens *(3–5 iterative compile/debug cycles)* | 600 tokens *(local `validate_*.sh` script run)* | **~97% reduction** |
-| **Total Turn Footprint** | **~115,000 tokens** | **~14,100–16,100 tokens** | **~86% total reduction** |
+| **Linting, Syntax & Error Remediation** | 24,000 tokens *(3-5 iterative compile/debug cycles)* | 600 tokens *(local `validate_*.sh` script run)* | **~97% reduction** |
+| **Total Turn Footprint** | **~115,000 tokens** | **~14,100-16,100 tokens** | **~86% total reduction** |
 
 ### Projected Cost Impact (Per 1,000 Complex Tasks)
 
@@ -148,3 +148,4 @@ To preserve these token advantages as the repository expands, all contributors m
 2. **Automate with Scripts:** If a verification step can be checked with a deterministic script (`*.sh` or `*.py`), write a script under `scripts/` instead of asking the agent to evaluate the code textually.
 3. **Respect Tool Boundaries:** Only declare the minimal required tools in an agent persona frontmatter (`tools: [read, search, ...]`). Never assign unneeded tools.
 4. **Use Structured Artifacts for Handoffs:** Write high-density summaries and implementation plans rather than verbose chat conversational histories.
+

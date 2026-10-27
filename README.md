@@ -220,7 +220,7 @@ For teams building local-first development environments or dedicated IDE integra
 │  (BYO-LLM)   ││(pgvector/SQL)│ │ Firecracker)    │
 └──────────────┘└──────────────┘ └─────────────────┘
 ```
-Detailed API contracts, service boundaries, and implementation roadmaps are available in [**`docs/architecture-mvp-spec.md`**](./docs/architecture-mvp-spec.md). For an in-depth breakdown of how our modular design cuts token consumption and LLM inference costs by 60%–85%, see [**`docs/token-optimization-architecture.md`**](./docs/token-optimization-architecture.md).
+Detailed API contracts, service boundaries, and implementation roadmaps are available in [**`docs/architecture-mvp-spec.md`**](./docs/architecture-mvp-spec.md). For an in-depth breakdown of how our modular design cuts token consumption and LLM inference costs by 60% to 85%, see [**`docs/token-optimization-architecture.md`**](./docs/token-optimization-architecture.md).
 
 ---
 

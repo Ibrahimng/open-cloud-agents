@@ -1,0 +1,11 @@
+{
+  "editor.unicodeHighlight.allowedCharacters": {
+    "–": true,
+    "—": true,
+    "•": true,
+    "“": true,
+    "”": true,
+    "‘": true,
+    "’": true
+  }
+}

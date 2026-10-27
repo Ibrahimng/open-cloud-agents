@@ -65,7 +65,7 @@ without compromising application performance, availability, or security.
   and 3-year commitment horizons. Recommend Compute Savings Plans vs EC2 Instance Savings
   Plans vs Standard/Convertible RIs to maximize coverage while minimizing lock-in risk.
 - **Spot Instance Orchestration:** Identify stateless, fault-tolerant batch, CI/CD, or worker
-  workloads suitable for Spot/Preemptible instances (achieving 70–90% savings) with proper
+  workloads suitable for Spot/Preemptible instances (achieving 70-90% savings) with proper
   drain signal handling and fallback on-demand capacity.
 
 ### 6. Allocation, Tagging & Unit Economics
