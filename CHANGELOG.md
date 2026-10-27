@@ -7,6 +7,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] - 2026-10-27
+
+### 🌐 Multi-Cloud IaC Standards, Token Optimization Architecture & Autonomous Gatekeeper Pipeline
+This feature release integrates production-grade **Infrastructure as Code (IaC)** engineering standards across AWS, Azure, GCP, and Docker, introduces a comprehensive **Token Optimization Architecture** framework, and establishes the **Autonomous Gatekeeper CI Pipeline** with automated PR reviews and approvals powered by `Antigravity-AI` across merged Pull Requests #17, #18, #19, and #20.
+
+---
+
+### ✨ Added
+
+#### 1. Centralized Terraform Infrastructure Planner ([`skills/devops/iac/terraform-infrastructure-planner/`](./skills/devops/iac/terraform-infrastructure-planner/SKILL.md))
+* **Machine-Readable Pre-Code Architecture Plans:** Generates structured `.terraform-planning-files/INFRA.{provider}.{goal}.md` specifications covering architecture blueprints, remote state locking, resource dependency graphs, blast-radius assessments, and rollback runbooks.
+* **Multi-Cloud Provider Support:** Uniform planning taxonomy covering AWS, Azure, GCP, and Docker ecosystems aligned to Well-Architected Framework pillars.
+* **Automated Plan Validation Tool (`validate_infra_plan.py`):** CLI linter verifying required plan sections, target file paths, and naming conventions prior to code generation.
+
+#### 2. Multi-Cloud & Docker Terraform Implementation Standards
+* **AWS Implementation Standards ([`skills/devops/iac/aws-terraform-implementation/`](./skills/devops/iac/aws-terraform-implementation/SKILL.md)):**
+  * S3 secure defaults (encryption, public access blocks, versioning), least-privilege IAM policies, KMS CMK envelope encryption, and private subnet topology.
+  * Golden validation script (`validate_terraform.sh`) ensuring formatting, syntax validation, and state-destruction trap detection.
+* **Azure Implementation Standards ([`skills/devops/iac/azure-terraform-implementation/`](./skills/devops/iac/azure-terraform-implementation/SKILL.md)):**
+  * Entra ID granular RBAC roles, Azure Key Vault with 90-day soft-delete and purge protection, Storage Account TLS 1.2+ secure defaults, and isolated VNet NSG boundaries.
+  * Dedicated validation script (`validate_azure_tf.sh`).
+* **GCP Implementation Standards ([`skills/devops/iac/gcp-terraform-implementation/`](./skills/devops/iac/gcp-terraform-implementation/SKILL.md)):**
+  * Custom-mode VPC with Private Google Access, Cloud KMS CMEK encryption with 90-day rotation, uniform bucket-level access on GCS, and Workload Identity federation over service account keys.
+  * Dedicated validation script (`validate_gcp_tf.sh`).
+* **Docker Container Orchestration Standards ([`skills/devops/iac/docker-terraform-implementation/`](./skills/devops/iac/docker-terraform-implementation/SKILL.md)):**
+  * Hardened container configurations enforcing explicit non-root execution (`10001:10001`), read-only root filesystems, dropped Linux capabilities (`drop = ["ALL"]`), immutable SHA256 image digests, and internal bridge network isolation.
+  * Dedicated validation script (`validate_docker_tf.sh`).
+
+#### 3. Token Optimization Architecture Guide ([`docs/token-optimization-architecture.md`](./docs/token-optimization-architecture.md))
+* **Three-Tier Token Conservation Model:** Preserves LLM context windows through concise agent system prompts (~1.5k-4.5k tokens), on-demand 3-tier skills (~1k-2k tokens loaded only when triggered), and off-loaded execution scripts (0 LLM tokens).
+* **Enterprise ROI & Latency Benchmarks:** Documents 70-85% prompt token reduction, 40-60% faster inference latency, and ~80% operational cost savings compared to monolithic monolithic prompting.
+
+#### 4. Autonomous Gatekeeper CI Pipeline ([`.github/workflows/autonomous-gatekeeper.yml`](./.github/workflows/autonomous-gatekeeper.yml))
+* **Unified Directed Acyclic Graph (DAG):** Consolidated previous fragmented workflows (`ci.yml` and `agents-pipeline.yml`) into a single, cohesive GitHub Actions pipeline with zero duplicate runner waste.
+* **Deterministic Quality Gates:** Executes repository hygiene, agent contract validations, 6-stage multi-agent handoff simulation, Gitleaks secret detection, ShellCheck linting, and FinOps waste regression in parallel.
+* **Terminal Autonomous Gatekeeper (`Antigravity-AI`):**
+  * Automatically evaluates upstream job statuses and analyzes incoming PR diffs via `scripts/ci/audit_pr_diff.py`.
+  * Blocks merge and comments itemized failure lists if any upstream check fails or if destructive IaC traps are detected.
+  * Autonomously submits official GitHub `APPROVE` reviews on clean PRs, solving the solo maintainer approval constraint under branch protection.
+
+---
+
+### 🔄 Changed
+* **Agent Master Suite Enhancements:**
+  * Updated **Principal Cloud Architect** with multi-cloud and Docker pre-code planning mandates.
+  * Expanded **DevSecOps Reviewer** with comprehensive multi-cloud (AWS, Azure, GCP, Docker) pre-merge audit checklists.
+  * Enhanced **DevSecOps Engineer** with verified provider modules and golden implementation standards.
+* **CI & Workflow Hardening:**
+  * Double-quoted environment files (`"$GITHUB_ENV"`, `"$GITHUB_OUTPUT"`, `"$GITHUB_STEP_SUMMARY"`) across all active workflows to prevent word splitting (`SC2086`).
+  * Safely mapped untrusted context expressions (`head.ref`, `inputs.tag_name`, `ref_name`) via `env:` blocks to eliminate script injection vectors.
+  * Achieved 100% clean status with `actionlint`.
+
+---
+
+### 🏆 Merged Pull Requests in this Release
+* **PR #17:** `feat(iac): integrate AWS Terraform planner & implementation standards across agents and skills`
+* **PR #18:** `feat(iac): integrate Azure, GCP, and Docker Terraform standards across agents and skills`
+* **PR #19:** `docs(architecture): add token optimization and architectural benefits guide`
+* **PR #20:** `ci(gatekeeper): unify quality checks and autonomous Antigravity-AI approval into autonomous-gatekeeper.yml`
+
+---
+
 ## [1.1.0] - 2026-10-26
 
 ### 💰 FinOps Cloud Waste Reaper, Docs-as-Code & Automated Governance
