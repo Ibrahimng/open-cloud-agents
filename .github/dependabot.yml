@@ -16,10 +16,8 @@ updates:
       interval: "daily"
       time: "02:00"
       timezone: "Etc/UTC"
-    reviewers:
-      - "ibrahimng"
     assignees:
-      - "ibrahimng"
+      - "Ibrahimng"
     open-pull-requests-limit: 10
     commit-message:
       prefix: "ci(deps)"
@@ -36,10 +34,8 @@ updates:
       interval: "daily"
       time: "02:00"
       timezone: "Etc/UTC"
-    reviewers:
-      - "ibrahimng"
     assignees:
-      - "ibrahimng"
+      - "Ibrahimng"
     open-pull-requests-limit: 10
     commit-message:
       prefix: "chore(deps)"

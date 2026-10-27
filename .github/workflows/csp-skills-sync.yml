@@ -77,10 +77,8 @@ jobs:
             automated
             dependencies
             csp-sync
-          reviewers: |
-            ibrahimng
           assignees: |
-            ibrahimng
+            Ibrahimng
           delete-branch: true
 
       - name: Notify Maintainer on Monitor Failure
