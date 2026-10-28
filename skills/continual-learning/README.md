@@ -5,25 +5,29 @@ This domain provides autonomous agents with the capability to **reflect on real-
 ```text
 skills/continual-learning/
 ├── knowledge-enhancement-loop/          # Transcript mining, fact extraction, and skill patching
-└── incident-postmortem-to-guardrail/    # Converts SRE incident findings into pre-merge DevSecOps checks
+├── incident-postmortem-to-guardrail/    # Converts SRE incident findings into pre-merge DevSecOps checks
+└── guardrail-regression-testing/        # Regression testing ensuring guardrails catch bugs with 0 false positives
 ```
 
 ## The Knowledge Flywheel
 
 ```text
-[Real-Time Incident / Outage]
+[Real-Time Incident / Outage / CI Discovery]
               │
               ▼
-    1. SRE Triages Incident
+    1. SRE Triages Incident / Gatekeeper Traps Error
               │
               ▼
     2. Blameless PIR & Root Cause Isolated
               │
               ▼
-    3. Knowledge-Enhancement Loop Activates
+    3. Knowledge-Enhancement Loop Activates (AGENTS.md updated)
               │
               ▼
     4. Auto-Generates Guardrail in DevSecOps Reviewer
+              │
+              ▼
+    5. Guardrail Regression Testing Verifies Accuracy
               │
               ▼
 [Future Deployments Block the Failure Mode Pre-Merge]

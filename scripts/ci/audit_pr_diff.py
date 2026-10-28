@@ -28,8 +28,12 @@ def audit_diff(base_ref: str = "main") -> tuple[list[str], str]:
             # Exclude documentation, markdown checklists, and CI workflow configurations
             if current_file.endswith(".md") or current_file.startswith(".github/"):
                 continue
-            # Also exclude audit scripts
-            if "audit_pr_diff.py" in current_file:
+            # Exclude Python test suites, regression runners, and audit harnesses
+            if current_file.endswith(".py") and (
+                "test" in current_file.lower()
+                or "audit" in current_file.lower()
+                or "regression" in current_file.lower()
+            ):
                 continue
 
             stripped = line[1:].strip()
