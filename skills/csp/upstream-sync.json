@@ -8,9 +8,9 @@
       "url": "https://github.com/aws/agent-toolkit-for-aws",
       "branch": "main",
       "target_dir": "skills/csp/aws",
-      "last_synced_commit": "35fa6905b1e4afede203328fc1ff55b985a52e86",
-      "last_synced_date": "2026-10-27T07:31:16Z",
-      "commit_message": "chore(deps): bump jdx/mise-action (#497)"
+      "last_synced_commit": "b08b99f38098c30c0ee1a781accd8e349e5b145c",
+      "last_synced_date": "2026-10-28T03:39:14Z",
+      "commit_message": "feat(aws-startup-advisor): record Azure OpenAI and Gemini usage from live CLIs (#504)"
     },
     "azure": {
       "name": "Microsoft Azure",
@@ -28,10 +28,9 @@
       "url": "https://github.com/google/skills",
       "branch": "main",
       "target_dir": "skills/csp/gcp",
-      "last_synced_commit": "84e8150e4fa71bf422d5b224e215f5ba13864aa3",
-      "last_synced_date": "2026-10-26T20:19:24Z",
-      "commit_message": "Fix broken Snowflake translation documentation link in bigquery-migration-sql-translator skill."
+      "last_synced_commit": "588698280ecdf6145aab1ebabad0785d9630a8db",
+      "last_synced_date": "2026-10-27T18:48:35Z",
+      "commit_message": "Add .md.txt and HTML 404 auto-triage, retry settings, and single living issue management to link-checker workflow."
     }
   }
 }
-
