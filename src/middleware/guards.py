@@ -57,3 +57,4 @@ def build_secure_prompt_payload(user_message: str) -> list:
     ]
     
     return structured_payload
+
