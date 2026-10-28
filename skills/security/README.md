@@ -14,3 +14,17 @@ Curated agent skills for enterprise security posture management, regulatory comp
 - [`iam-least-privilege/`](./iam-least-privilege/): Zero-trust identity architecture, service account hardening, and SCPs/Permission Boundaries.
 - [`secret-management/`](./secret-management/): KMS envelope encryption, HashiCorp Vault, cloud secrets rotation, and SOPS.
 - [`cloud-armor-crs-rule-upgrader/`](./cloud-armor-crs-rule-upgrader/): Automated Google Cloud Armor OWASP CRS 3.0/3.3 to CRS 4.22 policy migration, sensitivity tuning, and preview-mode cutover.
+
+---
+
+## Core Structural Reference Matrix
+
+This table details the exact files within the workspace where reference standards are parsed to drive active agent decisions:
+
+| Active Skill Folder | Reference Documentation File | Primary Script Consumer | Automated Security Function |
+|---|---|---|---|
+| [`compliance/ai-governance-audit/`](./compliance/ai-governance-audit/SKILL.md) | [`iso-42001-aims-matrix.md`](./compliance/ai-governance-audit/references/iso-42001-aims-matrix.md) | [`verify_ai_lineage.py`](./compliance/ai-governance-audit/scripts/verify_ai_lineage.py) | Validates data manifest formats against compliance metrics |
+| [`owasp-llm-security/`](./owasp-llm-security/SKILL.md) | [`llm-vulnerability-vectors.md`](./owasp-llm-security/references/llm-vulnerability-vectors.md) | [`scan_prompt_injection.py`](./owasp-llm-security/scripts/scan_prompt_injection.py) | Updates regex pattern profiles with known injection signatures |
+| [`owasp-llm-security/`](./owasp-llm-security/SKILL.md) | [`llm-vulnerability-vectors.md`](./owasp-llm-security/references/llm-vulnerability-vectors.md) | [`validate_llm_outputs.sh`](./owasp-llm-security/scripts/validate_llm_outputs.sh) | Sets grep verification blocks for malicious output strings |
+| [`cloud-armor-crs-rule-upgrader/`](./cloud-armor-crs-rule-upgrader/SKILL.md) | [`crs-422-sensitivity-matrix.md`](./cloud-armor-crs-rule-upgrader/references/crs-422-sensitivity-matrix.md) | [`upgrade_policy.py`](./cloud-armor-crs-rule-upgrader/scripts/upgrade_policy.py) | Upgrades Cloud Armor policies to OWASP ModSecurity CRS 4.22 |
+| [`compliance/soc2-evidence-collector/`](./compliance/soc2-evidence-collector/SKILL.md) | [`soc2-trust-criteria-matrix.md`](./compliance/soc2-evidence-collector/references/soc2-trust-criteria-matrix.md) | [`collect_soc2_evidence.py`](./compliance/soc2-evidence-collector/scripts/collect_soc2_evidence.py) | Collects automated multi-cloud AICPA SOC 2 Type II audit evidence |

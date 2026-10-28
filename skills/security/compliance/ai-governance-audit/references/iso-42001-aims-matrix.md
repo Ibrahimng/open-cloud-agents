@@ -1,6 +1,6 @@
-# ISO/IEC 42001:2023 Artificial Intelligence Management System (AIMS) Matrix
+# ISO/IEC 42001:2023 Artificial Intelligence Management System (AIMS) Control Matrix
 
-ISO/IEC 42001 is the international standard specifying requirements and guidance for establishing, implementing, maintaining, and continually improving an Artificial Intelligence Management System (AIMS). It provides a structured governance framework for managing AI-related risks, ethical concerns, data provenance, and continuous accountability.
+This reference matrix provides the Technical Verification Controls required by the **Security Compliance Commander** to audit cloud-native AI infrastructure against the certifiable ISO/IEC 42001 standard.
 
 ---
 
@@ -18,9 +18,36 @@ ISO/IEC 42001 is the international standard specifying requirements and guidance
 
 ---
 
-## 2. Annex A & B Control Implementation Matrix
+## Organizational Controls & System Requirements
 
-Annex B provides detailed guidance for controls organized across 38 specific control areas. The primary controls critical for Cloud Architecture and DevSecOps include:
+### Control A.5.2: AI Policy Alignment
+- **Objective:** Ensure artificial intelligence systems remain aligned with corporate information security policies and ethical operational charters.
+- **Verification Vector:** Audit pipeline parameters for explicit configuration constraints that restrict access to unauthorized fine-tuning capabilities.
+
+### Control A.8.3: Assessing AI System Impact
+- **Objective:** Evaluate downstream risks associated with model drift, hallucination velocity, and behavioral shifts.
+- **Verification Vector:** Automated check for model verification logs tracking drift deviations inside staging deployments.
+
+---
+
+## Annex B: Technical Control Objectives
+
+### Control B.9.2: AI System Data Provenance & Lineage
+- **Objective:** Maintain complete traceability of the lifecycle of training, validation, and testing datasets to prevent data tampering.
+- **Technical Checklist:**
+  - [ ] Every active training manifest contains a top-level `dataset_provenance` schema metadata block.
+  - [ ] Data files are verified against a static cryptographic hash check (`expected_sha256`).
+  - [ ] Sources are versioned with unique immutable identifiers preventing unversioned overrides.
+
+### Control B.10.4: Algorithmic Transparency & Logging
+- **Objective:** Capture sufficient technical audit trails to reconstruct inference paths and detect active security incidents.
+- **Technical Checklist:**
+  - [ ] Capture inbound model inputs, token weight variations, and calculated inference responses.
+  - [ ] Route all inference logs to write-once immutable cloud sinks (e.g., AWS CloudWatch with object locks, GCP Security Command Center Enterprise).
+
+---
+
+## 2. Extended Technical Controls Domain Matrix
 
 ### Domain B.2: AI Policy & Objectives
 - **B.2.1 AI Policy:** An approved policy defining organizational principles for responsible AI development, human-centric design, and risk tolerance thresholds.
@@ -37,7 +64,7 @@ Annex B provides detailed guidance for controls organized across 38 specific con
 
 ### Domain B.6: Data for AI Systems
 - **B.6.1 Data Acquisition & Quality:** Data quality metrics (completeness, accuracy, representativeness) validated before training ingestion.
-- **B.6.2 Data Provenance & Lineage (CRITICAL - Control B.9.2):**
+- **B.6.2 Data Provenance & Lineage (Control B.9.2):**
   - All training corpora must possess immutable SHA-256 hashes.
   - S3 / GCS buckets must enforce versioning, KMS SSE, and object-lock retention policies.
   - Ingestion manifests must track data origin, license metadata, scraping timestamps, and preprocessing steps.
@@ -55,7 +82,7 @@ Annex B provides detailed guidance for controls organized across 38 specific con
 - **B.9.2 Data Lineage in Supply Chains:** Enforcing signed SBOMs and cryptographic lineage on fine-tuning weights and RAG vector embeddings.
 
 ### Domain B.10: Continuous Monitoring & Incident Response
-- **B.10.1 Logging & Audit Trails:** Immutable inference logs capturing prompt hashes, response hashes, model version, temperature, and latency.
+- **B.10.1 Logging & Audit Trails (Control B.10.4):** Immutable inference logs capturing prompt hashes, response hashes, model version, temperature, and latency.
 - **B.10.2 AI Incident Response:** Automated isolation of compromised models upon detection of prompt injection, data exfiltration, or malicious weight perturbation.
 
 ---
@@ -64,10 +91,23 @@ Annex B provides detailed guidance for controls organized across 38 specific con
 
 | ISO 42001 Control | Required Audit Artifact | Target Cloud / Repository Location | Verification Method |
 |---|---|---|---|
+| **A.5.2** | AI System Policy & Bounds | `docs/compliance/aims-scope.md` | Configuration constraints on unauthorized fine-tuning |
+| **A.8.3** | AI System Impact Log | `tests/evaluations/drift-report.json` | Automated drift deviation checks in staging |
 | **B.4.1** | AI Impact Assessment Document | `docs/compliance/impact-assessment.md` | PR manual sign-off by Ethics Board |
 | **B.5.5** | Automated Evaluation Test Report | `tests/evaluations/report.json` | CI test suite exit code 0 |
 | **B.6.2 / B.9.2** | Cryptographic Dataset Manifest | `pipelines/train_v2.json` | `python3 verify_ai_lineage.py --manifest ...` |
 | **B.7.1** | Standardized Model Card | `models/<model-id>/MODEL_CARD.md` | Automated Markdown schema check |
 | **B.8.2** | Human-in-the-Loop Sign-off Gate | GitHub PR review / Cloud Deploy Approval | Audit log of human user approval |
-| **B.10.1** | Immutable Inference Logging | Cloud Storage / BigQuery write-once table | KMS key policy & bucket lock inspection |
+| **B.10.1 / B.10.4** | Immutable Inference Logging | Cloud Storage / BigQuery write-once table | KMS key policy & bucket lock inspection |
 
+---
+
+## 4. Core Structural Reference Matrix
+
+This table details the exact files within the workspace where these reference standards are parsed to drive active agent decisions:
+
+| Active Skill Folder | Reference Documentation File | Primary Script Consumer | Automated Security Function |
+|---|---|---|---|
+| [`compliance/ai-governance-audit/`](../SKILL.md) | [`iso-42001-aims-matrix.md`](./iso-42001-aims-matrix.md) | [`verify_ai_lineage.py`](../scripts/verify_ai_lineage.py) | Validates data manifest formats against compliance metrics |
+| [`owasp-llm-security/`](../../../owasp-llm-security/SKILL.md) | [`llm-vulnerability-vectors.md`](../../../owasp-llm-security/references/llm-vulnerability-vectors.md) | [`scan_prompt_injection.py`](../../../owasp-llm-security/scripts/scan_prompt_injection.py) | Updates regex pattern profiles with known injection signatures |
+| [`owasp-llm-security/`](../../../owasp-llm-security/SKILL.md) | [`llm-vulnerability-vectors.md`](../../../owasp-llm-security/references/llm-vulnerability-vectors.md) | [`validate_llm_outputs.sh`](../../../owasp-llm-security/scripts/validate_llm_outputs.sh) | Sets grep verification blocks for malicious output strings |
