@@ -246,9 +246,20 @@ jobs:
               : '';
             const isClean = verdict === 'CLEAN' || (summary.includes('Clean') && !summary.includes('Needs Human Review'));
 
+            const prAuthor = context.payload.pull_request ? context.payload.pull_request.user.login : '';
+            const isSelfAuthored = prAuthor === 'github-actions[bot]' || prAuthor === 'app/github-actions';
+
             if (isClean) {
-              if (!alreadyApproved) {
-                const approvalBody = `### 🤖 Antigravity-AI: Autonomous Gatekeeper Approval\n\n` +
+              const alreadyReviewed = reviews.some(
+                r => r.user.login === 'github-actions[bot]' && (r.state === 'APPROVED' || (r.body && r.body.includes('Antigravity-AI: Autonomous Gatekeeper')))
+              );
+
+              if (!alreadyReviewed) {
+                const footerText = isSelfAuthored
+                  ? '> *Verified autonomously by Antigravity-AI. (Self-authored automated PR — all quality gates passed, ready for maintainer merge).*'
+                  : '> *Approved autonomously by Antigravity-AI as the pre-merge gatekeeper for Open Cloud Agents.*';
+
+                const approvalBody = `### 🤖 Antigravity-AI: Autonomous Gatekeeper ${isSelfAuthored ? 'Verification' : 'Approval'}\n\n` +
                   `**Verdict:** ✅ All Pre-Merge Quality Gates Passed\n\n` +
                   `#### Verified Quality Gates:\n` +
                   `- ✅ **Repository Hygiene & Skill Specs:** Validated metadata, shell permissions, and link integrity\n` +
@@ -257,18 +268,35 @@ jobs:
                   `- ✅ **Multi-Agent Simulation:** 6-stage handoff pipeline executed cleanly with trace artifact\n` +
                   `- ✅ **DevSecOps Diff Audit:** No destructive IaC replacements, open 0.0.0.0/0 ingress, or permission escalations\n\n` +
                   `${summary}\n\n` +
-                  `> *Approved autonomously by Antigravity-AI as the pre-merge gatekeeper for Open Cloud Agents.*`;
+                  `${footerText}`;
 
-                await github.rest.pulls.createReview({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: context.issue.number,
-                  event: 'APPROVE',
-                  body: approvalBody
-                });
-                console.log('✅ Submitted formal APPROVE review as Antigravity-AI.');
+                const targetEvent = isSelfAuthored ? 'COMMENT' : 'APPROVE';
+
+                try {
+                  await github.rest.pulls.createReview({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: context.issue.number,
+                    event: targetEvent,
+                    body: approvalBody
+                  });
+                  console.log(`✅ Submitted formal ${targetEvent} review as Antigravity-AI.`);
+                } catch (reviewError) {
+                  if (reviewError.status === 422 && String(reviewError.message).includes('approve your own pull request')) {
+                    console.log('ℹ️ PR was self-authored. Fallback: submitting verification COMMENT review.');
+                    await github.rest.pulls.createReview({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: context.issue.number,
+                      event: 'COMMENT',
+                      body: approvalBody.replace('Approval', 'Verification')
+                    });
+                  } else {
+                    throw reviewError;
+                  }
+                }
               } else {
-                console.log('ℹ️ PR already approved by Antigravity-AI.');
+                console.log('ℹ️ PR already verified/approved by Antigravity-AI.');
               }
             } else {
               await github.rest.pulls.createReview({
