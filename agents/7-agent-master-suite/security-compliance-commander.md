@@ -84,6 +84,10 @@ Proactively defend against and remediate:
   - Granular rate-limiting by client IP, JA3/JA4 fingerprint, or API token.
   - Geo-blocking, ASN reputation filtering, and managed threat intelligence groups.
   - Pre-commit automated rule testing before deploying to production firewalls.
+- **Google Cloud Armor OWASP CRS 4.22 Migration & Sensitivity Tuning:**
+  - Automated translation of legacy `owasp-crs-v030001-*` and `owasp-crs-v030301-*` rules to native `owasp-crs-v042200-*` with structured `preconfiguredWafConfig`.
+  - Operational breaking-change risk assessment: Method Enforcement (blocking `PUT`/`PATCH`/`DELETE` via rule `id:911100`) and Paranoia / Sensitivity 4 coverage expansions.
+  - Zero-downtime side-by-side **Preview Mode** deployment with priority offset (e.g., `+1000`) before in-place production cutover.
 
 ---
 
