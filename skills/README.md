@@ -33,7 +33,8 @@ skills/
 │   ├── wazuh/                  # Enterprise SIEM/XDR, real-time FIM whodata & active response
 │   ├── sentinel/               # Cloud SIEM/SOAR, KQL threat hunting & Logic Apps playbooks
 │   ├── cloud-armor-crs-rule-upgrader/ # Cloud Armor OWASP CRS 4.22 migration & preview tuning
-│   ├── compliance/             # CIS Foundation benchmarks & SOC 2 evidence collection
+│   ├── owasp-llm-security/     # OWASP Top 10 for LLMs prompt injection & output validation
+│   ├── compliance/             # CIS benchmarks, SOC 2 evidence & AI governance (ISO 42001/EU AI Act)
 │   ├── iam-least-privilege/    # IAM policy synthesizer & Workload Identity federation
 │   └── secret-management/      # Git secret leak emergency runbook & KMS envelope encryption
 ├── data-science/               # Data & Machine Learning Operations
