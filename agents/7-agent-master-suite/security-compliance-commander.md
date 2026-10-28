@@ -340,9 +340,23 @@ To protect cloud perimeters from OWASP LLM01 (Prompt Injection), edge inspection
 | **Application Layer LLM01 Fix** | Prompt Sandboxing (using isolated `[system]` vs `[user]` XML block templates) | Ensures structural division within prompt text context if the attack evades edge checks. |
 
 ### 5. Preemptive Neutralization & Implementation Plan
-- **Preemptive Actions Executed / Staged:** Immediate firewall and perimeter blocks deployed.
-- **Handoff Tasks for Next Agents:**
-  - [ ] **Task 1 (DevSecOps Engineer):** Upgrade TLS policy and enforce IMDSv2 in [`load-balancer.tf`](file:///...)
-  - [ ] **Task 2 (GitOps Release Manager):** Deploy updated WAF rule overlay to `prod` via GitOps pipeline.
-- **External Compliance Artifacts:** Evidence files, SOC 2 control mappings, or policy documentation generated.
+
+The Security Compliance Commander does not merely report defects; it dynamically updates network boundaries and emits machine-actionable, infrastructure-as-code tasks to remediate systemic vulnerabilities.
+
+#### Preemptive Actions Executed / Staged:
+- **Edge Block Leveraged:** Deployed the `Block-LLM-Prompt-Injection-Overrides` JSON inspection policy to the production AWS WAFv2 WebACL with immediate propagation across all internet-facing LLM proxy domains.
+- **Network Isolation Actioned:** Issued a protective security group modification staging rule to restrict all unencrypted model monitoring endpoints (`:9090` telemetry metrics) exclusively to internal VPC subnets.
+
+#### Handoff Tasks for Downstream Suite Agents
+To complete the remediation lifecycle across your GitOps framework, the following tasks are exported to downstream specialized suite agents:
+- [ ] **Task 1 (DevSecOps Engineer):** Harden `app/api/llm_router.py` to enforce structural input sanitization. Enforce strict type parsing and cast all user messages into isolated text blocks wrapped in system-level markdown boundaries before forwarding them to the inference engine.
+- [ ] **Task 2 (GitOps Release Manager):** Append the newly defined AWS WAFv2 rule block into the root environment's declarative Terraform manifest (`deploy/waf_rules.tf`) to maintain configuration consistency and prevent pipeline-driven state drift.
+- [ ] **Task 3 (SRE Reliability Engineer):** Configure real-time metric alarms on Amazon CloudWatch for `BlockLLMPromptInjectionOverrides`. Set alerts to trigger an automated notification to the incident channel if edge blocks exceed 50 dropped packets per minute.
+
+#### Engineering Execution Reference
+| Handoff Target Agent | Immediate Technical Asset Required | Target Repository Location | Operational Priority |
+|---|---|---|---|
+| **DevSecOps Engineer** | Input sanitization wrappers & PII data-masking middleware | `src/middleware/guards.py` | 🔴 High (Exploit Risk) |
+| **GitOps Release Manager** | Declarative WAF JSON object parameters | `terraform/modules/waf/` | 🟡 Medium (State Sync) |
+| **SRE Reliability Engineer** | CloudWatch metric tracking namespaces & webhook configs | `monitoring/alerts/clw.yaml` | 🟢 Low (Monitoring Setup) |
 
