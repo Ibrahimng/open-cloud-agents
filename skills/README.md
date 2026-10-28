@@ -26,7 +26,13 @@ skills/
 │   ├── docker/                 # Container hardening & multi-stage minimal runtime builds
 │   ├── ci-cd/                  # GitHub Actions OIDC federation & ArgoCD GitOps promotion
 │   └── observability/          # OpenTelemetry tracing & PromQL Golden Signals alerting
-├── security/                   # Enterprise Governance & Hardening
+├── security/                   # Enterprise Governance, SIEM/XDR & Runtime Threat Defense
+│   ├── cis-complete-audit/     # 4-layer CIS benchmark auditor (Cloud, K8s, Host, Docker)
+│   ├── falco/                  # eBPF runtime threat detection & Falco Talon active response
+│   ├── sysdig/                 # CNAPP container drift control & forensic capture trace replay
+│   ├── wazuh/                  # Enterprise SIEM/XDR, real-time FIM whodata & active response
+│   ├── sentinel/               # Cloud SIEM/SOAR, KQL threat hunting & Logic Apps playbooks
+│   ├── cloud-armor-crs-rule-upgrader/ # Cloud Armor OWASP CRS 4.22 migration & preview tuning
 │   ├── compliance/             # CIS Foundation benchmarks & SOC 2 evidence collection
 │   ├── iam-least-privilege/    # IAM policy synthesizer & Workload Identity federation
 │   └── secret-management/      # Git secret leak emergency runbook & KMS envelope encryption
@@ -37,6 +43,28 @@ skills/
     ├── knowledge-enhancement-loop/       # Live transcript mining & skill auto-patching
     └── incident-postmortem-to-guardrail/ # Converts SRE findings to DevSecOps pre-merge rules
 ```
+
+---
+
+## 🌐 Global Skill Architecture Design Reference
+
+| Project Architecture Layer | Technical Focus Area | Primary Global Constraints to Track |
+|---|---|---|
+| **Data Engine** | Data Residency & Privacy | GDPR, CCPA, PIPL, Cross-border transfer rules |
+| **Infrastructure Layer** | Technical Controls & IAM | ISO 27001, SOC 2, NIST CSF 2.0, CIS Benchmarks |
+| **Financial/Payment Engine** | Transaction Handling | PCI-DSS, DORA, GLBA, SWIFT CSP, APRA |
+| **Vendor Matrix** | Supply Chain Security | TPRM, SBOM tracking, Vendor SOC 2 validations |
+| **Incident Response Engine** | Breach Notification Timelines | 72-hour counters, statutory templates by jurisdiction |
+| **Model/ML Layer** | Algorithmic Integrity | EU AI Act, ISO 42001, NIST AI RMF |
+
+### AI Compliance Integration Matrix
+
+| Framework / Law | Compliance Nature | Core Enforcement Mechanism | Key Metric Your Agent Must Track |
+|---|---|---|---|
+| **EU AI Act** | Statutory Law | Conformity certifications & massive revenue-based fines | Risk classification tier (High vs. Low) & logging persistence |
+| **ISO/IEC 42001** | Voluntary Certification | Independent third-party CPA/ISO audits | Existence of an active Artificial Intelligence Management System (AIMS) |
+| **NIST AI RMF** | Operational Blueprint | Enterprise risk management alignment | Continuous measuring of model bias, validity, and explainability |
+| **OWASP Top 10 LLM** | Technical Vulnerability | Code scanning, WAF configuration, and edge sanitization | Implementation of prompt sandboxing and LLM output validation |
 
 ---
 

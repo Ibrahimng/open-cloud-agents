@@ -117,3 +117,4 @@ AzureDiagnostics
 | extend IPCustomEntity = CallerIPAddress
 | project Resource, identity_claim_upn_s, CallerIPAddress, SecretGetCount, AccessedSecrets, AccountCustomEntity, IPCustomEntity
 ```
+

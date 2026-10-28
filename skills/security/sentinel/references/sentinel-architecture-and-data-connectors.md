@@ -80,3 +80,4 @@ tail -f /var/log/syslog | grep "CEF:"
    Switch from Pay-As-You-Go (\$2.30/GB) to Commitment Tiers (100 GB/day to 5,000 GB/day) to save up to 50% on predictable enterprise ingestion.
 3. **Data Retention Policies:**
    Configure table-level retention to keep high-value security tables (`SigninLogs`, `AuditLogs`) for 365 days, while truncating verbose network telemetry after 30 days.
+

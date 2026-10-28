@@ -48,3 +48,4 @@ When closing an incident, record root-cause classification for continuous learni
 | **False Positive - Inaccurate Data** | Alert fired due to parsing failure or corrupt log source. | Update data connector transform or log parser. |
 | **False Positive - Incorrect Rule Logic** | Query logic too broad, matching benign business activities. | Tune analytics rule thresholds, add whitelist exceptions. |
 | **Benign Positive - Expected Activity** | Action was unauthorized in theory but approved in practice (e.g. penetration testing, maintenance window). | Suppress rule for the specific actor or time window. |
+

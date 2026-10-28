@@ -122,3 +122,4 @@ See deployment patterns in [soar-automation-playbooks.md](references/soar-automa
 - [incident-triage-and-entity-analytics.md](references/incident-triage-and-entity-analytics.md): Entity mappings, UEBA profiling, investigation graphs, and closing workflows.
 - `scripts/validate_kql_queries.py`: Syntactic validator and performance linter for KQL queries.
 - `scripts/sentinel_playbook_generator.py`: Declarative ARM/Bicep template generator for Sentinel analytics rules and SOAR bindings.
+
