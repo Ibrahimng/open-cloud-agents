@@ -51,3 +51,8 @@ tmp/
 temp/
 *.tmp
 
+# Mock Data & Local Testing Artifacts
+mock/
+mocks/
+
+

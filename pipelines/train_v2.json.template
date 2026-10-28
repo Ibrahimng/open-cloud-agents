@@ -1,0 +1,34 @@
+{
+  "pipeline_name": "example-foundation-model-finetune",
+  "pipeline_version": "1.0.0",
+  "framework_compliance": {
+    "iso_42001": "Clause B.9.2 Compliant",
+    "eu_ai_act": "Article 15 Logging Compliant"
+  },
+  "risk_tier": "High Risk",
+  "human_oversight": true,
+  "dataset_provenance": {
+    "name": "example-training-dataset",
+    "uri": "s3://enterprise-ai-training-data-vault/v1.0/",
+    "version": "v1.0.0",
+    "expected_sha256": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "source_tracking_metadata": "s3://metadata-vault/lineage/v1.0.0.json"
+  },
+  "datasets": [
+    {
+      "name": "example-training-dataset",
+      "uri": "s3://enterprise-ai-training-data-vault/v1.0/",
+      "version": "v1.0.0",
+      "sha256": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+    }
+  ],
+  "logging": {
+    "sink": "google-cloud-scc-immutable-vault",
+    "immutable": true,
+    "retention_days": 180
+  },
+  "output_handling": {
+    "strict_schema": true,
+    "type_casting": true
+  }
+}

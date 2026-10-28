@@ -104,8 +104,8 @@ def run_owasp_static_scan(directory_to_scan: str) -> bool:
     print(f"[*] Starting Static Code Guardrail Check targeting: {directory_to_scan}")
     total_issues = 0
     for root, dirs, files in os.walk(directory_to_scan):
-        # Exclude VCS and cache directories
-        if any(ignored in root for ignored in [".git", "__pycache__", ".venv", "node_modules"]):
+        # Exclude VCS, virtualenvs, and gitignored mock test directories
+        if any(ignored in root for ignored in [".git", "__pycache__", ".venv", "node_modules", "mock", "mocks"]):
             continue
         for file in files:
             if file.endswith(".py"):
