@@ -1,0 +1,44 @@
+name: "AI Safety & Regulatory Governance Validation"
+
+on:
+  push:
+    branches: [ "main", "master", "develop", "feat/**" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-ai-security:
+    name: "Audit AI Lineage & Code Guardrails"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout Code Repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up Python Environment"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: "Verify Component Execution Permissions"
+        run: |
+          chmod +x skills/security/compliance/ai-governance-audit/scripts/run_ai_security_pipeline.sh
+          chmod +x skills/security/compliance/ai-governance-audit/scripts/verify_ai_lineage.py
+          chmod +x skills/security/owasp-llm-security/scripts/scan_prompt_injection.py
+          chmod +x skills/security/owasp-llm-security/scripts/validate_llm_outputs.sh
+
+      - name: "Initialize Staged Test Pipeline Target Assets"
+        run: |
+          # Provision basic default folders/files to ensure local test pathways resolve smoothly
+          mkdir -p pipelines app
+          if [ ! -f pipelines/train_v2.json ]; then
+            echo '{"dataset_provenance": {"version": "1.0.0", "expected_sha256": "da39a3ee5e6b4b0d3255bfef95601890afd80709"}}' > pipelines/train_v2.json
+          fi
+
+      - name: "Execute Security Compliance Commander Orchestrator"
+        run: ./skills/security/compliance/ai-governance-audit/scripts/run_ai_security_pipeline.sh
+

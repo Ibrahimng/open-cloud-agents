@@ -1,0 +1,13 @@
+{
+  "pipeline_name": "production-llm-fine-tuning-pipeline",
+  "environment": "production-gcp-vertex",
+  "model_meta": {
+    "base_architecture": "llama-3-8b-instruct",
+    "intended_use": "enterprise-compliance-agent"
+  },
+  "dataset_provenance": {
+    "source_uri": "s3://secure-compliance-audit-datasets-prod/v2/",
+    "version": "2.4.1-alpha",
+    "expected_sha256": "8f43c0a524a21d120a1120afd80709da39a3ee5e6b4b0d3255bfef95601890af"
+  }
+}

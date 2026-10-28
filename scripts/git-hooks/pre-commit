@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Git Hook Target: Local Pre-Commit Quality Gate
+# Orchestrates: Security Compliance Commander (SCC) AI Validation Framework
+# ==============================================================================
+
+set -euo pipefail
+
+TARGET_ORCHESTRATOR="skills/security/compliance/ai-governance-audit/scripts/run_ai_security_pipeline.sh"
+
+echo -e "\n\033[0;34m[*] Pre-Commit: Commencing validation via Security Compliance Commander...\033[0;0m"
+
+if [[ -f "$TARGET_ORCHESTRATOR" ]]; then
+    # Ensure script execution bit is flipped locally
+    chmod +x "$TARGET_ORCHESTRATOR"
+    
+    # Run the pipeline
+    if ! ./"$TARGET_ORCHESTRATOR"; then
+        echo -e "\033[0;31m🚨 [GIT BLOCK] Commit aborted. Fix outstanding AI security/compliance vulnerabilities above.\033[0;0m\n"
+        exit 1
+    fi
+else
+    echo -e "\033[0;33m⚠️ Warning: AI security pipeline orchestrator file not found at project root path. Skipping check.\033[0;0m"
+fi
+
+exit 0
+
