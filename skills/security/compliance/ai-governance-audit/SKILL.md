@@ -102,10 +102,28 @@ Jailbreak probing and prompt engineering overrides on the `/v1/chat/completions`
 
 ---
 
-## Verification & Lineage CLI
-Execute the automated AI dataset lineage and logging audit script:
+## Verification & Pipeline Automation
+
+### 1. Automated Pipeline Orchestration
+Run the consolidated AI governance and OWASP safety pipeline:
+```bash
+bash skills/security/compliance/ai-governance-audit/scripts/run_ai_security_pipeline.sh
+```
+See details in [`scripts/run_ai_security_pipeline.sh`](./scripts/run_ai_security_pipeline.sh).
+
+### 2. Standalone Lineage Verification CLI
+Execute the targeted AI dataset lineage and logging audit:
 ```bash
 python3 skills/security/compliance/ai-governance-audit/scripts/verify_ai_lineage.py --manifest pipelines/train_v2.json
 ```
 See details in [`scripts/verify_ai_lineage.py`](./scripts/verify_ai_lineage.py).
+
+### End-of-Execution Pipeline Reference Matrix
+
+| Execution Stage | Target Runtime Component | Primary Script/Binary | Expected Exit Code Behavior | Local Fallback Behavior |
+|---|---|---|---|---|
+| **Phase 1: Lineage** | ISO 42001/EU AI Act Validator | `verify_ai_lineage.py` | 0 on Success, soft warnings do not break execution loop | Exits safely if target JSON manifest path configuration drops from root filesystem |
+| **Phase 2: OWASP** | Static Threat Code Engine | `scan_prompt_injection.py` | 0 on clean pass, 1 if any unsafe prompt strings are trapped | Defensively defaults path context to root execution directory if `app/` is missing |
+| **Orchestration** | CI Driver Pipeline Wrap | `run_ai_security_pipeline.sh` | Strictly matches cumulative check requirements (0 or 1) | Enforces standard shell fail-fast execution boundaries (`set -euo pipefail`) |
+
 
