@@ -1,313 +1,218 @@
 #!/usr/bin/env python3
 """
-AI Dataset Lineage, Provenance & Governance Verification Tool
-=============================================================
-Audits AI training pipeline configurations, dataset manifests, and model
-deployment specifications against ISO/IEC 42001:2023 (Control B.9.2) and the
-EU AI Act (Regulation EU 2024/1689, Articles 10, 12, 14, and 15).
-
-Zero external dependencies - standard library only.
+Agent Skill Component: Security Compliance Commander (SCC)
+Framework Mapping: ISO/IEC 42001:2023 Control B.9.2 & EU AI Act Art 15
+Purpose: Validates data provenance, lineage declarations, and dataset integrity hashes.
 """
 
 import argparse
 import hashlib
 import json
 import os
-import re
 import sys
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 
-def parse_manifest_file(file_path: str) -> Dict[str, Any]:
-    """Parse JSON or key-value pipeline manifest file."""
-    with open(file_path, "r", encoding="utf-8") as f:
-        content = f.read().strip()
-
+def calculate_file_sha256(filepath: str) -> Optional[str]:
+    """Generates SHA-256 checksum for dataset validation verification."""
+    sha256_hash = hashlib.sha256()
     try:
-        return json.loads(content)
-    except json.JSONDecodeError:
-        # Fallback to key-value or simplified parser
-        data: Dict[str, Any] = {}
-        for line in content.splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if ":" in line:
-                k, v = line.split(":", 1)
-                data[k.strip()] = v.strip().strip('"\'')
-        return data
+        with open(filepath, "rb") as f:
+            for byte_block in iter(lambda: f.read(4096), b""):
+                sha256_hash.update(byte_block)
+        return sha256_hash.hexdigest()
+    except (FileNotFoundError, IsADirectoryError, PermissionError):
+        return None
 
 
-def audit_ai_manifest(manifest: Dict[str, Any], file_path: str) -> Tuple[List[Dict[str, str]], int, int]:
-    """
-    Evaluates manifest against ISO 42001 and EU AI Act technical rules.
-    Returns: (findings_list, pass_count, warning_count, fail_count)
-    """
+def audit_pipeline_lineage(manifest_path: str, strict: bool = False, json_output: bool = False) -> bool:
+    """Inspects ML pipeline declarations for rigorous tracking metrics."""
+    if not json_output:
+        print(f"[*] Initializing Lineage & Data Provenance Audit on: {manifest_path}")
+
+    if not os.path.exists(manifest_path):
+        print(f"[-] Audit Target Failure: Manifest file {manifest_path} does not exist.", file=sys.stderr)
+        sys.exit(1)
+
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError:
+            print("[-] Audit Critical Failure: Manifest is not valid JSON.", file=sys.stderr)
+            sys.exit(1)
+
+    # Core ISO 42001 Evaluation Structural Checks
     findings: List[Dict[str, str]] = []
+    compliance_status = "Compliant"
 
-    # -------------------------------------------------------------
-    # 1. ISO 42001 Control B.9.2 & EU AI Act Art. 10: Data Provenance
-    # -------------------------------------------------------------
-    datasets = manifest.get("datasets") or manifest.get("training_data") or []
-    if isinstance(datasets, dict):
-        datasets = [datasets]
-    elif not isinstance(datasets, list) and datasets:
-        datasets = [{"uri": str(datasets)}]
-
-    if not datasets:
+    # 1. Check for explicit data tracking fields (ISO 42001 B.9.2 / EU AI Act Art 10)
+    if "dataset_provenance" not in data and "datasets" not in data:
         findings.append({
-            "control": "ISO 42001 B.9.2 / EU AI Act Art. 10",
-            "status": "FAIL",
-            "category": "Data Lineage",
-            "message": f"No training datasets or data clusters declared in manifest '{file_path}'."
+            "control": "ISO 42001 B.9.2 / EU AI Act",
+            "status": "NON-COMPLIANT",
+            "finding": "Missing top-level 'dataset_provenance' declarations metadata block."
         })
+        compliance_status = "Non-Compliant"
     else:
-        for idx, ds in enumerate(datasets):
-            ds_name = ds.get("name") if isinstance(ds, dict) else f"dataset[{idx}]"
-            uri = ds.get("uri") or ds.get("path") or "" if isinstance(ds, dict) else str(ds)
-            checksum = ds.get("sha256") or ds.get("checksum") or ds.get("hash") if isinstance(ds, dict) else None
-            version = ds.get("version") or ds.get("tag") or ds.get("commit") if isinstance(ds, dict) else None
+        # Check single dataset_provenance block or multi-dataset list
+        prov_blocks = []
+        if "dataset_provenance" in data:
+            prov_blocks.append(data.get("dataset_provenance", {}))
+        if "datasets" in data and isinstance(data["datasets"], list):
+            for ds in data["datasets"]:
+                if isinstance(ds, dict) and ds not in prov_blocks:
+                    prov_blocks.append(ds)
 
-            # Check unversioned S3/GCS or generic URIs
-            if uri.startswith("s3://") or uri.startswith("gs://"):
-                if not version and not checksum:
-                    findings.append({
-                        "control": "ISO 42001 B.9.2",
-                        "status": "WARN",
-                        "category": "Data Provenance",
-                        "message": f"Dataset '{ds_name}' ({uri}) ingests cloud storage clusters without version tag or commit hash. Prone to silent data poisoning."
-                    })
-                elif version and not checksum:
-                    findings.append({
-                        "control": "ISO 42001 B.9.2",
-                        "status": "WARN",
-                        "category": "Cryptographic Verification",
-                        "message": f"Dataset '{ds_name}' has version '{version}' but lacks SHA-256 cryptographic checksum verification."
-                    })
-                else:
-                    findings.append({
-                        "control": "ISO 42001 B.9.2",
-                        "status": "PASS",
-                        "category": "Data Provenance",
-                        "message": f"Dataset '{ds_name}' verified with immutable URI, version '{version}', and SHA-256 hash."
-                    })
-            elif uri:
-                if not checksum:
-                    findings.append({
-                        "control": "EU AI Act Art. 10",
-                        "status": "WARN",
-                        "category": "Data Integrity",
-                        "message": f"Dataset '{ds_name}' ({uri}) does not declare a cryptographic SHA-256 hash."
-                    })
-                else:
-                    findings.append({
-                        "control": "EU AI Act Art. 10",
-                        "status": "PASS",
-                        "category": "Data Integrity",
-                        "message": f"Dataset '{ds_name}' declares cryptographic verification hash."
-                    })
+        for prov in prov_blocks:
+            ds_name = prov.get("name", "unnamed-dataset")
+            expected_hash = prov.get("expected_sha256") or prov.get("sha256") or prov.get("checksum")
+            version = prov.get("version") or prov.get("tag") or prov.get("commit")
+            uri = prov.get("uri") or prov.get("path") or ""
 
-    # -------------------------------------------------------------
-    # 2. EU AI Act Art. 12 & Art. 15: Cyber & Logging Resilience
-    # -------------------------------------------------------------
-    logging_cfg = manifest.get("logging") or manifest.get("audit_logging") or manifest.get("telemetry") or {}
+            # 2. Check for Hash Integrity Enforcement
+            if not expected_hash:
+                findings.append({
+                    "control": "ISO 42001 B.9.2",
+                    "status": "WARNING",
+                    "finding": f"Dataset '{ds_name}' 'expected_sha256' hash omitted. Vulnerable to data poisoning drift."
+                })
+                if compliance_status != "Non-Compliant":
+                    compliance_status = "Warning"
+            else:
+                findings.append({
+                    "control": "ISO 42001 B.9.2",
+                    "status": "PASS",
+                    "finding": f"Dataset '{ds_name}' hash verification enforced (SHA-256: {expected_hash[:16]}...)."
+                })
+
+            # 3. Check for Versioning Control tracking
+            if not version:
+                findings.append({
+                    "control": "ISO 42001 B.9.2",
+                    "status": "WARNING",
+                    "finding": f"Dataset '{ds_name}' has no static version identifier explicitly tied to training sources."
+                })
+                if compliance_status != "Non-Compliant":
+                    compliance_status = "Warning"
+            else:
+                findings.append({
+                    "control": "ISO 42001 B.9.2",
+                    "status": "PASS",
+                    "finding": f"Dataset '{ds_name}' lineage anchored to immutable version: '{version}'."
+                })
+
+            # 4. Artifact Hash Verification if local file target exists
+            if uri and os.path.exists(uri) and os.path.isfile(uri):
+                actual_hash = calculate_file_sha256(uri)
+                if expected_hash and actual_hash:
+                    if actual_hash.lower() == expected_hash.lower():
+                        findings.append({
+                            "control": "ISO 42001 B.9.2",
+                            "status": "PASS",
+                            "finding": f"Cryptographic integrity confirmed: local file '{uri}' matches declared SHA-256."
+                        })
+                    else:
+                        findings.append({
+                            "control": "ISO 42001 B.9.2",
+                            "status": "NON-COMPLIANT",
+                            "finding": f"Integrity Failure: local file '{uri}' SHA-256 mismatch ({actual_hash} != {expected_hash})."
+                        })
+                        compliance_status = "Non-Compliant"
+
+    # 5. Check for Immutable Logging & Cyber Resilience (EU AI Act Art 12 & Art 15)
+    logging_cfg = data.get("logging") or data.get("audit_logging") or {}
     if not logging_cfg:
         findings.append({
             "control": "EU AI Act Art. 12 / Art. 15",
-            "status": "FAIL",
-            "category": "Logging & Traceability",
-            "message": "Model deployment manifest lacks automated inference and security event logging configuration."
+            "status": "WARNING",
+            "finding": "Model pipeline lacks automated inference and security event logging configuration."
         })
+        if compliance_status != "Non-Compliant":
+            compliance_status = "Warning"
     else:
-        sink = logging_cfg.get("sink") or logging_cfg.get("destination") or ""
-        immutable = logging_cfg.get("immutable") or logging_cfg.get("write_once") or False
-        retention = logging_cfg.get("retention_days") or logging_cfg.get("retention") or 0
-
-        if not sink:
-            findings.append({
-                "control": "EU AI Act Art. 12",
-                "status": "WARN",
-                "category": "Logging Destination",
-                "message": "Logging enabled but no explicit destination sink (SCC, CloudWatch, S3 Object Lock) defined."
-            })
-        elif not immutable:
+        sink = logging_cfg.get("sink") or logging_cfg.get("destination", "configured")
+        immutable = logging_cfg.get("immutable") or logging_cfg.get("write_once", False)
+        if immutable:
             findings.append({
                 "control": "EU AI Act Art. 15",
-                "status": "WARN",
-                "category": "Tamper Resistance",
-                "message": f"Logging sink '{sink}' is not configured with immutable write-once storage policies."
+                "status": "PASS",
+                "finding": f"Inference and anomalous input logging routed to write-once sink '{sink}'."
             })
         else:
             findings.append({
                 "control": "EU AI Act Art. 15",
-                "status": "PASS",
-                "category": "Logging & Traceability",
-                "message": f"Automated inference logging to '{sink}' enforces write-once immutability (Retention: {retention}d)."
+                "status": "WARNING",
+                "finding": f"Logging sink '{sink}' does not enforce write-once immutability policies."
             })
+            if compliance_status != "Non-Compliant":
+                compliance_status = "Warning"
 
-    # -------------------------------------------------------------
-    # 3. EU AI Act Art. 14: Human Oversight & Risk Classification
-    # -------------------------------------------------------------
-    risk_tier = str(manifest.get("risk_tier") or manifest.get("risk_classification") or "unknown").lower()
-    human_oversight = manifest.get("human_oversight") or manifest.get("hitl") or manifest.get("approval_required")
-
-    if risk_tier in ("high", "high_risk", "annex_iii"):
-        if not human_oversight:
+    # 6. Check for Human Oversight & Risk Tiering (EU AI Act Art. 14)
+    risk_tier = str(data.get("risk_tier", "standard")).lower()
+    human_oversight = data.get("human_oversight", False)
+    if "high" in risk_tier:
+        if human_oversight:
             findings.append({
                 "control": "EU AI Act Art. 14",
-                "status": "FAIL",
-                "category": "Human Oversight",
-                "message": f"System classified as High Risk ('{risk_tier}') but lacks required Human-in-the-Loop (HITL) manual intervention gate."
+                "status": "PASS",
+                "finding": "High-Risk system enforces mandatory human-in-the-loop intervention stop-gate."
             })
         else:
             findings.append({
                 "control": "EU AI Act Art. 14",
-                "status": "PASS",
-                "category": "Human Oversight",
-                "message": f"High-Risk system enforces mandatory human oversight and manual intervention stop-gate."
+                "status": "NON-COMPLIANT",
+                "finding": "High-Risk system lacks required Human-in-the-Loop (HITL) manual intervention gate."
             })
-    else:
-        findings.append({
-            "control": "EU AI Act Art. 6",
-            "status": "PASS",
-            "category": "Risk Tiering",
-            "message": f"AI System registered under risk tier: '{risk_tier}'."
-        })
+            compliance_status = "Non-Compliant"
 
-    # -------------------------------------------------------------
-    # 4. OWASP LLM02: Insecure Output Sanitization
-    # -------------------------------------------------------------
-    output_handling = manifest.get("output_handling") or manifest.get("guardrails") or {}
-    if output_handling:
-        strict_schema = output_handling.get("strict_schema") or output_handling.get("schema_validation")
-        if strict_schema:
-            findings.append({
-                "control": "OWASP LLM02",
-                "status": "PASS",
-                "category": "Output Handling",
-                "message": "Downstream model outputs validated through strict schema parsing."
-            })
-        else:
-            findings.append({
-                "control": "OWASP LLM02",
-                "status": "WARN",
-                "category": "Output Handling",
-                "message": "Output handling declared without strict schema validation; risk of downstream injection."
-            })
-
-    return findings
-
-
-def generate_sample_manifest() -> Dict[str, Any]:
-    """Generates an illustrative compliant manifest if testing in sandbox."""
-    return {
-        "model_name": "enterprise-agent-reasoning-v2",
-        "risk_tier": "High Risk",
-        "human_oversight": True,
-        "datasets": [
-            {
-                "name": "corporate-knowledge-corpus",
-                "uri": "s3://enterprise-ai-training-data-vault/v2.1/",
-                "version": "v2.1.4",
-                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-            }
-        ],
-        "logging": {
-            "sink": "google-cloud-scc-immutable-vault",
-            "immutable": True,
-            "retention_days": 180
-        },
-        "output_handling": {
-            "strict_schema": True,
-            "type_casting": True
+    # Output Auditor Scorecard
+    if json_output:
+        result = {
+            "manifest": manifest_path,
+            "overall_status": compliance_status,
+            "is_compliant": compliance_status == "Compliant",
+            "findings": findings
         }
-    }
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Verify AI pipeline manifests against ISO 42001 and EU AI Act requirements."
-    )
-    parser.add_argument("--manifest", "-m", help="Path to AI pipeline JSON manifest")
-    parser.add_argument("--dir", "-d", help="Directory of AI manifests to recursively inspect")
-    parser.add_argument("--strict", action="store_true", help="Fail on warnings as well as failures")
-    parser.add_argument("--json-output", action="store_true", help="Emit findings as structured JSON")
-    parser.add_argument("--sample", action="store_true", help="Run audit against compliant sample manifest")
-
-    args = parser.parse_args()
-
-    targets: List[str] = []
-    if args.manifest:
-        targets.append(args.manifest)
-    elif args.dir:
-        for root, _, files in os.walk(args.dir):
-            for f in files:
-                if f.endswith(".json") and ("pipeline" in f or "train" in f or "model" in f or "ai" in f):
-                    targets.append(os.path.join(root, f))
-    elif args.sample:
-        targets = ["<sample-manifest>"]
+        print(json.dumps(result, indent=2))
     else:
-        # Default scan for any train or pipeline JSON files in workspace
-        for candidate in ["pipelines/train_v2.json", "pipelines/train.json", "deploy/ai-pipeline.json"]:
-            if os.path.exists(candidate):
-                targets.append(candidate)
-        if not targets:
-            targets = ["<sample-manifest>"]
-
-    all_findings = []
-    has_failure = False
-
-    for target in targets:
-        if target == "<sample-manifest>":
-            data = generate_sample_manifest()
-            path_display = "sample-compliant-pipeline.json"
-        else:
-            if not os.path.exists(target):
-                print(f"Error: Target manifest '{target}' not found.", file=sys.stderr)
-                sys.exit(1)
-            data = parse_manifest_file(target)
-            path_display = target
-
-        findings = audit_ai_manifest(data, path_display)
-        for f in findings:
-            f["target"] = path_display
-            all_findings.append(f)
-            if f["status"] == "FAIL":
-                has_failure = True
-            elif args.strict and f["status"] == "WARN":
-                has_failure = True
-
-    if args.json_output:
-        print(json.dumps(all_findings, indent=2))
-    else:
-        print("=" * 72)
-        print(" 🤖 AI Governance & Lineage Verification Audit")
-        print(" Frameworks: ISO/IEC 42001:2023 (B.9.2) & EU AI Act (Arts. 10, 12, 14, 15)")
-        print("=" * 72)
-
-        for f in all_findings:
-            if f["status"] == "PASS":
+        print("\n=== SCC AI LINEAGE AUDIT MATRIX ===")
+        print(f"Overall Status: {compliance_status}")
+        for item in findings:
+            if item["status"] == "PASS":
                 badge = "\033[92m[PASS]\033[0m"
-            elif f["status"] == "WARN":
-                badge = "\033[93m[WARN]\033[0m"
+            elif item["status"] == "WARNING":
+                badge = "\033[93m[WARNING]\033[0m"
             else:
-                badge = "\033[91m[FAIL]\033[0m"
+                badge = "\033[91m[NON-COMPLIANT]\033[0m"
+            print(f"{badge} Control {item['control']}: {item['finding']}")
 
-            print(f"{badge} {f['control']:<32} | {f['category']:<18} | {f['message']}")
-
-        print("-" * 72)
-        pass_cnt = sum(1 for f in all_findings if f["status"] == "PASS")
-        warn_cnt = sum(1 for f in all_findings if f["status"] == "WARN")
-        fail_cnt = sum(1 for f in all_findings if f["status"] == "FAIL")
-
-        print(f"Audit Summary: {pass_cnt} Passing, {warn_cnt} Warnings, {fail_cnt} Failing.")
-        if has_failure:
-            print("Verdict: ❌ Non-Compliant with AI Governance Baselines.")
-            sys.exit(1)
-        else:
-            print("Verdict: ✅ All Evaluated AI Governance Baseline Controls Satisfied.")
-            sys.exit(0)
+    if strict and compliance_status != "Compliant":
+        return False
+    return compliance_status != "Non-Compliant"
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="Verify AI pipeline manifests against ISO 42001 and EU AI Act requirements."
+    )
+    parser.add_argument("manifest_pos", nargs="?", default=None, help="Target manifest path")
+    parser.add_argument("--manifest", "-m", help="Path to AI pipeline JSON manifest")
+    parser.add_argument("--strict", action="store_true", help="Fail if any warnings are detected")
+    parser.add_argument("--json", action="store_true", help="Output findings as JSON")
+    parser.add_argument("--sample", action="store_true", help="Run against default sample manifest")
+
+    args = parser.parse_args()
+
+    # Determine target manifest path
+    target = args.manifest or args.manifest_pos
+    if not target:
+        default_candidate = "pipelines/train_v2.json"
+        if os.path.exists(default_candidate):
+            target = default_candidate
+        else:
+            print(f"[*] No target specified and '{default_candidate}' not found. Please provide manifest path.", file=sys.stderr)
+            parser.print_help()
+            sys.exit(1)
+
+    is_compliant = audit_pipeline_lineage(target, strict=args.strict, json_output=args.json)
+    sys.exit(0 if is_compliant else 1)

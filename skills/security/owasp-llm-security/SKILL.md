@@ -178,3 +178,4 @@ bash skills/security/owasp-llm-security/scripts/validate_llm_outputs.sh --input 
 - [ ] **DevSecOps Engineer:** Implement input sanitization middleware within `src/middleware/guards.py` to strip delimiter escape characters and enforce prompt sandboxing.
 - [ ] **GitOps Release Manager:** Inject declarative WAF JSON blocks into `terraform/modules/waf/` manifests.
 - [ ] **SRE Reliability Engineer:** Establish CloudWatch alarms for `BlockLLMPromptInjectionOverrides` alerting at > 50 blocks/min.
+

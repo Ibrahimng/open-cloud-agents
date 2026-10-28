@@ -70,3 +70,4 @@ Annex B provides detailed guidance for controls organized across 38 specific con
 | **B.7.1** | Standardized Model Card | `models/<model-id>/MODEL_CARD.md` | Automated Markdown schema check |
 | **B.8.2** | Human-in-the-Loop Sign-off Gate | GitHub PR review / Cloud Deploy Approval | Audit log of human user approval |
 | **B.10.1** | Immutable Inference Logging | Cloud Storage / BigQuery write-once table | KMS key policy & bucket lock inspection |
+

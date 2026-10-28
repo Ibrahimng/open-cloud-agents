@@ -81,3 +81,4 @@ Providers of general-purpose AI models (including foundation LLMs) must:
 4. Ensure immutable write-once logging is enabled:
    Verify deploy/gcp-vertex-infra.tf contains object lock / Cloud Storage retention_policy blocks.
 ```
+

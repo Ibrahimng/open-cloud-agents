@@ -176,3 +176,4 @@ else
 fi
 
 validate_content "$TARGET_CONTENT"
+
