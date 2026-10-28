@@ -23,3 +23,4 @@ When adding a new check to `scripts/ci/audit_pr_diff.py`:
 1. Register both the negative and positive test assertions in `verify_guardrail_regressions.py`.
 2. Add the test row to this matrix.
 3. Ensure the test suite passes before committing changes.
+

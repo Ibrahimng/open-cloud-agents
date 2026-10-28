@@ -62,3 +62,4 @@ The suite executes test assertions against `scripts/ci/audit_pr_diff.py`:
 ## References & Tools
 - [regression-test-matrix.md](references/regression-test-matrix.md): Comprehensive inventory of active guardrail test cases and expected verdicts.
 - `scripts/verify_guardrail_regressions.py`: Executable regression test runner.
+
