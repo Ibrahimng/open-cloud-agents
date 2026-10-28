@@ -18,6 +18,7 @@ fi
 
 LINEAGE_SCRIPT="${PROJECT_ROOT}/skills/security/compliance/ai-governance-audit/scripts/verify_ai_lineage.py"
 OWASP_SCRIPT="${PROJECT_ROOT}/skills/security/owasp-llm-security/scripts/scan_prompt_injection.py"
+OUTPUT_SCRIPT="${PROJECT_ROOT}/skills/security/owasp-llm-security/scripts/validate_llm_outputs.sh"
 
 # Terminal formatting definitions
 RED='\033[0;31m'
@@ -49,7 +50,7 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# PHASE 2: Static Code Guardrail Check (OWASP LLM01 / LLM02)
+# PHASE 2: Static Code Guardrail Check (OWASP LLM01)
 # ------------------------------------------------------------------------------
 echo -e "\n${BLUE}[PHASE 2] Static Code Analysis: Prompt Injection Vectors${NC}"
 if [[ -f "$OWASP_SCRIPT" ]]; then
@@ -62,6 +63,22 @@ if [[ -f "$OWASP_SCRIPT" ]]; then
     fi
 else
     echo -e "${RED}❌ Error: OWASP LLM static analyzer not found at: ${OWASP_SCRIPT}${NC}"
+    PIPELINE_FAILED=1
+fi
+
+# ------------------------------------------------------------------------------
+# PHASE 3: Output Integrity Verification (OWASP LLM02)
+# ------------------------------------------------------------------------------
+echo -e "\n${BLUE}[PHASE 3] Output Integrity Check: Toxic Payload Interception${NC}"
+if [[ -f "$OUTPUT_SCRIPT" ]]; then
+    if bash "$OUTPUT_SCRIPT"; then
+        echo -e "${GREEN}✅ Phase 3 Success: Model output matches safe execution profiles.${NC}"
+    else
+        echo -e "${RED}❌ Phase 3 Failure: Model output contains unsafe execution vectors.${NC}"
+        PIPELINE_FAILED=1
+    fi
+else
+    echo -e "${RED}❌ Error: Output validation module not found at: ${OUTPUT_SCRIPT}${NC}"
     PIPELINE_FAILED=1
 fi
 

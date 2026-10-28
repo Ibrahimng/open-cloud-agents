@@ -29,6 +29,7 @@ jobs:
           chmod +x skills/security/compliance/ai-governance-audit/scripts/run_ai_security_pipeline.sh
           chmod +x skills/security/compliance/ai-governance-audit/scripts/verify_ai_lineage.py
           chmod +x skills/security/owasp-llm-security/scripts/scan_prompt_injection.py
+          chmod +x skills/security/owasp-llm-security/scripts/validate_llm_outputs.sh
 
       - name: "Initialize Staged Test Pipeline Target Assets"
         run: |
