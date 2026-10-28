@@ -7,6 +7,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-10-28
+
+### 🛡️ Runtime Threat Detection, CIS Complete Audit, and AI Governance & LLM Safety Suites
+This major feature release introduces an enterprise-grade **Cloud Security, Runtime Threat Detection, and Compliance Ecosystem** across merged Pull Request #25. It integrates CNCF eBPF kernel security with **Falco & Falco Talon**, **Sysdig** CNAPP drift control, **Wazuh** enterprise SIEM/XDR active response, **Microsoft Sentinel** cloud-native SIEM/SOAR threat hunting, a comprehensive 4-layer **CIS Complete Audit** suite, and full-lifecycle **AI Governance & OWASP Top 10 for LLMs** defense pipelines aligned with ISO/IEC 42001:2023 and the EU AI Act.
+
+---
+
+### ✨ Added
+
+#### 1. CIS Complete Multi-Layer Compliance Audit Suite ([`skills/security/cis-complete-audit/`](./skills/security/cis-complete-audit/SKILL.md))
+* **4-Layer Unified CIS Auditing:** Automated evaluation, scoring, and drift detection across Cloud Foundations (AWS CIS 3.0, Azure CIS 2.1, GCP CIS 3.0), Kubernetes (CIS K8s 1.9), Linux Host Hardening (CIS Benchmark Level 1 & 2), and Docker Containers (CIS Docker 1.6).
+* **Automated Audit Engine (`audit_cis_compliance.py`):** Multi-framework Python scanner generating compliance reports, weighted severity scoring (Critical, High, Medium, Low), and machine-readable JSON artifacts.
+* **Declarative Remediation Automation (`cis_remediation_helper.sh`):** Shell execution helper providing safe, automated dry-run and apply modes for CIS drift remediation.
+* **Comprehensive Technical Reference Matrices:** Reference guides for Cloud Foundations, Kubernetes CIS guidelines, Linux host hardening vectors, Docker container isolation rules, and remediation playbooks.
+
+#### 2. Falco & Falco Talon: eBPF Kernel Threat Detection & Real-Time Prevention ([`skills/security/falco/`](./skills/security/falco/SKILL.md))
+* **Syscall-Level Behavioral Monitoring:** CNCF graduated eBPF kernel tracing intercepting unauthorized process spawns, interactive shells in production, container namespace escapes, and unexpected network egress.
+* **Falco Talon Active Response Actionners:** Autonomous threat neutralization playbooks executing zero-grace pod eviction (`kubernetes:terminate`), instant CNI network isolation (`kubernetes:networkpolicy` egress-deny-all via Cilium/Calico), and node-level process termination (`SIGKILL`).
+* **Declarative Rule Architecture & Testing Tools:** Complete rule compiler validator (`validate_falco_rules.py`) and mock alert generator (`simulate_falco_alerts.py`).
+
+#### 3. Sysdig: Cloud Native Application Protection & Runtime Drift Control ([`skills/security/sysdig/`](./skills/security/sysdig/SKILL.md))
+* **Container Runtime Drift Prevention:** Sysdig Secure and OSS chisel tracing intercepting drift between immutable container images and runtime process state.
+* **Admission Control & Image Vulnerability Gatekeeping:** Automated evaluation of CVE severities and non-compliant package blocking before deployment.
+* **Forensic Capture Analysis & Policy Tooling:** Dedicated trace capture parser (`parse_sysdig_capture.py`) and Falco-to-Sysdig declarative policy generator (`sysdig_policy_generator.py`).
+
+#### 4. Wazuh: Enterprise Open-Source SIEM, XDR & Active Response ([`skills/security/wazuh/`](./skills/security/wazuh/SKILL.md))
+* **Host OS & File Integrity Monitoring (FIM):** Real-time `syscheck` tracking unauthorized file modifications, permission escalations, and binary tampering across Linux and Windows nodes.
+* **Automated Active Response Playbooks:** Autonomous host containment scripts (`firewall-drop`, `host-deny`, custom container freeze) neutralizing brute-force and lateral movement attacks.
+* **Log Decoders & Rules Testing Engine:** Custom XML decoder definitions and rule verification runner (`wazuh_rule_tester.py`) alongside an active response simulator (`wazuh_active_response_simulator.py`).
+
+#### 5. Microsoft Sentinel: Cloud-Native SIEM & SOAR Threat Hunting ([`skills/security/sentinel/`](./skills/security/sentinel/SKILL.md))
+* **Advanced Kusto Query Language (KQL) Threat Hunting:** Production KQL hunting library detecting credential dumping, abnormal multi-cloud data egress, and privileged identity manipulation.
+* **SOAR Automation Playbooks (Logic Apps):** Automated incident triage, entity analytics (UEBA), and declarative JSON ARM/Bicep remediation templates.
+* **Analytical Rule Authoring & Verification:** CLI syntax validator for KQL queries (`validate_kql_queries.py`) and automated Logic App playbook template generator (`sentinel_playbook_generator.py`).
+
+#### 6. AI Governance & Regulatory Compliance Suite ([`skills/security/compliance/ai-governance-audit/`](./skills/security/compliance/ai-governance-audit/SKILL.md))
+* **ISO/IEC 42001:2023 AIMS Control Matrix:** Deep-dive governance mapping covering Organizational Controls (A.5.2 AI Policy, A.8.3 AI System Impact) and Annex B Technical Controls (B.9.2 Data Lineage, B.10.4 Algorithmic Transparency).
+* **EU AI Act Conformity Guide (Regulation EU 2024/1689):** High-Risk AI system classification, technical documentation requirements (Art. 11), automatic logging obligations (Art. 12), and cybersecurity resilience (Art. 15).
+* **Cryptographic Data Provenance Verification Engine (`verify_ai_lineage.py`):** Standalone CLI auditor enforcing mandatory `dataset_provenance` metadata schemas, static SHA-256 dataset hash integrity, and immutable version tags.
+
+#### 7. OWASP Top 10 for LLMs Application Security Defenses ([`skills/security/owasp-llm-security/`](./skills/security/owasp-llm-security/SKILL.md))
+* **Static Prompt Injection Code Scanner (`scan_prompt_injection.py`):** AST regex scanner intercepting dynamic string interpolation (`f"..."`, concatenation) in prompt templates and evaluating prompt payloads against known jailbreak signatures.
+* **Model Output Integrity Verification (`validate_llm_outputs.sh`):** Post-generation filter intercepting downstream RCE shell commands, SQL injection strings, and XSS artifacts before execution.
+* **Declarative Edge Perimeter Rules:** AWS WAFv2 WebACL JSON inspection policies and Google Cloud Armor rules blocking administrative override strings at ingress gateways.
+* **Runtime Input Sanitization Middleware ([`src/middleware/guards.py`](./src/middleware/guards.py)):** Hardened payload builder enforcing structural role arrays and delimiter stripping.
+
+#### 8. Automated AI Safety & Governance CI/CD Pipeline ([`.github/workflows/ai-safety-pipeline.yml`](./.github/workflows/ai-safety-pipeline.yml))
+* **Centralized CI Pipeline:** Executes on every push and pull request, orchestrating dataset lineage verification, static prompt injection scans, and output integrity checks via [`run_ai_security_pipeline.sh`](./skills/security/compliance/ai-governance-audit/scripts/run_ai_security_pipeline.sh).
+* **Local Desktop Pre-Commit Shield:** Tracked hook ([`scripts/git-hooks/pre-commit`](./scripts/git-hooks/pre-commit)) preventing unvalidated prompt concatenations from being committed locally.
+
+---
+
+### 🔄 Changed
+* **README.md:** Updated release badge to `v1.3.0` and added the 5 new security subdomains to the catalog.
+* **Security Subdomain Hub ([`skills/security/README.md`](./skills/security/README.md)):** Added the Core Structural Reference Matrix connecting compliance reference specifications directly to automated script engines.
+* **Security Compliance Commander Persona ([`agents/7-agent-master-suite/security-compliance-commander.md`](./agents/7-agent-master-suite/security-compliance-commander.md)):** Expanded operational purview to include AI governance, ISO 42001, EU AI Act conformity, and Falco/Wazuh runtime defense loops.
+
+---
+
 ## [1.2.0] - 2026-10-27
 
 ### 🌐 Multi-Cloud IaC Standards, Token Optimization Architecture & Autonomous Gatekeeper Pipeline

@@ -6,7 +6,7 @@
 
 ### *Autonomous, Well-Architected Cloud Engineering for Any AI Agent or IDE*
 
-[![Release](https://img.shields.io/badge/Release-v1.1.0-success.svg)](CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.3.0-success.svg)](CHANGELOG.md)
 [![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-blue.svg)](https://ibrahimng.github.io/open-cloud-agents/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Well-Architected](https://img.shields.io/badge/Architecture-AWS%20%7C%20Azure%20%7C%20GCP-orange.svg)](#the-7-agent-master-suite)
