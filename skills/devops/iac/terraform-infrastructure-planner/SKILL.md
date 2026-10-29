@@ -30,7 +30,9 @@ All implementation plans are written to `.terraform-planning-files/INFRA.{provid
 - Never modify application code or write `.tf` files directly during this stage.
 
 ### 2. Workload Classification
+
 Evaluate requirements to classify the workload tier:
+
 | Workload Tier | Redundancy & Availability | Security Controls | Cost Profile |
 |---|---|---|---|
 | **Demo / Learning** | Single-AZ, minimal NAT, Spot/Burst | Basic IAM/RBAC, default encryption | Minimal (< $50/mo) |
@@ -38,11 +40,12 @@ Evaluate requirements to classify the workload tier:
 | **Enterprise / Regulated** | Multi-Region Active/Standby, Transit Gateway/WAN | Envelope encryption, WAF, Private Endpoints, Config/Audit | High assurance, SOC 2 / HIPAA / PCI |
 
 ### 3. Module Selection & Registry Verification
+
 - Always adopt a **module-first** strategy using verified modules:
-  - **AWS:** `terraform-aws-modules/*` (VPC, EKS, RDS, S3, ALB)
-  - **Azure:** `Azure/*` (`Azure/vnet/azurerm`, `Azure/aks/azurerm`)
-  - **GCP:** `terraform-google-modules/*` (`terraform-google-modules/network/google`)
-  - **Docker:** `kreuzwerker/docker` provider with hardened container resource patterns
+    - **AWS:** `terraform-aws-modules/*` (VPC, EKS, RDS, S3, ALB)
+    - **Azure:** `Azure/*` (`Azure/vnet/azurerm`, `Azure/aks/azurerm`)
+    - **GCP:** `terraform-google-modules/*` (`terraform-google-modules/network/google`)
+    - **Docker:** `kreuzwerker/docker` provider with hardened container resource patterns
 - Check and specify the latest semantic version constraints (e.g. `~> 5.0`).
 - Favor module composition over writing raw primitives.
 
