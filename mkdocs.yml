@@ -63,6 +63,10 @@ markdown_extensions:
 plugins:
   - search
 
+validation:
+  omitted_files: info
+  unrecognized_links: ignore
+
 nav:
   - Home: index.md
   - Master Directive: AGENTS.md
@@ -84,13 +88,58 @@ nav:
       - Rule 05 Repository Hygiene: rules/05-repository-and-path-hygiene.md
   - Skills Catalog:
       - Skills Architecture: skills/README.md
-      - FinOps Waste Reaper: skills/finops/cloud-waste-reaper/SKILL.md
-      - Dart Engineering: skills/programming/dart/README.md
+      - Security & Threat Defense:
+          - Security Ecosystem: skills/security/README.md
+          - CIS Complete Audit: skills/security/cis-complete-audit/SKILL.md
+          - Falco eBPF Kernel Threat Detection: skills/security/falco/SKILL.md
+          - Sysdig CNAPP & Drift Control: skills/security/sysdig/SKILL.md
+          - Wazuh SIEM/XDR & Active Response: skills/security/wazuh/SKILL.md
+          - Microsoft Sentinel SIEM/SOAR: skills/security/sentinel/SKILL.md
+          - Compliance Overview: skills/security/compliance/README.md
+          - AI Governance (ISO 42001 & EU AI Act): skills/security/compliance/ai-governance-audit/SKILL.md
+          - CIS Foundations Benchmark: skills/security/compliance/cis-benchmark-audit/SKILL.md
+          - SOC 2 Type II Evidence Collector: skills/security/compliance/soc2-evidence-collector/SKILL.md
+          - OWASP Top 10 for LLMs: skills/security/owasp-llm-security/SKILL.md
+          - Cloud Armor CRS Upgrader: skills/security/cloud-armor-crs-rule-upgrader/SKILL.md
+          - Workload Identity Federation: skills/security/iam-least-privilege/workload-identity-federation/SKILL.md
+          - Git Secret Leak Remediation: skills/security/secret-management/git-secret-leak-remediation/SKILL.md
+      - DevOps & Infrastructure as Code:
+          - DevOps Ecosystem: skills/devops/README.md
+          - Terraform Infrastructure Planner: skills/devops/iac/terraform-infrastructure-planner/SKILL.md
+          - AWS Terraform Standards: skills/devops/iac/aws-terraform-implementation/SKILL.md
+          - Azure Terraform Standards: skills/devops/iac/azure-terraform-implementation/SKILL.md
+          - GCP Terraform Standards: skills/devops/iac/gcp-terraform-implementation/SKILL.md
+          - Docker Container Hardening: skills/devops/iac/docker-terraform-implementation/SKILL.md
+          - Terraform & OpenTofu Modules: skills/devops/iac/terraform-opentofu-modules/SKILL.md
+          - Helm Chart Scaffolding: skills/devops/kubernetes/helm-chart-scaffold/SKILL.md
+          - Kubernetes Pod Troubleshooting: skills/devops/kubernetes/k8s-pod-troubleshooting/SKILL.md
+          - GitOps ArgoCD Canary Promotion: skills/devops/ci-cd/gitops-argocd-promotion/SKILL.md
+      - FinOps & Cost Optimization:
+          - FinOps Framework: skills/finops/README.md
+          - Cloud Waste Reaper: skills/finops/cloud-waste-reaper/SKILL.md
+      - Continual Learning:
+          - Learning Framework: skills/continual-learning/README.md
+          - Incident Postmortem to Guardrail: skills/continual-learning/incident-postmortem-to-guardrail/SKILL.md
+          - Guardrail Regression Testing: skills/continual-learning/guardrail-regression-testing/SKILL.md
+          - Knowledge Enhancement Loop: skills/continual-learning/knowledge-enhancement-loop/SKILL.md
+      - Language Engineering:
+          - Programming Framework: skills/programming/README.md
+          - Python FastAPI REST Patterns: skills/programming/python/fastapi-rest-patterns/SKILL.md
+          - Python Pytest Test Suite: skills/programming/python/pytest-test-suite/SKILL.md
+          - TypeScript Strict Patterns: skills/programming/javascript/typescript-strict-patterns/SKILL.md
+          - Go Concurrency Patterns: skills/programming/go/go-concurrency-patterns/SKILL.md
+          - Java Spring Boot Architecture: skills/programming/java/spring-boot-architecture/SKILL.md
+          - Dart Engineering Suite: skills/programming/dart/README.md
+      - Cloud Service Providers (CSPs):
+          - CSP Ecosystem: skills/csp/README.md
+          - AWS Specialized Skills: skills/csp/aws/README.md
+          - Azure Specialized Skills: skills/csp/azure/README.md
+          - GCP Specialized Skills: skills/csp/gcp/README.md
   - Runtime Architecture:
-      - Architecture MVP Spec: architecture-mvp-spec.md
-      - Engineering Standards: engineering-standards.md
+      - Architecture MVP Spec: docs/architecture-mvp-spec.md
+      - Engineering Standards: docs/engineering-standards.md
+      - Token Optimization Architecture: docs/token-optimization-architecture.md
   - Community & Governance:
       - Release Changelog: CHANGELOG.md
       - Contributing Guide: CONTRIBUTING.md
       - Hall of Fame: CONTRIBUTORS.md
-

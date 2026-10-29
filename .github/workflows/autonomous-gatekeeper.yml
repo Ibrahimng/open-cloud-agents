@@ -256,7 +256,7 @@ jobs:
 
               if (!alreadyReviewed) {
                 const footerText = isSelfAuthored
-                  ? '> *Verified autonomously by Antigravity-AI. (Self-authored automated PR — all quality gates passed, ready for maintainer merge).*'
+                  ? '> *Verified autonomously by Antigravity-AI. (Self-authored automated PR - all quality gates passed, ready for maintainer merge).*'
                   : '> *Approved autonomously by Antigravity-AI as the pre-merge gatekeeper for Open Cloud Agents.*';
 
                 const approvalBody = `### 🤖 Antigravity-AI: Autonomous Gatekeeper ${isSelfAuthored ? 'Verification' : 'Approval'}\n\n` +

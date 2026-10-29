@@ -58,22 +58,9 @@ def prepare_docs():
     # 4. Existing docs/ directory content
     docs_dir = REPO_ROOT / "docs"
     if docs_dir.exists():
-        for item in docs_dir.iterdir():
-            if item.name.startswith("."):
-                continue
-            dest_item = BUILD_DOCS / item.name
-            if item.is_dir():
-                shutil.copytree(item, dest_item)
-            else:
-                shutil.copy2(item, dest_item)
-        log("Staged docs/ architectural specs and assets")
-
-        # Also support docs/images/ alias path for relative markdown links
-        docs_alias = BUILD_DOCS / "docs"
-        docs_alias.mkdir(parents=True, exist_ok=True)
-        images_src = docs_dir / "images"
-        if images_src.exists():
-            shutil.copytree(images_src, docs_alias / "images", dirs_exist_ok=True)
+        dest_docs = BUILD_DOCS / "docs"
+        shutil.copytree(docs_dir, dest_docs, dirs_exist_ok=True, ignore=shutil.ignore_patterns(".git*", "__pycache__", "*.pyc"))
+        log("Staged docs/ directory into build_docs/docs/")
 
     log("Documentation preparation completed successfully!")
 
