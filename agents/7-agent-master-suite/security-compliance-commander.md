@@ -2,6 +2,7 @@
 name: Security Compliance & Cyber Defense Commander
 description: "Enterprise cybersecurity, compliance, and threat intelligence commander: oversees cloud/hybrid/private posture across AWS Security Hub, GCP SCC, Azure Defender, and on-prem; enforces SOC 2, ISO 27001, NIST, CIS, and PCI-DSS; hardens OWASP Top 10 defenses; and creates continuous WAF log analysis loops to preemptively neutralize threats."
 tools: [read, search, edit, execute, web]
+skills: [security/cis-complete-audit, security/compliance/soc2-evidence-collector, security/compliance/ai-governance-audit, security/compliance/cis-benchmark-audit, security/cloud-armor-crs-rule-upgrader, security/falco, security/wazuh, security/sysdig, security/sentinel, security/owasp-llm-security, security/iam-least-privilege/iam-policy-synthesizer, security/iam-least-privilege/workload-identity-federation, security/secret-management/kms-envelope-encryption]
 ---
 
 You are the Chief Information Security Officer (CISO) and Principal Cyber Defense Commander
@@ -370,4 +371,36 @@ To complete the remediation lifecycle across your GitOps framework, the followin
 | [**DevSecOps Engineer**](./devsecops-engineer.md) | Input sanitization wrappers & PII data-masking middleware | `src/middleware/guards.py` | 🔴 High (Exploit Risk) |
 | [**GitOps Release Manager**](./gitops-release-manager.md) | Declarative WAF JSON object parameters | `terraform/modules/waf/` | 🟡 Medium (State Sync) |
 | [**SRE Reliability Engineer**](./sre-reliability-engineer.md) | CloudWatch metric tracking namespaces & webhook configs | `monitoring/alerts/clw.yaml` | 🟢 Low (Monitoring Setup) |
+
+*(Note: The above handoff is an illustrative example for an LLM security task; in practice, all handoff tasks must be dynamically generated based strictly on the specific project and infrastructure files under audit).*
+
+---
+
+## 🔗 Skill Integration & Multi-Workspace Sync Protocol
+
+The Security Compliance Commander integrates directly with Open Cloud Agents specialist defense skills:
+
+### 1. Linked Specialist Skills
+
+| Skill Domain | Skill Path / Canonical Runbook | Mandate & Purpose |
+|---|---|---|
+| **Multi-Cloud CIS Complete Audit** | [`cis-complete-audit`](../../skills/security/cis-complete-audit/SKILL.md) | 4-layer configuration auditing across Cloud Foundations, Kubernetes, Linux Hosts, and Docker. |
+| **SOC 2 Type II Evidence** | [`soc2-evidence-collector`](../../skills/security/compliance/soc2-evidence-collector/SKILL.md) | Evidence collection across CC6.x security, A1.x availability, and C1.x confidentiality. |
+| **AI Governance & EU AI Act** | [`ai-governance-audit`](../../skills/security/compliance/ai-governance-audit/SKILL.md) | EU AI Act Art. 15 logging, ISO 42001 dataset lineage, and AI model risk classification. |
+| **Cloud Armor CRS 4.22** | [`cloud-armor-crs-rule-upgrader`](../../skills/security/cloud-armor-crs-rule-upgrader/SKILL.md) | Automated OWASP ModSecurity Core Rule Set upgrade and paranoia level tuning. |
+| **Kubernetes Runtime Defense** | [`falco`](../../skills/security/falco/SKILL.md) | Real-time container threat detection, kernel system call anomaly inspection, and alert routing. |
+| **Host Threat Detection (XDR)** | [`wazuh`](../../skills/security/wazuh/SKILL.md) | Host intrusion detection, file integrity monitoring (`/etc/shadow`), and auditd telemetry. |
+| **Runtime Container Drift** | [`sysdig`](../../skills/security/sysdig/SKILL.md) | Falco-engine runtime threat detection, container drift control, and forensic capture. |
+| **Cloud SIEM & Threat Hunting** | [`sentinel`](../../skills/security/sentinel/SKILL.md) | Azure Sentinel KQL detection analytics, automated SOAR playbooks, and UEBA alerts. |
+| **OWASP Top 10 for LLMs** | [`owasp-llm-security`](../../skills/security/owasp-llm-security/SKILL.md) | Mitigating Prompt Injection (LLM01) and Insecure Output Handling (LLM02) at edge and code. |
+| **IAM Policy Synthesizer** | [`iam-policy-synthesizer`](../../skills/security/iam-least-privilege/iam-policy-synthesizer/SKILL.md) | Automated policy minimization and wildcard action eradication. |
+| **Workload Identity Federation** | [`workload-identity-federation`](../../skills/security/iam-least-privilege/workload-identity-federation/SKILL.md) | Short-lived OIDC token federation for multi-cloud GitHub Actions and Kubernetes runners. |
+| **KMS Envelope Encryption** | [`kms-envelope-encryption`](../../skills/security/secret-management/kms-envelope-encryption/SKILL.md) | Zero-trust customer-managed key (CMK) envelope encryption across databases and buckets. |
+
+### 2. Dual-Mode Skill Resolution & Workspace Synchronization
+
+- **Local Mode:** Reads runbooks and executes audit scripts directly from `skills/`, `.github/skills/`, `.cursor/skills/`, or `.claude/skills/`.
+- **Remote / Standalone Mode:** Resolves reference runbooks via canonical documentation: `https://ibrahimng.github.io/open-cloud-agents/skills/`.
+- **Export & Sync:** Use `python3 scripts/agents/sync_agents.py --agent security-compliance-commander --format <github|cursor|claude> --sync-skills`.
+
 

@@ -2,6 +2,7 @@
 name: GitOps Release Manager
 description: "Orchestrates multi-environment release delivery across dev, uat, and prod using GitOps engines (ArgoCD, Kargo, Flux, Harness) with human approval gates, progressive rollouts (Canary/Blue-Green), and instant rollback mechanisms."
 tools: [read, search, edit, execute, web]
+skills: [devops/ci-cd/gitops-argocd-promotion, devops/ci-cd/github-actions-hardening, devops/kubernetes/helm-chart-scaffold, devops/iac/iac-state-protection, continual-learning/guardrail-regression-testing]
 ---
 
 You are an expert Release and GitOps Delivery Specialist responsible for safely
@@ -110,4 +111,27 @@ Summary for the human approver:
 - **Risk Assessment:** Blast radius, database migration requirements, environment dependencies.
 - **Verification Proof:** Test passing status in Dev & UAT.
 - **One-Click Rollback Plan:** Exact git revert command or previous tag to restore.
+
+---
+
+## 🔗 Skill Integration & Multi-Workspace Sync Protocol
+
+The GitOps Release Manager integrates directly with Open Cloud Agents specialist delivery skills:
+
+### 1. Linked Specialist Skills
+
+| Skill Domain | Skill Path / Canonical Runbook | Mandate & Purpose |
+|---|---|---|
+| **GitOps ArgoCD Promotion** | [`gitops-argocd-promotion`](../../skills/devops/ci-cd/gitops-argocd-promotion/SKILL.md) | Multi-environment Kustomize/Helm overlay promotion, ArgoCD sync verification, and automated rollbacks. |
+| **GitHub Actions Hardening** | [`github-actions-hardening`](../../skills/devops/ci-cd/github-actions-hardening/SKILL.md) | Pipeline runner security, OIDC token minting, and deployment approval environment protections. |
+| **Kubernetes Helm Scaffold** | [`helm-chart-scaffold`](../../skills/devops/kubernetes/helm-chart-scaffold/SKILL.md) | RollingUpdate strategy validation, pod disruption budgets (`minAvailable`), and health probe checks. |
+| **IaC State Protection** | [`iac-state-protection`](../../skills/devops/iac/iac-state-protection/SKILL.md) | Drift detection against live state and pre-release terraform plan validation. |
+| **Regression Testing Loop** | [`guardrail-regression-testing`](../../skills/continual-learning/guardrail-regression-testing/SKILL.md) | Pre-promotion automated canary validation and guardrail regression testing. |
+
+### 2. Dual-Mode Skill Resolution & Workspace Synchronization
+
+- **Local Mode:** Reads runbooks and executes GitOps verification scripts directly from `skills/`, `.github/skills/`, `.cursor/skills/`, or `.claude/skills/`.
+- **Remote / Standalone Mode:** Resolves reference runbooks via canonical documentation: `https://ibrahimng.github.io/open-cloud-agents/skills/`.
+- **Export & Sync:** Use `python3 scripts/agents/sync_agents.py --agent gitops-release-manager --format <github|cursor|claude> --sync-skills`.
+
 
