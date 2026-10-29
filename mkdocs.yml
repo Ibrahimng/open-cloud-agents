@@ -139,6 +139,7 @@ nav:
       - Architecture MVP Spec: docs/architecture-mvp-spec.md
       - Engineering Standards: docs/engineering-standards.md
       - Token Optimization Architecture: docs/token-optimization-architecture.md
+      - 30-Day Action Plan: docs/30-day-action-plan.md
   - Community & Governance:
       - Release Changelog: CHANGELOG.md
       - Contributing Guide: CONTRIBUTING.md
