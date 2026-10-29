@@ -119,3 +119,4 @@ When a new version tag (e.g. `v1.3.1`) is tagged and pushed to GitHub, an automa
 | **Ubuntu / Debian** (APT) | `apt list --installed ocagents` | `sudo apt update && sudo apt install --only-upgrade ocagents` |
 | **Alpine Linux** (APK) | `apk info ocagents` | `apk update && apk upgrade ocagents` |
 | **Python** (pipx) | `pipx list` | `pipx upgrade open-cloud-agents` |
+

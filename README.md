@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/images/social-preview.png" alt="Open Cloud Agents - Autonomous Cloud Review and Guardrails" width="100%" />
+  <img src="./docs/images/social-preview.png" alt="Open Cloud Agents - AI Cloud Architecture and Security Review" width="100%" />
 </p>
 
 # ☁️ Open Cloud Agents
@@ -10,319 +10,226 @@
 [![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-blue.svg)](https://ibrahimng.github.io/open-cloud-agents/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Well-Architected](https://img.shields.io/badge/Architecture-AWS%20%7C%20Azure%20%7C%20GCP-orange.svg)](#the-7-agent-master-suite)
-[![Local-First](https://img.shields.io/badge/Philosophy-Local--First%20%26%20BYO--LLM-blueviolet.svg)](#core-philosophy)
+[![Status](https://img.shields.io/badge/Status-Early--Stage%20Architecture%20Review-blueviolet.svg)](#-project-status--focus)
 
-**Open Cloud Agents** is a local-first, bring-your-own-LLM framework for safer cloud engineering. Instead of relying on one overloaded generalist chatbot for architecture, security, delivery, reliability, and cost, it routes each task to a specialist cloud agent with defined responsibilities, guardrails, and operational boundaries.
+**Open Cloud Agents** gives engineering teams a safer, structured way to review cloud architecture, audit IaC pull requests, and catch operational risks using any LLM—without handing production infrastructure to an uncontrolled prompt.
 
-This project is built for engineering teams that want AI to assist with **cloud architecture reviews, security posture auditing, IaC risk analysis, GitOps promotions, SRE incident triage, and FinOps waste elimination**—without handing production infrastructure decisions to an uncontrolled prompt.
+> [!NOTE]
+> **Project Status:** Early-stage open-source system focused specifically on **cloud architecture reviews, pre-merge IaC security auditing, and operational guardrails**.
+
+---
+
+## ⚡ At a Glance: In 30 Seconds
+
+| Question | Answer |
+|---|---|
+| **What is this?** | A local-first, bring-your-own-LLM tool for **reviewing cloud architecture, detecting security/cost risks, and enforcing guardrails** across AWS, Azure, and GCP. |
+| **Who is it for?** | Cloud architects, platform teams, security auditors, and DevSecOps engineers who use AI coding tools (Copilot, Cursor, Claude Code, ChatGPT) but need **domain-specific cloud guardrails**. |
+| **How do I try it?** | Install the standalone CLI (`ocagents`), sync a specialist agent into your repo, and run a pre-merge review in under 3 minutes. |
+
+---
+
+## 🔍 See It in Action: Sample Pre-Merge Review
+
+When a developer submits a Terraform PR that accidentally triggers state destruction, here is how the **DevSecOps Reviewer** evaluates it:
+
+### 1. The Input (Flawed Terraform Pull Request)
+```hcl
+resource "aws_rds_cluster" "payments" {
+  # RISK: Renaming cluster_identifier destroys the database!
+  cluster_identifier = "payments-db-production-v2"
+  engine             = "aurora-postgresql"
+  database_name      = "payments"
+  master_username    = "dbadmin"
+  # RISK: Hardcoded plaintext password & missing KMS CMK
+  master_password    = "TemporaryPass2026!"
+}
+```
+
+### 2. The Agent's Verdict & Output
+```markdown
+## 🛡️ DevSecOps Reviewer Audit Verdict: 🔴 BLOCKED (High Risk)
+
+### 💥 1. State Destruction Trap (CRITICAL)
+- **Finding:** Changing `cluster_identifier` triggers `forces replacement` in Terraform AWS provider.
+- **Impact:** Irreversible deletion and recreation of production Aurora database with catastrophic data loss.
+- **Mandated Fix:** Retain original `cluster_identifier` and use AWS Blue/Green cluster promotion instead.
+
+### 🚨 2. Zero-Trust Secrets Violation (HIGH)
+- **Finding:** Plaintext `master_password` committed to git.
+- **Mandated Fix:** Use `aws_secretsmanager_secret` or AWS IAM database authentication with short-lived tokens.
+
+### 🔒 3. Compliance & Encryption Gap (MEDIUM)
+- **Finding:** Missing `kms_key_id` Customer Managed Key (CMK) envelope encryption.
+- **Rule Breached:** `rules/04-cloud-well-architected-invariants.md` (SOC 2 CC6.1).
+```
+
+### 3. The Verified Fix
+```diff
+ resource "aws_rds_cluster" "payments" {
+-  cluster_identifier = "payments-db-production-v2"
++  cluster_identifier = "payments-db-production"
+   engine             = "aurora-postgresql"
+-  master_password    = "TemporaryPass2026!"
++  manage_master_user_password = true
++  kms_key_id                  = aws_kms_key.db_encryption.arn
++  storage_encrypted           = true
++  deletion_protection         = true
+ }
+```
+
+---
+
+## 🚀 5-Minute Quickstart
+
+### Step 1: Install the Standalone CLI (`ocagents`)
+
+Install the standalone CLI in seconds with zero external dependencies:
+
+```bash
+# macOS & Linux
+curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash
+
+# Windows (PowerShell)
+irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex
+```
+
+*(Also available via `brew install Ibrahimng/tap/ocagents` or `pipx install open-cloud-agents`)*
+
+### Step 2: Sync a Specialist Agent to Your Repo
+
+Export the **DevSecOps Reviewer** into your repository for your preferred AI tool:
+
+```bash
+# For GitHub Copilot / VS Code:
+ocagents sync devsecops-reviewer --format github --target .
+
+# For Claude Code:
+ocagents sync devsecops-reviewer --format claude --target .
+
+# For Cursor:
+ocagents sync devsecops-reviewer --format cursor --target .
+```
+
+### Step 3: Run Your First Review
+
+Open your AI coding tool and invoke the agent against your codebase:
+
+```text
+# In GitHub Copilot Chat:
+@workspace Review my open Terraform PR for state destruction traps using #file:devsecops-reviewer.md
+
+# In Claude Code:
+claude "Read and adopt .claude/agents/devsecops-reviewer.md to audit our terraform/ directory for security and cost risks."
+
+# In Cursor:
+@devsecops-reviewer.mdc Audit our AWS payment infrastructure against Well-Architected guardrails.
+```
 
 ---
 
 ## 💡 Why This Project Exists
 
-Most AI coding setups fail in production cloud environments because they treat AI as a single generalist prompt.
+Generalist AI coding assistants are unsafe for cloud infrastructure because they treat cloud resources like standard application code.
 
-While a generalist chatbot works for small code completions, it breaks down when managing complex cloud systems:
-* **Multi-region disaster recovery:** Hallucinating active-active consensus models without accounting for data replication lag.
-* **Infrastructure as Code (IaC):** Silent `forces replacement` traps on databases and storage volumes that trigger irreversible data loss.
-* **Edge & Ingress Security:** Misconfiguring load balancer cipher suites, missing redirect query preservation, or exposing container task interfaces to `0.0.0.0/0`.
-* **Cost Traps:** Accumulating thousands of dollars in unbudgeted NAT Gateway egress and idle unattached storage.
+A generalist model easily misses:
+* **Silent State Destruction:** Re-creating RDS clusters, S3 buckets, or VPCs due to immutable IaC attribute changes (`forces replacement`).
+* **Ingress Exposure:** Binding container tasks to `0.0.0.0/0` with public IPs instead of private endpoints.
+* **FinOps Traps:** Accumulating thousands of dollars in idle NAT Gateway charges and orphaned EBS volumes.
 
-Open Cloud Agents introduces a disciplined, production-aware model:
-1. **Personas ([`agents/`](./agents/README.md)):** Define the mandate, boundaries, and handoff contracts.
-2. **Skills ([`skills/`](./skills/README.md)):** Provide 3-tier execution runbooks (`SKILL.md`, `references/`, `scripts/`).
-3. **Rules ([`rules/`](./rules/README.md)):** Enforce non-negotiable safety guardrails that block destructive actions.
-
----
-
-## 🏛️ Core Philosophy
-
-### 1. Local-First & Bring-Your-Own-LLM (BYO-LLM)
-Your architecture diagrams, IaC manifests, operational runbooks, and internal security policies remain **local to your environment and codebase**—never locked inside proprietary SaaS agent platforms.
-* Runs locally on your workstation, private CI runner, or sovereign cloud.
-* Model-agnostic: use Claude (3.7/3.5), GPT-4o, Gemini (2.5/2.0), DeepSeek-R1, or local models via Ollama / vLLM.
-* Built on open standards: Model Context Protocol (MCP), open agent skill specs, and declarative Policy-as-Code.
-
-### 2. Specialist Agents, Not One Overloaded Prompt
-Engineering organizations divide responsibilities between architects, security engineers, DevOps reviewers, release managers, SREs, and FinOps analysts. Open Cloud Agents mirrors this exact organizational discipline. Each agent has a narrower role, a clear intake contract, and dedicated verification gates.
-
-### 3. Safety-First Operational Design
-Autonomous agents must not possess unbounded destructive authority:
-* **Zero Destruction:** Blocks `DROP`, `TRUNCATE`, bucket wipes, and IaC `forces replacement` without explicit human confirmation.
-* **Zero-Trust Secrets:** Prohibits plaintext credentials, static long-lived keys, and unredacted logs; mandates OIDC federation.
-* **Human-in-the-Loop:** Enforces mandatory human sign-off gates prior to production deployments and canary promotions.
+### How Open Cloud Agents Solves This
+1. **Local-First & BYO-LLM:** Your code, IaC, and architectural policies never leave your machine or private runner. Works with Claude (3.7/3.5), GPT-4o, Gemini (2.5/2.0), or local models via Ollama.
+2. **Specialist Agents, Not One Prompt:** Work is routed to focused specialist personas with clear boundaries and intake contracts.
+3. **Hardened Guardrails:** Inviolable rules strictly refuse destructive operations and force human confirmation gates.
 
 ---
 
-## 🔄 The Core Workflow (3 Steps)
+## 🛡️ Safety Model: Inviolable Operational Guardrails
 
-```
-   ┌───────────────────────┐      ┌─────────────────────────┐      ┌─────────────────────────┐
-   │ 1. Load Repo Context  │ ───► │ 2. Run Specialist Agent │ ───► │ 3. Actionable Findings  │
-   │ (IaC, K8s, Git Diff)  │      │ (Reviewer, SRE, FinOps) │      │ (Risk, Diffs, Handoffs) │
-   └───────────────────────┘      └─────────────────────────┘      └─────────────────────────┘
-```
+All agents strictly obey non-negotiable safety guardrails defined in [`rules/`](./rules/README.md):
 
-1. **Load Context:** Point the agent to your repository, Terraform directory, Kubernetes manifests, or PR diff.
-2. **Run Specialist Agent:** Invoke the targeted persona (e.g. `DevSecOps Reviewer` for pre-merge PR audits, `FinOps Cost Optimizer` for idle waste elimination).
-3. **Produce Actionable Output:** Receive an executive risk verdict, verified code diffs, composite validation commands, and machine-executable handoffs for downstream execution.
+| Rule | Enforcement | Primary Guardrail |
+|---|---|---|
+| [`rules/01-destructive-actions.md`](./rules/01-destructive-actions.md) | Databases & Storage | **Bans `DROP`, `TRUNCATE`, bucket wipes, and IaC `forces replacement`** without human confirmation. |
+| [`rules/02-secrets-and-identity.md`](./rules/02-secrets-and-identity.md) | Secrets & IAM | **Prohibits hardcoded tokens and static cloud keys;** mandates short-lived OIDC workload federation. |
+| [`rules/03-surgical-scope-discipline.md`](./rules/03-surgical-scope-discipline.md) | Pull Requests | **Bans unsolicited mass refactorings,** global sweeps, and unsolicited dependency bumps. |
+| [`rules/04-cloud-well-architected-invariants.md`](./rules/04-cloud-well-architected-invariants.md) | Multi-AZ & DR | **Mandates quantitative RTO/RPO targets,** KMS envelope encryption, and multi-AZ redundancy. |
+| [`rules/05-repository-and-path-hygiene.md`](./rules/05-repository-and-path-hygiene.md) | Path Safety | **Forbids leaking local workstation paths (`/Users/<username>/`)** into code or documentation. |
 
 ---
 
-## 👥 The 7-Agent Master Suite
+## 👥 The 7-Agent Master Suite (Overview)
 
 Every formal pillar of the **AWS, Microsoft Azure, and Google Cloud Well-Architected Frameworks** is represented by a dedicated specialist agent:
 
-| Well-Architected Pillar | Agent Persona | Core Mandate & Primary Focus | Linked Skills |
-|---|---|---|:---:|
-| **Strategic Architecture** | [`principal-cloud-architect.md`](./agents/7-agent-master-suite/principal-cloud-architect.md) | High-Level Design (HLD), ADRs, multi-region DR (RTO/RPO), and centralized `.terraform-planning-files/`. | 9 Skills |
-| **Security & Compliance** | [`security-compliance-commander.md`](./agents/7-agent-master-suite/security-compliance-commander.md) | Cloud Security Hubs (AWS Hub, GCP SCC, Defender), SOC 2, ISO 27001, CIS Benchmarks, WAF loops. | 13 Skills |
-| **Cost Optimization (FinOps)** | [`finops-cloud-cost-optimizer.md`](./agents/7-agent-master-suite/finops-cloud-cost-optimizer.md) | Idle waste elimination, container requests/limits rightsizing, S3 tiering, NAT egress elimination. | 9 Skills |
-| **Code & Pipeline Security** | [`devsecops-reviewer.md`](./agents/7-agent-master-suite/devsecops-reviewer.md) | Pre-merge PR audits, state destruction prevention (`forces replacement`), perimeter bypass detection. | 9 Skills |
-| **Operational Excellence** | [`devsecops-engineer.md`](./agents/7-agent-master-suite/devsecops-engineer.md) | Surgical code/IaC fixes, zero-scope-creep hardening, non-destructive tests, Conventional Commits. | 12 Skills |
-| **Continuous Delivery** | [`gitops-release-manager.md`](./agents/7-agent-master-suite/gitops-release-manager.md) | Multi-environment promotion (`dev` ➔ `uat` ➔ `prod`) via ArgoCD/Flux, progressive Canary rollouts, human gates. | 5 Skills |
-| **Reliability & Performance** | [`sre-reliability-engineer.md`](./agents/7-agent-master-suite/sre-reliability-engineer.md) | Four Golden Signals, SLI/SLO burn alerts, client endpoint RCA (`502/503/504`), blameless postmortems. | 8 Skills |
-
-*Explore the complete agent suite and handoff specifications in [`agents/`](./agents/README.md).*
-
----
-
-## 🛡️ Inviolable Rules & Operational Guardrails
-
-Rules define the non-negotiable boundaries that protect production systems from AI-induced drift and outages:
-
-| Rule Specification | Scope & Enforcement | Primary Guardrail |
+| Well-Architected Pillar | Agent Persona | Core Mandate & Primary Focus |
 |---|---|---|
-| [`rules/01-destructive-actions.md`](./rules/01-destructive-actions.md) | Databases, Buckets, Cloud Storage | Bans `DROP`, `TRUNCATE`, bucket wipes, and IaC `forces replacement` without human confirmation. |
-| [`rules/02-secrets-and-identity.md`](./rules/02-secrets-and-identity.md) | Identity, Credentials, Auth | Prohibits hardcoded tokens and static cloud keys; mandates short-lived OIDC workload federation. |
-| [`rules/03-surgical-scope-discipline.md`](./rules/03-surgical-scope-discipline.md) | Pull Requests, Git Diff Scopes | Prohibits unsolicited mass refactorings, global formatting sweeps, and unsolicited dependency bumps. |
-| [`rules/04-cloud-well-architected-invariants.md`](./rules/04-cloud-well-architected-invariants.md) | Resilience, Encryption, DR | Mandates quantitative RTO/RPO targets, KMS envelope encryption, and multi-AZ redundancy by default. |
-| [`rules/05-repository-and-path-hygiene.md`](./rules/05-repository-and-path-hygiene.md) | Path & Code Hygiene | Strictly forbids leaking local developer machine paths (`/Users/<username>/`) into code or documentation. |
+| **Strategic Architecture** | [`principal-cloud-architect.md`](./agents/7-agent-master-suite/principal-cloud-architect.md) | High-Level Design (HLD), ADRs, multi-region DR (RTO/RPO), and trade-off analysis. |
+| **Security & Compliance** | [`security-compliance-commander.md`](./agents/7-agent-master-suite/security-compliance-commander.md) | Cloud Security Hubs (AWS Hub, GCP SCC, Defender), SOC 2, ISO 27001, CIS Benchmarks, WAF loops. |
+| **Cost Optimization (FinOps)** | [`finops-cloud-cost-optimizer.md`](./agents/7-agent-master-suite/finops-cloud-cost-optimizer.md) | Idle waste elimination, container request rightsizing, S3 tiering, NAT egress elimination. |
+| **Code & Pipeline Security** | [`devsecops-reviewer.md`](./agents/7-agent-master-suite/devsecops-reviewer.md) | Pre-merge PR audits, state destruction prevention (`forces replacement`), perimeter checks. |
+| **Operational Excellence** | [`devsecops-engineer.md`](./agents/7-agent-master-suite/devsecops-engineer.md) | Surgical code/IaC fixes, zero-scope-creep hardening, non-destructive tests, Conventional Commits. |
+| **Continuous Delivery** | [`gitops-release-manager.md`](./agents/7-agent-master-suite/gitops-release-manager.md) | Multi-environment promotion (`dev` ➔ `uat` ➔ `prod`) via ArgoCD/Flux, canary rollouts, human gates. |
+| **Reliability & Performance** | [`sre-reliability-engineer.md`](./agents/7-agent-master-suite/sre-reliability-engineer.md) | Four Golden Signals, SLI/SLO burn alerts, client endpoint RCA (`502/503/504`), blameless postmortems. |
+
+*Explore full agent specifications, tool boundaries, and handoff contracts in [`agents/`](./agents/README.md).*
 
 ---
 
-## 🚀 Quickstart: Standalone `ocagents` CLI
+## ⚡ Essential CLI Commands
 
-Open Cloud Agents provides a standalone command-line tool (`ocagents` / `oca`) that installs in seconds without requiring manual git repository management.
-
-### 🍎 macOS & 🐧 Linux (One-Liner)
 ```bash
-curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash
-```
+# List all registered agents and linked skills
+ocagents -agents list
+# or shorthand:
+ocagents -a ls
 
-### 🪟 Windows (PowerShell One-Liner)
-```powershell
-irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex
-```
+# Sync all 7 agents into your repo for GitHub Copilot
+ocagents -A -format github --target .
 
-### 📦 System Package Managers
-```bash
-# Homebrew (macOS & Linux)
-brew install Ibrahimng/tap/ocagents
+# Sync a specific agent + specialist execution skills for Claude Code
+ocagents sync devsecops-reviewer -f claude --target . --sync-skills
 
-# Python / pipx (Universal)
-pipx install open-cloud-agents
-# or
-pip install open-cloud-agents
+# Sync all agents as Cursor Rules (.cursor/rules/*.mdc)
+ocagents sync -A -f cursor --target .
 
-# Windows (Winget)
-winget install Ibrahimng.OpenCloudAgents
-```
+# Validate agent specs, contracts, and repository hygiene
+ocagents validate
 
-### ⚡ Essential CLI Commands
-
-| Intent | Command | Shortcut Alias |
-|---|---|---|
-| **List registered agents & skills** | `ocagents -agents list` | `ocagents -a ls` |
-| **Sync all agents for GitHub Copilot** | `ocagents -A -format github --target .` | `oca sync -A -f github` |
-| **Sync single agent + skills for Claude** | `ocagents sync devsecops-reviewer -f claude --sync-skills` | `oca sync devsecops-reviewer -f claude -s` |
-| **Sync all agents as Cursor Rules** | `ocagents sync -A --format cursor --target .` | `oca sync -A -f cursor` |
-| **Validate repo hygiene & agent specs** | `ocagents validate` | `oca validate` |
-| **Simulate multi-agent design task** | `ocagents run --task "Architect multi-region payment DR"` | `oca run` |
-| **Show asset catalog & runtime info** | `ocagents info` | `oca info` |
-| **Update catalog to latest release** | `ocagents update` | `oca update` |
-
----
-
-## 🔌 How to Use with Any AI Agent or IDE
-
-You can run Open Cloud Agents across any modern AI coding assistant, IDE, or agent orchestrator:
-
-### 1. Claude Code
-```bash
-claude "Read and adopt ./agents/7-agent-master-suite/devsecops-reviewer.md to audit our open PR for state destruction risks."
-```
-
-### 2. GitHub Copilot / VS Code
-```text
-@workspace Review my open pull request using the instructions and guardrails in #file:devsecops-reviewer.md
-```
-
-### 3. Cursor / Windsurf / Antigravity IDE
-Import personas as custom project agents or configure them in your IDE rules:
-```text
-@principal-cloud-architect.md Draft an ADR for transitioning our payment service to multi-region active-active with conflict resolution.
-```
-
-### 4. Universal Workspace Synchronizer (Standalone CLI)
-Synchronize any agent persona and its linked specialist skills directly into your repository with one command:
-```bash
-# Sync DevSecOps Reviewer + skills into GitHub Copilot (.github/agents/ + .github/skills/)
-ocagents sync devsecops-reviewer --format github --target /path/to/my-repo --sync-skills
-
-# Sync all 7 agents into Cursor Rules (.cursor/rules/*.mdc)
-ocagents sync -A --format cursor --target /path/to/my-repo
-
-# Sync into Claude Code (.claude/agents/ + .claude/skills/)
-ocagents sync devsecops-reviewer --format claude --target /path/to/my-repo --sync-skills
-```
-
-### 5. Custom Agent Frameworks (LangGraph, AutoGen, Raw APIs)
-Because all instructions are standard Markdown with YAML frontmatter, load them programmatically in Python or TypeScript:
-```python
-with open("agents/7-agent-master-suite/finops-cloud-cost-optimizer.md", "r") as f:
-    system_prompt = f.read()
-
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "Audit our AWS Terraform manifests for unattached EBS waste and NAT Gateway traps."}
-    ]
-)
+# Pull latest canonical agent updates directly from GitHub (1.5 seconds)
+ocagents update
 ```
 
 ---
 
-## 🧰 The 3-Tier Enterprise Skills Ecosystem
+## 📚 Documentation & Reference
 
-Skills provide on-demand, deep-dive procedural execution runbooks:
-
-```text
-skills/<domain>/<tech>/<skill-name>/
-├── SKILL.md                 # 1. Operational runbook, triage workflow, and guardrails
-├── references/              # 2. Decision trees, cheat sheets, and architecture blueprints
-└── scripts/                 # 3. Executable verification, linting, and diagnostic scripts (*.sh)
-```
-
-* **Cloud Providers ([`skills/csp/`](./skills/csp/README.md)):** AWS, Microsoft Azure (193 service skills), and Google Cloud.
-* **DevOps & Delivery ([`skills/devops/`](./skills/devops/README.md)):** Terraform module architecture, state protection, Kubernetes pod diagnostics (`pod_diagnose.sh`), Helm scaffolding, Dockerfile hardening, GitHub Actions OIDC federation, and ArgoCD promotion.
-* **Security & Governance ([`skills/security/`](./skills/security/README.md)):** CIS complete audits, SOC 2 evidence collection, WAF rules (Cloud Armor CRS 4.22), runtime threat detection (Falco, Sysdig, Wazuh), and KMS envelope encryption.
-* **FinOps & Cost ([`skills/finops/`](./skills/finops/README.md)):** Cloud waste reaper for orphaned disks, unassociated IPs, and idle NAT gateways.
-* **Continual Learning ([`skills/continual-learning/`](./skills/continual-learning/README.md)):** Autonomous feedback loop synthesizing SRE incident postmortems into permanent pre-merge DevSecOps guardrails.
-
-*Browse the complete skills catalog in [`skills/README.md`](./skills/README.md).*
+* [**Package Distribution & Updates**](./docs/package-distribution-and-updates.md): Multi-platform distribution specs (Homebrew, WinGet, APT, APK).
+* [**Master Agent Directive (AGENTS.md)**](./AGENTS.md): Core runtime directive and continuous learning memory.
+* [**Skills Ecosystem**](./skills/README.md): 3-tier operational execution runbooks (`SKILL.md`, `references/`, `scripts/`).
+* [**Architecture MVP Specification**](./docs/architecture-mvp-spec.md): Architectural design and multi-agent pipeline contracts.
+* [**Token Optimization Architecture**](./docs/token-optimization-architecture.md): Context window compression and prompt caching strategies.
 
 ---
 
-## ⚡ Quickstart
+## 🗺️ Project Status & Focus
 
-### Prerequisites
-* Python 3.10+
-* Git
-* Any LLM provider or local runner (Claude, OpenAI, Gemini, Ollama)
-
-### 1. Clone & Set Up
-```bash
-git clone https://github.com/Ibrahimng/open-cloud-agents.git
-cd open-cloud-agents
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-### 2. Validate Specifications & Tool Boundaries
-```bash
-python3 scripts/agents/agent_pipeline.py --validate
-```
-
-### 3. Run an End-to-End Multi-Agent Handoff Simulation
-```bash
-python3 scripts/agents/agent_pipeline.py --simulate
-```
-
-### 4. Execute a Custom Architectural Task
-```bash
-python3 scripts/agents/agent_pipeline.py --task "Architect zero-downtime payments failover with Aurora Global Database"
-```
-
----
-
-## 🎯 Example Use Cases
-
-### 1. Pre-Merge IaC Risk Review
-Use the **DevSecOps Reviewer** to audit a Terraform pull request before merge:
-* Identifies database renames that trigger silent recreation (`forces replacement`).
-* Flags perimeter bypasses (task ENIs with public IPs listening on `0.0.0.0/0`).
-* Enforces modern TLS ciphers (banning deprecated `ELBSecurityPolicy-2016-08`).
-
-### 2. SRE Outage Triage & RCA
-Use the **SRE Reliability Engineer** during a production incident:
-* Rapidly triages client endpoint 502/503 cascades.
-* Profiles CFS CPU quota throttling and HikariCP connection pool starvation.
-* Formulates immediate blast-radius mitigations and blameless postmortem action items.
-
-### 3. Cloud Waste & FinOps Assessment
-Use the **FinOps Cost Optimizer** to inspect cloud infrastructure:
-* Identifies unattached EBS volumes and orphaned disk snapshots.
-* Rightsizes Kubernetes container requests against p95 historical telemetry.
-* Eliminates costly NAT Gateway intra-cloud data transfer via free Gateway VPC Endpoints.
-
----
-
-## 📂 Repository Structure
-
-```text
-.
-├── AGENTS.md                  # Master Agent Directive & runtime knowledge base
-├── README.md                  # Project overview, quickstart & documentation
-├── LICENSE                    # Apache 2.0 open-source license
-├── CHANGELOG.md               # Version history and releases
-├── CONTRIBUTING.md            # Community contribution guidelines
-├── mkdocs.yml                 # Documentation site configuration
-├── agents/                    # 7-Agent Master Suite specifications
-├── rules/                     # Non-negotiable security and operational rules
-├── skills/                    # 3-tier enterprise operational skills library
-├── scripts/
-│   ├── agents/                # Multi-agent pipeline runner & workspace synchronizer
-│   ├── ci/                    # Repository hygiene and link integrity validators
-│   └── docs/                  # MkDocs documentation preparation tools
-└── docs/                      # Architectural specs and engineering standards
-```
-
----
-
-## 🗺️ Roadmap
-
-### Current Focus
-* **Core Review Workflows:** Sharpen the value proposition for cloud architecture and security review.
-* **Onboarding & First-Run Experience:** Streamline multi-workspace synchronization (`sync_agents.py`) across Copilot, Cursor, and Claude Code.
-* **Production Runbooks:** Expand specialist skills across multi-cloud and Kubernetes operational guardrails.
-* **Real-World Case Studies:** Deliver architectural review walkthroughs and interactive terminal demos.
-
-### Planned Enhancements
-* Additional cloud service provider modules and governance frameworks.
-* Controlled multi-agent orchestration runtime with structured handoff contracts.
-* Deeper CI/CD automated gates and policy-as-code admission controllers.
-* Community-contributed agent personas and shared operational skill packs.
+* **Current Focus:** Sharpening the first-run experience, pre-merge IaC review workflows, and operational guardrail enforcement.
+* **Planned:** Interactive web/TUI report generator, expanded CSP service coverage, and automated PR review bots.
 
 ---
 
 ## 🤝 Community & Contributing
 
-Open Cloud Agents is an open, community-driven project. We welcome pull requests from cloud practitioners, security auditors, and platform engineers.
+We welcome contributions from cloud architects, security practitioners, and platform engineers.
 
-Before submitting contributions, please review:
+Before contributing, please read:
 * [**Contributing Guide (CONTRIBUTING.md)**](./CONTRIBUTING.md)
 * [**Engineering Standards**](./docs/engineering-standards.md)
 
-Run local verification suites before opening a PR:
+Run local verification before submitting pull requests:
 ```bash
-# Validate repository hygiene, relative links, and path safety
-python3 scripts/ci/validate_repo.py
-
-# Validate agent specifications, token budgets, and tool boundaries
-python3 scripts/agents/agent_pipeline.py --validate
+ocagents validate
 ```
 
 ---
@@ -331,4 +238,4 @@ python3 scripts/agents/agent_pipeline.py --validate
 
 * **Core Project:** Licensed under the [Apache License 2.0](./LICENSE) © 2026 Ibrahim Jimoh.
 * **Attribution:** Collaborative pair co-authorship trailer: `Co-authored-by: Antigravity <antigravity@google.com>`.
-* **Provider Standards:** Cloud skills remix open-source architectural patterns from AWS (Apache-2.0), Microsoft Azure (MIT/CC-BY-4.0), Google Cloud (Apache-2.0), and the Dart/Flutter teams (BSD-3-Clause). Full notices are documented in [`skills/csp/README.md`](./skills/csp/README.md).
+* **Founding Architect:** Ibrahim Jimoh ([GitHub](https://github.com/Ibrahimng) | [LinkedIn](https://www.linkedin.com/in/ijimoh)).
