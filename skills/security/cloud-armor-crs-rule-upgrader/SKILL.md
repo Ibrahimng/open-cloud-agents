@@ -103,24 +103,14 @@ workflows.
 
 ## Core Upgrade Workflow for Network Security Agent
 
-> [!IMPORTANT] **Mandatory Agent Response Behaviors**: 1. **Explain Both Upgrade
-> Modes**: Whenever discussing an upgrade (even if the user asks specifically
-> about Preview Mode or In-Place), ALWAYS explain BOTH **In-Place Upgrade**
-> (direct in-situ rule replacement, immediate enforcement, zero extra quota) and
-> **Preview Mode** (preview rules deployed at lower numeric priority numbers
-> with `preview = true`, zero risk of blocking traffic, allows telemetry
-> inspection in Cloud Logging before cutover). 2. **Handling Policy Audit
-> Inquiries**: When asked to audit or inspect a policy (such as
-> `'ecommerce-waf'`), if policy JSON is not provided or `gcloud describe` cannot
-> reach Google Cloud resources, immediately provide the `gcloud compute
-> security-policies describe POLICY_NAME --format=json` command and guide the
-> user through the audit checks: - Check for legacy OWASP 3.0 / 3.3 rulesets
-> (`sqli-stable`, `xss-stable`, `rce-stable`, `methodenforcement-stable`, or
-> `evaluatePreconfiguredExpr`). - Report in-scope WAF rules versus pass-through
-> custom rules (such as IP allowlists `SRC_IPS_V1`, rate limiting, or default
-> rules `priority: 2147483647`). - Highlight signature count expansions under
-> CRS 4.22 (for example, RCE expanding from 11/15 to 44 signatures; SQLi
-> expanding to 60 signatures).
+> [!IMPORTANT]
+> **Mandatory Agent Response Behaviors**:
+>
+> 1. **Explain Both Upgrade Modes**: Whenever discussing an upgrade (even if the user asks specifically about Preview Mode or In-Place), ALWAYS explain BOTH **In-Place Upgrade** (direct in-situ rule replacement, immediate enforcement, zero extra quota) and **Preview Mode** (preview rules deployed at lower numeric priority numbers with `preview = true`, zero risk of blocking traffic, allows telemetry inspection in Cloud Logging before cutover).
+> 2. **Handling Policy Audit Inquiries**: When asked to audit or inspect a policy (such as `'ecommerce-waf'`), if policy JSON is not provided or `gcloud describe` cannot reach Google Cloud resources, immediately provide the `gcloud compute security-policies describe POLICY_NAME --format=json` command and guide the user through the audit checks:
+>     - Check for legacy OWASP 3.0 / 3.3 rulesets (`sqli-stable`, `xss-stable`, `rce-stable`, `methodenforcement-stable`, or `evaluatePreconfiguredExpr`).
+>     - Report in-scope WAF rules versus pass-through custom rules (such as IP allowlists `SRC_IPS_V1`, rate limiting, or default rules `priority: 2147483647`).
+>     - Highlight signature count expansions under CRS 4.22 (for example, RCE expanding from 11/15 to 44 signatures; SQLi expanding to 60 signatures).
 
 When interacting with a customer to upgrade a Cloud Armor security policy,
 execute this 5-step workflow:
@@ -166,101 +156,31 @@ execute this 5-step workflow:
 
 Evaluate each in-scope rule against standard operational risk categories:
 
-| Risk Level        | Impact Category        | Criteria and Recommended Action |
-| ----------------- | ---------------------- | ------------------------------- |
-| 🔴 **High Risk**   | **Breaking Change**    | Immediate risk of blocking      |
-:                   :                        : legitimate production traffic   :
-:                   :                        : upon cutover. Example\:         :
-:                   :                        : `methodenforcement-v422-stable` :
-:                   :                        : only permits `GET`, `HEAD`,     :
-:                   :                        : `POST`, `OPTIONS`, and **blocks :
-:                   :                        : `PUT`, `PATCH`, `DELETE`**      :
-:                   :                        : requests. Requires customer     :
-:                   :                        : confirmation and API            :
-:                   :                        : path/signature exemptions.      :
-| 🟡 **Medium Risk** | **Attention Required** | Behavioral shifts that should   |
-:                   :                        : be validated in Preview Mode    :
-:                   :                        : before enforcement\:<br>•       :
-:                   :                        : **Coverage Expansion**\:        :
-:                   :                        : Sensitivity level 4 activates   :
-:                   :                        : significantly more signatures   :
-:                   :                        : (for example, RCE expands from  :
-:                   :                        : 11/15 to 44 signatures; SQLi    :
-:                   :                        : expands to 60 signatures).<br>• :
-:                   :                        : **Deprecated Exemption Lost**\: :
-:                   :                        : Legacy rule opted out of any of :
-:                   :                        : the 15 retired CRS 3.0/3.3 IDs  :
-:                   :                        : (`981172`, `981173`, `980130`,  :
-:                   :                        : `949110`; SQLi\: `942110`;      :
-:                   :                        : RCE\: `932100`, `932105`,       :
-:                   :                        : `932106`, `932110`, `932115`,   :
-:                   :                        : `932150`; Scanner Detection\:   :
-:                   :                        : `913101`, `913102`, `913110`,   :
-:                   :                        : `913120`), which are omitted in :
-:                   :                        : 4.22.<br>• **Custom Filter      :
-:                   :                        : Continuity**\: Preserved custom :
-:                   :                        : header/cookie/query/IP          :
-:                   :                        : conditions combined with WAF    :
-:                   :                        : calls.                          :
-| 🟢 **Low Risk**    | **Clean Upgrade**      | Direct 1:1 ruleset translation  |
-:                   :                        : with preserved active opt-outs  :
-:                   :                        : and no expected behavioral      :
-:                   :                        : divergence (for example,        :
-:                   :                        : standard SQLi or XSS rules).    :
-| ⚪ **No Action**   | **Pass-Through**       | Non-OWASP rules (pure IP        |
-:                   :                        : allowlist/denylist, rate        :
-:                   :                        : limiting, default rule).        :
-:                   :                        : Carried over unchanged.         :
+| Risk Level | Impact Category | Criteria and Recommended Action |
+|---|---|---|
+| 🔴 **High Risk** | **Breaking Change** | Immediate risk of blocking legitimate production traffic upon cutover. Example: `methodenforcement-v422-stable` only permits `GET`, `HEAD`, `POST`, `OPTIONS`, and **blocks `PUT`, `PATCH`, `DELETE`** requests. Requires customer confirmation and API path/signature exemptions. |
+| 🟡 **Medium Risk** | **Attention Required** | Behavioral shifts that should be validated in Preview Mode before enforcement:<br>• **Coverage Expansion**: Sensitivity level 4 activates significantly more signatures (for example, RCE expands from 11/15 to 44 signatures; SQLi expands to 60 signatures).<br>• **Deprecated Exemption Lost**: Legacy rule opted out of any of the 15 retired CRS 3.0/3.3 IDs (`981172`, `981173`, `980130`, `949110`; SQLi: `942110`; RCE: `932100`, `932105`, `932106`, `932110`, `932115`, `932150`; Scanner Detection: `913101`, `913102`, `913110`, `913120`), which are omitted in 4.22.<br>• **Custom Filter Continuity**: Preserved custom header/cookie/query/IP conditions combined with WAF calls. |
+| 🟢 **Low Risk** | **Clean Upgrade** | Direct 1:1 ruleset translation with preserved active opt-outs and no expected behavioral divergence (for example, standard SQLi or XSS rules). |
+| ⚪ **No Action** | **Pass-Through** | Non-OWASP rules (pure IP allowlist/denylist, rate limiting, default rule). Carried over unchanged. |
 
 ### Step 3: Upgrade Mode Selection and User Alignment
 
 Engage the customer with findings before applying changes:
 
-1.  **Report Findings**: State how many WAF rules will be upgraded, signature
-    coverage expansions, and any deprecated signatures being retired.
-2.  **Method Enforcement Warning**: If `methodenforcement` is present, warn: >
-    *"Notice: Method Enforcement in CRS 4.22 permits only GET, HEAD, POST, and
-    OPTIONS. If your application handles REST API updates (PUT, PATCH, DELETE),
-    these methods will be blocked with HTTP 403. Would you like to add an
-    exemption for API paths or opt out of rule id911100?"*
+1.  **Report Findings**: State how many WAF rules will be upgraded, signature coverage expansions, and any deprecated signatures being retired.
+2.  **Method Enforcement Warning**: If `methodenforcement` is present, warn:
+    > *"Notice: Method Enforcement in CRS 4.22 permits only GET, HEAD, POST, and OPTIONS. If your application handles REST API updates (PUT, PATCH, DELETE), these methods will be blocked with HTTP 403. Would you like to add an exemption for API paths or opt out of rule id911100?"*
 3.  **Explain Differences Between Modes**:
-    -   **Preview Mode (Recommended)**: Keeps existing legacy rules actively
-        enforcing while deploying corresponding upgraded CRS 4.22 preview rules
-        with `preview = true` at a lower numeric priority number (higher
-        evaluation priority, for example, `PRIORITY - 5`). Traffic is evaluated
-        first by preview rules and logged to Cloud Logging without blocking,
-        ensuring zero risk of downtime or false positives prior to cutover.
-        Requires sufficient quota under the 200-rule limit.
-    -   **In-Place Upgrade**: Directly modifies the CEL expressions and
-        `preconfiguredWafConfig` on existing rule priority numbers in-situ.
-        Immediate enforcement with zero additional rule overhead, but carries
-        cutover risk if new signatures or method enforcement block valid
-        traffic.
+    -   **Preview Mode (Recommended)**: Keeps existing legacy rules actively enforcing while deploying corresponding upgraded CRS 4.22 preview rules with `preview = true` at a lower numeric priority number (higher evaluation priority, for example, `PRIORITY - 5`). Traffic is evaluated first by preview rules and logged to Cloud Logging without blocking, ensuring zero risk of downtime or false positives prior to cutover. Requires sufficient quota under the 200-rule limit.
+    -   **In-Place Upgrade**: Directly modifies the CEL expressions and `preconfiguredWafConfig` on existing rule priority numbers in-situ. Immediate enforcement with zero additional rule overhead, but carries cutover risk if new signatures or method enforcement block valid traffic.
 4.  **Quota Guardrail (200 Rules)**:
-    -   Calculate projected rule count: `current_total_rules +
-        in_scope_waf_rules`.
-    -   If projected count > 200, alert the customer: > *"Cloud Armor enforces a
-        maximum limit of 200 rules per security policy. Deploying in Preview
-        Mode would require PROJECTED_COUNT rules. The upgrade cannot proceed
-        in Preview Mode. We must either perform an In-Place Upgrade or
-        consolidate rules."*
+    -   Calculate projected rule count: `current_total_rules + in_scope_waf_rules`.
+    -   If projected count > 200, alert the customer:
+        > *"Cloud Armor enforces a maximum limit of 200 rules per security policy. Deploying in Preview Mode would require PROJECTED_COUNT rules. The upgrade cannot proceed in Preview Mode. We must either perform an In-Place Upgrade or consolidate rules."*
 5.  **Priority Spacing Guardrail (Preview Mode)**:
-    -   If an in-scope WAF rule at `PRIORITY` immediately follows another rule
-        at `PREV_PRIORITY` with no free integer priority slot between them
-        (for example, `999` and `1000`, or a WAF rule at priority `0`), alert
-        the customer: > *"Rule PRIORITY cannot be deployed in Preview Mode
-        because the preceding rule at priority PREV_PRIORITY leaves no open
-        priority number between PREV_PRIORITY and PRIORITY (and placing the
-        preview rule above PREV_PRIORITY would change evaluation order). To use
-        Preview Mode, please readjust your rule priorities to leave at least one
-        open priority slot before PRIORITY, or choose an In-Place Upgrade."*
-    -   **Do NOT automatically re-number existing customer rules**: Because rule
-        priorities act as primary identifiers in Cloud Armor and are often tied
-        to Terraform/IaC resources and SIEM alerting filters, never silently
-        shift existing customer rule priorities to make room. If the customer
-        explicitly asks you to readjust their rule priorities for them, first
-        warn them about potential Terraform/IaC state drift and confirm the
-        exact new priority numbers before executing any priority changes.
+    -   If an in-scope WAF rule at `PRIORITY` immediately follows another rule at `PREV_PRIORITY` with no free integer priority slot between them (for example, `999` and `1000`, or a WAF rule at priority `0`), alert the customer:
+        > *"Rule PRIORITY cannot be deployed in Preview Mode because the preceding rule at priority PREV_PRIORITY leaves no open priority number between PREV_PRIORITY and PRIORITY (and placing the preview rule above PREV_PRIORITY would change evaluation order). To use Preview Mode, please readjust your rule priorities to leave at least one open priority slot before PRIORITY, or choose an In-Place Upgrade."*
+    -   **Do NOT automatically re-number existing customer rules**: Because rule priorities act as primary identifiers in Cloud Armor and are often tied to Terraform/IaC resources and SIEM alerting filters, never silently shift existing customer rule priorities to make room. If the customer explicitly asks you to readjust their rule priorities for them, first warn them about potential Terraform/IaC state drift and confirm the exact new priority numbers before executing any priority changes.
 
 ### Step 4: Rule Transformation Logic
 

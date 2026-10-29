@@ -21,6 +21,7 @@ Wazuh bundles production-tested binary scripts in `/var/ossec/active-response/bi
 ## 2. Configuration Playbook (`ossec.conf`)
 
 ### 2.1 Block Ingress on SSH Brute-Force (Level $\ge 10$)
+
 ```xml
 <command>
   <name>firewall-drop</name>
@@ -39,6 +40,7 @@ Wazuh bundles production-tested binary scripts in `/var/ossec/active-response/bi
 ```
 
 ### 2.2 Neutralize Container Host on Malware or Reverse Shell
+
 ```xml
 <command>
   <name>isolate-endpoint</name>

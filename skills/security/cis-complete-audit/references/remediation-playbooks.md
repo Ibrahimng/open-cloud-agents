@@ -7,6 +7,7 @@ This document provides ready-to-deploy Infrastructure-as-Code (Terraform), Ansib
 ## 1. Cloud Foundations Remediation (Terraform)
 
 ### 1.1 AWS S3 Account-Level Public Access Block (AWS 2.1.1)
+
 ```hcl
 resource "aws_s3_account_public_access_block" "global" {
   block_public_acls       = true
@@ -17,6 +18,7 @@ resource "aws_s3_account_public_access_block" "global" {
 ```
 
 ### 1.2 AWS Multi-Region CloudTrail with KMS (AWS 3.1 & 3.2)
+
 ```hcl
 resource "aws_kms_key" "cloudtrail_key" {
   description             = "KMS Key for multi-region CloudTrail audit logging"
@@ -35,6 +37,7 @@ resource "aws_cloudtrail" "main_audit" {
 ```
 
 ### 1.3 GCP Cloud Storage Uniform Bucket-Level Access (GCP 3.2)
+
 ```hcl
 resource "google_storage_bucket" "secure_bucket" {
   name                        = "enterprise-compliance-storage"
@@ -56,6 +59,7 @@ resource "google_storage_bucket" "secure_bucket" {
 ## 2. Kubernetes Remediation (Manifests & Helm)
 
 ### 2.1 Restrict Application Namespace with Pod Security Standards
+
 ```yaml
 apiVersion: v1
 kind: Namespace
@@ -69,6 +73,7 @@ metadata:
 ```
 
 ### 2.2 Pod Security Context Template
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -108,6 +113,7 @@ spec:
 ## 3. Host System Remediation (Shell & Ansible)
 
 ### 3.1 Lock Down SSH Daemon
+
 ```bash
 sudo sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 sudo sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
@@ -117,6 +123,7 @@ sudo sshd -t && sudo systemctl reload sshd
 ```
 
 ### 3.2 Apply Kernel Network Hardening
+
 ```bash
 cat << 'EOF' | sudo tee /etc/sysctl.d/99-cis-remediation.conf
 net.ipv4.ip_forward = 0

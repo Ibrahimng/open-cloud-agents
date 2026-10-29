@@ -53,7 +53,8 @@ When running in high-load environments, monitor dropped events:
 curl -s http://localhost:8765/metrics | grep falco_drops
 ```
 
-### Optimization Knobs (`/etc/falco/falco.yaml`):
+### Optimization Knobs (`/etc/falco/falco.yaml`)
+
 ```yaml
 # Increase eBPF ring buffer size per CPU core (default is 8MB)
 modern_bpf:

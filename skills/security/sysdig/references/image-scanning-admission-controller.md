@@ -9,6 +9,7 @@ This guide covers shift-left vulnerability management, in-line CLI scanning, and
 The `sysdig-cli-scanner` performs container image analysis locally within CI runners (GitHub Actions, GitLab CI, Jenkins) without sending container image layers to external cloud endpoints. Only image metadata and package manifests are transmitted.
 
 ### CI/CD Runner Invocation
+
 ```bash
 # Set credentials via environment variables
 export SECURE_API_TOKEN="<SYSDIG_API_TOKEN>"

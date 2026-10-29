@@ -7,6 +7,7 @@ This guide covers the controls, flags, and admission checks mandated by the CIS 
 ## 1. Control Plane Components
 
 ### 1.1 Kubernetes API Server (`kube-apiserver`)
+
 Manifest location: `/etc/kubernetes/manifests/kube-apiserver.yaml`
 
 | Benchmark ID | Parameter / Flag | Recommended Setting | Rationale |
