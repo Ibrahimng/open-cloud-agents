@@ -244,14 +244,14 @@ Use the **FinOps Cost Optimizer** to inspect cloud infrastructure:
 │   ├── agents/                # Multi-agent pipeline runner & workspace synchronizer
 │   ├── ci/                    # Repository hygiene and link integrity validators
 │   └── docs/                  # MkDocs documentation preparation tools
-└── docs/                      # Architectural specs, standards, and 30-day plan
+└── docs/                      # Architectural specs and engineering standards
 ```
 
 ---
 
 ## 🗺️ Roadmap & 30-Day Plan
 
-We are executing against a structured **[30-Day Action Plan](./docs/30-day-action-plan.md)**:
+We are executing against a structured 30-day action plan across four operational phases:
 
 * **Phase 1 (Days 1–7): Reposition the Project:** Sharpen value proposition around cloud architecture & security review; reduce "everything" messaging. *(Completed)*
 * **Phase 2 (Days 8–14): First-Run Experience:** Ship universal workspace synchronizer (`sync_agents.py`); simplify quickstart and sample scenarios. *(Completed)*
@@ -267,7 +267,6 @@ Open Cloud Agents is an open, community-driven project. We welcome pull requests
 Before submitting contributions, please review:
 * [**Contributing Guide (CONTRIBUTING.md)**](./CONTRIBUTING.md)
 * [**Engineering Standards**](./docs/engineering-standards.md)
-* [**30-Day Action Plan**](./docs/30-day-action-plan.md)
 
 Run local verification suites before opening a PR:
 ```bash
