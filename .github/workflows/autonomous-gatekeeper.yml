@@ -100,7 +100,7 @@ jobs:
           fi
 
       - name: Upload Pipeline Execution Trace Artifact
-        if: ${{ !env.ACT }}
+        if: ${{ runner.name != 'Local Actions' }}
         uses: actions/upload-artifact@v7
         continue-on-error: true
         with:

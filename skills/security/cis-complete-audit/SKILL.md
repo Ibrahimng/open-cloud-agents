@@ -30,6 +30,7 @@ Comprehensive, end-to-end Center for Internet Security (CIS) compliance auditing
 ```
 
 ### Profile Levels
+
 - **Level 1 (Pragmatic / Essential):** Foundational security baseline controls that can be applied with minimal risk of breaking application functionality or performance.
 - **Level 2 (Defense-in-Depth / High-Security):** Stricter controls intended for environments requiring defense-in-depth where security takes precedence over operational flexibility.
 
@@ -38,6 +39,7 @@ Comprehensive, end-to-end Center for Internet Security (CIS) compliance auditing
 ## 🚀 Operational Workflow
 
 ### Step 1: Pre-Audit Environment Discovery
+
 Identify targets, cloud provider accounts, cluster kubeconfigs, or host access:
 
 ```bash
@@ -56,6 +58,7 @@ docker info 2>/dev/null || podman info
 ```
 
 ### Step 2: Automated Multi-Target Compliance Audit
+
 Execute the standalone, unified CIS audit scanner across targets:
 
 ```bash
@@ -87,6 +90,7 @@ Continuously evaluate configuration drift against CIS golden baselines:
 ## 🔍 Core CIS Checks by Subsystem
 
 ### 1. Cloud Foundations (AWS, Azure, GCP)
+
 See detailed checklist and commands in [cloud-foundations-matrix.md](references/cloud-foundations-matrix.md).
 
 - **Identity & Access Management:**
@@ -104,6 +108,7 @@ See detailed checklist and commands in [cloud-foundations-matrix.md](references/
     - Default VPC security groups configured with zero ingress and egress rules.
 
 ### 2. Kubernetes CIS Benchmark (v1.9)
+
 See detailed checklist and parameters in [kubernetes-cis-guide.md](references/kubernetes-cis-guide.md).
 
 - **Control Plane Hardening (`kube-apiserver`):**
@@ -123,6 +128,7 @@ See detailed checklist and parameters in [kubernetes-cis-guide.md](references/ku
     - Admission enforcement of `restricted` or `baseline` PSS profile on all application namespaces.
 
 ### 3. Linux OS Host Benchmark (Ubuntu / RHEL)
+
 See detailed configuration parameters in [linux-host-hardening-matrix.md](references/linux-host-hardening-matrix.md).
 
 - **Filesystem Configuration:**
@@ -141,6 +147,7 @@ See detailed configuration parameters in [linux-host-hardening-matrix.md](refere
     - `net.ipv4.conf.all.rp_filter = 1` (reverse path filtering).
 
 ### 4. Docker Container Runtime Benchmark
+
 See container daemon parameters in [docker-container-cis-matrix.md](references/docker-container-cis-matrix.md).
 
 - **Daemon Hardening (`/etc/docker/daemon.json`):**

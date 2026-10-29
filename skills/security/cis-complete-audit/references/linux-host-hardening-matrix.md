@@ -13,7 +13,8 @@ This reference outlines system configurations, PAM settings, `auditd` rules, and
 | `/dev/shm` | `nodev,nosuid,noexec` | Secures shared memory segment against malicious binary execution. |
 | `/home` | `nodev,nosuid` | Prevents regular users from creating local device nodes or SUID exploits. |
 
-### Verification Command:
+### Verification Command
+
 ```bash
 mount | grep -E '\s/(tmp|var/tmp|dev/shm|home)\s'
 ```
@@ -23,6 +24,7 @@ mount | grep -E '\s/(tmp|var/tmp|dev/shm|home)\s'
 ## 2. PAM, Password & Account Security
 
 ### 2.1 `/etc/login.defs` Requirements
+
 ```ini
 PASS_MAX_DAYS   90
 PASS_MIN_DAYS   7
@@ -31,7 +33,9 @@ ENCRYPT_METHOD  SHA512
 ```
 
 ### 2.2 Account Lockout (`pam_faillock` / `pam_tally2`)
+
 Configure `/etc/pam.d/common-auth` or `/etc/pam.d/system-auth`:
+
 ```
 auth required pam_faillock.so preauth silent audit deny=5 unlock_time=900
 auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900
@@ -39,6 +43,7 @@ auth sufficient pam_faillock.so authsucc
 ```
 
 ### 2.3 SSH Server Hardening (`/etc/ssh/sshd_config`)
+
 ```ini
 Protocol 2
 PermitRootLogin no

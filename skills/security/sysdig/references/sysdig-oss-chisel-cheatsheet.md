@@ -44,6 +44,7 @@ Chisels are modular Lua scripts extending Sysdig to perform aggregated analytics
 ## 3. High-Value Sysdig Filter Expressions
 
 ### Process & Container Filters
+
 ```bash
 # Detect interactive shells launched inside any container
 sysdig "container.id != host and (proc.name in (bash, sh, zsh))"
@@ -56,6 +57,7 @@ sysdig "k8s.ns.name=production and k8s.pod.name contains payment"
 ```
 
 ### Filesystem & I/O Filters
+
 ```bash
 # Monitor writes to sensitive system directories
 sysdig "evt.is_open_write=true and (fd.name startswith /etc or fd.name startswith /usr/bin)"
@@ -68,6 +70,7 @@ sysdig "evt.type in (unlink, unlinkat) and container.id != host"
 ```
 
 ### Network Filters
+
 ```bash
 # Detect network connections to external IP ranges (excluding RFC 1918)
 sysdig "evt.type=connect and not (fd.dip startswith 10. or fd.dip startswith 172.16. or fd.dip startswith 192.168. or fd.dip=127.0.0.1)"

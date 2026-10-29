@@ -67,9 +67,40 @@ ss -tna | grep -c CLOSE-WAIT
 
 ---
 
+## 🚨 The 10 Non-Negotiables Incident Triage Flow
+
+When a pod is reported in `CrashLoopBackOff`, `Pending`, or `Running` with elevated 5xx error rates, evaluate against the [10 DevSecOps Production Non-Negotiables](references/k8s-production-troubleshooting-cheatsheet.md):
+
+1. **Probe Misconfigurations:**
+    - Is `readinessProbe` failing or unconfigured, causing traffic to hit booting pods?
+    - Is `livenessProbe` checking an external database, causing cascading pod termination storms?
+2. **Resource Starvation & QoS:**
+    - Was the container terminated with Exit Code `137` (`OOMKilled`)? Run `kubectl describe pod` to verify `Last State: Terminated Reason: OOMKilled`.
+    - Is CFS quota throttling CPU threads? Verify if `resources.limits.cpu` is set unrealistically tight.
+3. **Autoscaling Stalls:**
+    - Did a traffic spike overwhelm fixed replicas? Verify `kubectl get hpa` and check whether `metrics-server` is reporting metrics.
+4. **NetworkPolicy Lateral Blocks:**
+    - Are egress or cross-namespace ingress packets being dropped by CNI network policies?
+5. **PDB Node Eviction Locks:**
+    - Is `kubectl drain` hanging during node pool maintenance? Verify `kubectl get pdb -A` to confirm `DisruptionsAllowed > 0`.
+6. **Connection Draining Drops:**
+    - Are 502 errors occurring strictly during deployments? Verify if the container lacks a `preStop: sleep 10` lifecycle hook.
+
+---
+
 ## Continuous Self-Knowledge Enhancement Loop
 
 Whenever an agent identifies a subtle networking or runtime edge case:
-1. **Isolate Root Cause Trigger:** (e.g. CoreDNS UDP packet drops at > 10,000 QPS).
-2. **Auto-Generate a Preventative Check:** Propose a rule in [`skills/devops/kubernetes/helm-chart-scaffold/SKILL.md`](../helm-chart-scaffold/SKILL.md) to mandate `dnsConfig.options` on high-throughput deployments.
-3. **Record in Knowledge Base:** Update `AGENTS.md` under `## Learned Kubernetes Networking Facts` so the SRE Incident Commander checks DNS latency immediately whenever 502/504 errors appear with low CPU usage.
+
+1. **Isolate Root Cause Trigger:** (e.g. CoreDNS UDP packet drops at > 10,000 QPS, or liveness cascading DB failover).
+2. **Auto-Generate a Preventative Check:** Propose a guardrail in [`skills/devops/kubernetes/helm-chart-scaffold/SKILL.md`](../helm-chart-scaffold/SKILL.md) to enforce declarative policy controls.
+3. **Record in Knowledge Base:** Update `AGENTS.md` under `## Learned Kubernetes Networking Facts` or `## Learned Kubernetes Production Reliability & Security Facts`.
+
+---
+
+## 📚 References & Tools
+
+- [k8s-production-troubleshooting-cheatsheet.md](references/k8s-production-troubleshooting-cheatsheet.md): Direct mapping of the 10 Non-Negotiables to failure symptoms and commands.
+- [k8s-pod-diagnostic-decision-tree.md](references/k8s-pod-diagnostic-decision-tree.md): Diagnostic decision tree and Linux signal exit codes (137, 139, 143, 1, 2).
+- [k8s-production-non-negotiables.md](../helm-chart-scaffold/references/k8s-production-non-negotiables.md): The 10 DevSecOps Production Non-Negotiables standard.
+- `scripts/pod_diagnose.sh`: Automated multi-step pod diagnostic and guardrail compliance inspector.

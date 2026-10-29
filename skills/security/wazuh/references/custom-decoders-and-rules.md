@@ -11,6 +11,7 @@ This guide explains how to construct custom XML decoders and detection rules wit
 ```
 
 ### Custom Decoder Example
+
 ```xml
 <!-- In /var/ossec/etc/decoders/local_decoder.xml -->
 <decoder name="custom-app">

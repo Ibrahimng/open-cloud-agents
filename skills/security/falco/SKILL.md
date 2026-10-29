@@ -39,6 +39,7 @@ Falco is the CNCF graduated standard for cloud-native runtime security and behav
 ## 🚀 Operational Workflow
 
 ### Step 1: Deploy Falco with Modern eBPF
+
 Deploy Falco across Kubernetes nodes using Helm with the non-intrusive modern eBPF driver:
 
 ```bash
@@ -57,6 +58,7 @@ helm upgrade --install falco falcosecurity/falco \
 ```
 
 ### Step 2: Validate Custom Rules
+
 Before deploying or modifying rules in production, run the syntax validator:
 
 ```bash
@@ -65,6 +67,7 @@ python3 skills/security/falco/scripts/validate_falco_rules.py \
 ```
 
 ### Step 3: Test Runtime Detection Safely
+
 Simulate benign security triggers to verify that the detection pipeline, alerts, and response hooks fire correctly:
 
 ```bash
@@ -82,6 +85,7 @@ Falco rules use a declarative YAML structure consisting of three primary buildin
 3. **Rules (`rule`):** Alert specifications triggered when incoming syscall events match conditions.
 
 ### Rule Template
+
 ```yaml
 - list: shell_binaries
   items: [bash, sh, zsh, ksh, csh]
@@ -119,6 +123,7 @@ Detailed production rules are in [cloud-native-threat-library.md](references/clo
 - **T1070 (Indicator Removal):** Deleting system logs (`/var/log/*`) or clearing bash history (`.bash_history`).
 
 ### Active Automated Prevention with Falco Talon
+
 Falco alone emits detection telemetry. **Falco Talon** acts as the enforcement response engine to execute automated containment actions within milliseconds:
 
 ```yaml

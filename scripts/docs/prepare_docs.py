@@ -39,6 +39,8 @@ def prepare_docs():
         "CONTRIBUTING.md",
         "CONTRIBUTORS.md",
         "LICENSE",
+        "install.sh",
+        "install.ps1",
     ]
     for filename in core_files:
         src = REPO_ROOT / filename

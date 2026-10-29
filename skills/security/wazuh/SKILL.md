@@ -43,6 +43,7 @@ Wazuh is the leading open-source Security Information and Event Management (SIEM
 ## 🚀 Operational Workflow
 
 ### Step 1: Agent Deployment & Registration
+
 Deploy the lightweight Wazuh agent across cloud VMs or Kubernetes nodes:
 
 ```bash
@@ -63,6 +64,7 @@ See [wazuh-architecture-and-deployment.md](references/wazuh-architecture-and-dep
 ---
 
 ### Step 2: Configure File Integrity Monitoring (FIM / `syscheck`)
+
 Configure real-time cryptographic file integrity auditing with **whodata** attribution via `auditd`:
 
 ```xml
@@ -88,6 +90,7 @@ See [fim-and-auditd-deep-dive.md](references/fim-and-auditd-deep-dive.md).
 ---
 
 ### Step 3: Test Decoders & Custom Detection Rules
+
 Validate log parsing and custom rule triggering using the standalone rule tester:
 
 ```bash
@@ -99,6 +102,7 @@ python3 skills/security/wazuh/scripts/wazuh_rule_tester.py \
 ---
 
 ### Step 4: Real-Time Threat Prevention via Active Response
+
 Configure automated active defense actions in `ossec.conf` to neutralize attacks upon detection:
 
 ```xml

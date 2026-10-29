@@ -32,6 +32,7 @@ Sysdig provides comprehensive Cloud Native Application Protection Platform (CNAP
 ## 🚀 Operational Workflow
 
 ### Step 1: Real-Time Runtime Drift Control
+
 Drift Control guarantees container immutability by detecting and preventing unauthorized binaries from executing inside running containers:
 
 1. **Drift Identification:** A process attempts to execute a binary that was not part of the original immutable container image (e.g. downloaded via `curl`, `wget`, or written via `/tmp`).
@@ -51,6 +52,7 @@ See [drift-control-and-prevention.md](references/drift-control-and-prevention.md
 ---
 
 ### Step 2: In-Line Image Scanning & Admission Gatekeeping
+
 Prevent vulnerable images or embedded credentials from reaching production Kubernetes clusters:
 
 ```bash
@@ -74,6 +76,7 @@ See [image-scanning-admission-controller.md](references/image-scanning-admission
 ---
 
 ### Step 3: Deep Forensics with Sysdig OSS & Chisels
+
 When a high-severity alert fires, Sysdig triggers an automated system call capture (`.scap`), recording all events 10 seconds before and 30 seconds after the trigger:
 
 ```bash

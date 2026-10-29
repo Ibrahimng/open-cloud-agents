@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.singleton.1.6.0.schema.json
+PackageIdentifier: Ibrahimng.OpenCloudAgents
+PackageVersion: 1.3.0
+PackageName: Open Cloud Agents CLI
+Publisher: Ibrahim Jimoh
+License: Apache-2.0
+LicenseUrl: https://github.com/Ibrahimng/open-cloud-agents/blob/main/LICENSE
+ShortDescription: Universal CLI and multi-agent framework for Cloud Architecture, DevSecOps, SRE, and FinOps.
+PackageUrl: https://ibrahimng.github.io/open-cloud-agents/
+Moniker: ocagents
+Tags:
+  - cloud
+  - architecture
+  - security
+  - devsecops
+  - ai-agents
+  - copilot
+  - cursor
+  - claude
+Installers:
+  - Architecture: neutral
+    InstallerType: portable
+    InstallerUrl: https://github.com/Ibrahimng/open-cloud-agents/archive/refs/tags/v1.3.0.zip
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+    Commands:
+      - ocagents
+      - oca
+ManifestType: singleton
+ManifestVersion: 1.6.0
+

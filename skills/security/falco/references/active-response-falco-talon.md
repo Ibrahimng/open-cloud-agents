@@ -22,6 +22,7 @@ While Falco acts as a sensor detecting malicious syscall patterns, **Falco Talon
 ## 2. Talon Action Configuration (`rules.yaml`)
 
 ### 2.1 Action Definitions
+
 ```yaml
 # 1. Action: Terminate Compromised Pod
 - action: Terminate Pod Instantly
@@ -44,6 +45,7 @@ While Falco acts as a sensor detecting malicious syscall patterns, **Falco Talon
 ```
 
 ### 2.2 Matching Rules to Actions
+
 ```yaml
 - rule: Isolate and Evict on Cryptomining
   match:

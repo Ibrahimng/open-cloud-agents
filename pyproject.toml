@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "open-cloud-agents"
+version = "1.3.0"
+description = "Universal CLI and multi-agent framework for Cloud Architecture, DevSecOps, SRE, and FinOps."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Ibrahim Jimoh", email = "Ibrahimng@users.noreply.github.com" }
+]
+maintainers = [
+    { name = "Ibrahim Jimoh", email = "Ibrahimng@users.noreply.github.com" }
+]
+keywords = [
+    "cloud",
+    "architecture",
+    "security",
+    "devsecops",
+    "ai-agents",
+    "copilot",
+    "cursor",
+    "claude",
+    "finops",
+    "sre"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Security",
+]
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.urls]
+Homepage = "https://ibrahimng.github.io/open-cloud-agents/"
+Documentation = "https://ibrahimng.github.io/open-cloud-agents/"
+Repository = "https://github.com/Ibrahimng/open-cloud-agents"
+Changelog = "https://github.com/Ibrahimng/open-cloud-agents/blob/main/CHANGELOG.md"
+
+[project.scripts]
+ocagents = "ocagents.cli:main"
+oca = "ocagents.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

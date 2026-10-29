@@ -69,40 +69,20 @@ When `evaluatePreconfiguredWaf('ruleset-name')` is called without an explicit
 
 Upgrading to CRS 4.22 expands signature coverage significantly:
 
-| Threat        | CRS 3.0    | CRS 3.3    | CRS 4.22   | Coverage Delta     |
-: Category      : Signatures : Signatures : Signatures :                    :
-| ------------- | ---------- | ---------- | ---------- | ------------------ |
-| **Remote Code | 11         | 15         | **44**     | +29 to +33         |
-: Execution     :            :            :            : signatures         :
-: (RCE)**       :            :            :            : (+200-300%)        :
-| **SQL         | 38         | 49         | **60**     | +11 to +22         |
-: Injection     :            :            :            : signatures         :
-: (SQLi)**      :            :            :            : (+22-58%)          :
-| **Cross-Site  | 25         | 30         | **33**     | +3 to +8           |
-: Scripting     :            :            :            : signatures         :
-: (XSS)**       :            :            :            : (+10-32%)          :
-| **PHP         | 13         | 16         | **20**     | +4 to +7           |
-: Injection**   :            :            :            : signatures         :
-:               :            :            :            : (+25-54%)          :
-| **Protocol    | 9          | 10         | **17**     | +7 to +8           |
-: Attack**      :            :            :            : signatures         :
-:               :            :            :            : (+70-89%)          :
-| **Java        | N/A        | 9          | **14**     | +5 signatures      |
-: Attack**      :            :            :            : (+55%)             :
-| **Generic /   | N/A        | 1          | **10**     | +9 signatures      |
-: Node.js**     :            :            :            : (+900%)            :
-| **Local File  | 4          | 4          | **5**      | +1 signature       |
-: Inclusion     :            :            :            :                    :
-: (LFI)**       :            :            :            :                    :
-| **Remote File | 4          | 4          | **5**      | +1 signature       |
-: Inclusion     :            :            :            :                    :
-: (RFI)**       :            :            :            :                    :
-| **Session     | 3          | 3          | **3**      | No change          |
-: Fixation**    :            :            :            :                    :
-| **Method      | 1          | 1          | **1**      | Behavior change    |
-: Enforcement** :            :            :            : (PUT/PATCH/DELETE) :
-| **Scanner     | 5          | 5          | **1**      | Consolidated       |
-: Detection**   :            :            :            :                    :
+| Threat Category | CRS 3.0 Signatures | CRS 3.3 Signatures | CRS 4.22 Signatures | Coverage Delta |
+|---|---|---|---|---|
+| **Remote Code Execution (RCE)** | 11 | 15 | **44** | +29 to +33 signatures (+200-300%) |
+| **SQL Injection (SQLi)** | 38 | 49 | **60** | +11 to +22 signatures (+22-58%) |
+| **Cross-Site Scripting (XSS)** | 25 | 30 | **33** | +3 to +8 signatures (+10-32%) |
+| **PHP Injection** | 13 | 16 | **20** | +4 to +7 signatures (+25-54%) |
+| **Protocol Attack** | 9 | 10 | **17** | +7 to +8 signatures (+70-89%) |
+| **Java Attack** | N/A | 9 | **14** | +5 signatures (+55%) |
+| **Generic / Node.js** | N/A | 1 | **10** | +9 signatures (+900%) |
+| **Local File Inclusion (LFI)** | 4 | 4 | **5** | +1 signature |
+| **Remote File Inclusion (RFI)** | 4 | 4 | **5** | +1 signature |
+| **Session Fixation** | 3 | 3 | **3** | No change |
+| **Method Enforcement** | 1 | 1 | **1** | Behavior change (PUT/PATCH/DELETE) |
+| **Scanner Detection** | 5 | 5 | **1** | Consolidated |
 
 **Why this matters**: The massive increase in active signatures (especially in
 RCE, SQLi, and Protocol Attack) increases protection against modern CVEs, but

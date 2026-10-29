@@ -27,7 +27,8 @@ This reference details daemon settings, container runtime flags, and security co
 }
 ```
 
-### Critical Daemon Invariants:
+### Critical Daemon Invariants
+
 1. `"icc": false`: Disables default inter-container communication on the docker0 bridge, forcing container communication through explicit user-defined bridge networks.
 2. `"userns-remap": "default"`: Maps container root UID 0 to an unprivileged high UID on the host (e.g. UID 100000), preventing root container escape exploits from gaining host root access.
 3. `"no-new-privileges": true`: Prevents processes inside containers from acquiring additional privileges via `setuid` or `setgid` binaries.

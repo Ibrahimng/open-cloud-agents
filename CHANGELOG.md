@@ -57,6 +57,19 @@ This major feature release introduces an enterprise-grade **Cloud Security, Runt
 * **Centralized CI Pipeline:** Executes on every push and pull request, orchestrating dataset lineage verification, static prompt injection scans, and output integrity checks via [`run_ai_security_pipeline.sh`](./skills/security/compliance/ai-governance-audit/scripts/run_ai_security_pipeline.sh).
 * **Local Desktop Pre-Commit Shield:** Tracked hook ([`scripts/git-hooks/pre-commit`](./scripts/git-hooks/pre-commit)) preventing unvalidated prompt concatenations from being committed locally.
 
+#### 9. Standalone `ocagents` Universal CLI & Zero-Friction Package Distribution ([`src/ocagents/`](./src/ocagents/))
+* **Standalone CLI Tooling (`ocagents` / `oca`):** Production command-line tool with zero-dependency execution for listing, syncing, validating, simulating, and updating Open Cloud Agents personas and specialist skills across any repository.
+* **One-Liner Installers:**
+  * macOS & Linux: `curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash`
+  * Windows (PowerShell): `irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex`
+* **Package Manager Distribution Specs:**
+  * Homebrew Formula: [`Formula/ocagents.rb`](./Formula/ocagents.rb)
+  * Python Packaging: [`pyproject.toml`](./pyproject.toml)
+  * Windows Package Manager: [`packaging/winget/manifest.yaml`](./packaging/winget/manifest.yaml)
+  * Alpine Linux (APK): [`packaging/alpine/APKBUILD`](./packaging/alpine/APKBUILD)
+  * Debian / Ubuntu (APT): [`packaging/debian/control`](./packaging/debian/control)
+* **Master Suite Skills Mapping:** Mapped specialist skills in YAML frontmatter and multi-workspace sync protocols across all 7 Master Suite agent specifications.
+
 ---
 
 ### 🔄 Changed
