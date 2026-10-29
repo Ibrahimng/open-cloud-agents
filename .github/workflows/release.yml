@@ -20,9 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
       - name: Determine Target Tag
         id: tag
@@ -56,7 +61,7 @@ jobs:
           "
 
       - name: Preview Release Notes (Local act mode)
-        if: ${{ env.ACT }}
+        if: ${{ env.ACT || runner.name == 'Local Actions' }}
         run: |
           echo "Running in local act runner. Skipping live GitHub API release call."
           echo "=== Extracted Release Notes Preview ==="
@@ -64,7 +69,7 @@ jobs:
           echo "======================================"
 
       - name: Publish GitHub Release
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.version }}
