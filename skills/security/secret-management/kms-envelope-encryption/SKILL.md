@@ -7,7 +7,9 @@ description: Implement envelope encryption workflows using KMS (Key Management S
 
 ## What is Envelope Encryption?
 Encrypting large payloads directly with KMS has high network latency, KMS API throttling risks, and per-call costs.
+
 **Envelope Encryption** solves this by:
+
 1. Calling KMS once to generate a symmetric **Data Encryption Key (DEK)** (plaintext + ciphertext).
 2. Using the plaintext DEK locally to encrypt the large payload with AES-256-GCM.
 3. Wiping the plaintext DEK from memory and storing the ciphertext DEK alongside the encrypted payload.

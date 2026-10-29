@@ -49,6 +49,7 @@ structured_payload = [
 ```
 
 For deep architectural vectors and prompt sandboxing patterns, see:
+
 - [`references/llm-vulnerability-vectors.md`](./references/llm-vulnerability-vectors.md)
 - [`references/prompt-sandboxing-templates.md`](./references/prompt-sandboxing-templates.md)
 

@@ -57,6 +57,7 @@ High-Risk AI systems (deployments in critical infrastructure, access to educatio
 ## 3. General-Purpose AI (GPAI) Models (Articles 51–56)
 
 Providers of general-purpose AI models (including foundation LLMs) must:
+
 1. Maintain comprehensive technical documentation, including training and testing processes.
 2. Make information available to downstream providers who integrate the model into AI systems.
 3. Establish a copyright compliance policy respecting EU copyright law.

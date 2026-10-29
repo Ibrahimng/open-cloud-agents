@@ -47,7 +47,9 @@ aws cloudtrail lookup-events \
   --query 'Events[*].[EventTime,EventName,SourceIPAddress,ReadOnly]' \
   --output table
 ```
+
 Inspect especially for:
+
 - `CreateUser`, `CreateAccessKey` (Backdoor persistence)
 - `RunInstances` (Crypto-mining or compute hijacking)
 - `PutBucketPolicy`, `ModifyVpcPeeringConnection` (Perimeter breach)
@@ -69,6 +71,7 @@ git push origin --force --tags
 ## Continuous Self-Knowledge Enhancement Loop
 
 When the security incident is contained:
+
 1. **Analyze Vulnerability Vector:** (e.g. `pull_request_target` event in GitHub Actions).
 2. **Auto-Generate Preventative Policy:** Add a check in [`skills/devops/ci-cd/github-actions-hardening/SKILL.md`](../../../devops/ci-cd/github-actions-hardening/SKILL.md) banning `pull_request_target` with secrets.
 3. **Update Pre-Merge Auditor Rules:** Update [`agents/7-agent-master-suite/devsecops-reviewer.md`](../../../../agents/7-agent-master-suite/devsecops-reviewer.md) to flag any workflow change introducing secret access in fork PRs.

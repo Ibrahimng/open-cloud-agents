@@ -24,8 +24,8 @@ An enterprise Wazuh deployment separates data collection, processing, and indexi
 ### Components
 1. **Wazuh Agent:** Installed on endpoints (Linux, Windows, macOS, container hosts). Collects system logs, file checksums, process executions, and open ports.
 2. **Wazuh Server (Manager Cluster):**
-   - **Master Node:** Handles agent registration (authd on port 1515), centralized configuration synchronization, and cluster orchestration.
-   - **Worker Nodes:** Ingest and decode events via multi-threaded analysis daemon (`ossec-analysisd`), evaluate rules, and route alerts.
+    - **Master Node:** Handles agent registration (authd on port 1515), centralized configuration synchronization, and cluster orchestration.
+    - **Worker Nodes:** Ingest and decode events via multi-threaded analysis daemon (`ossec-analysisd`), evaluate rules, and route alerts.
 3. **Wazuh Indexer:** Multi-node OpenSearch distributed document store indexing security events, alerts, and compliance assessments.
 4. **Wazuh Dashboard:** Web interface for threat exploration, MITRE ATT&CK mapping, and compliance tracking.
 

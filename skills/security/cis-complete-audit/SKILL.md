@@ -74,7 +74,9 @@ python3 skills/security/cis-complete-audit/scripts/audit_cis_compliance.py \
 ```
 
 ### Step 3: Drift Detection & Real-Time Posture Tracking
-Continuously evaluate configuration drift against CIS golden baselines.
+
+Continuously evaluate configuration drift against CIS golden baselines:
+
 - **Cloud IAM Drift:** Detect unrotated access keys (> 90 days), root account usage, missing MFA.
 - **Kubernetes Drift:** Detect pods launched without `securityContext.runAsNonRoot: true` or with `privileged: true`.
 - **Host Drift:** Detect modified `/etc/shadow` or `/etc/pam.d/`, world-writable files, unlogged sudo commands.
@@ -88,68 +90,68 @@ Continuously evaluate configuration drift against CIS golden baselines.
 See detailed checklist and commands in [cloud-foundations-matrix.md](references/cloud-foundations-matrix.md).
 
 - **Identity & Access Management:**
-  - MFA enforced for all console users and break-glass admins.
-  - Zero active root account access keys or GCP default compute service accounts with Editor/Owner roles.
-  - Unused credentials (> 90 days) automatically disabled.
+    - MFA enforced for all console users and break-glass admins.
+    - Zero active root account access keys or GCP default compute service accounts with Editor/Owner roles.
+    - Unused credentials (> 90 days) automatically disabled.
 - **Storage & Encryption:**
-  - Public Access Blocks enabled on all object buckets (S3 / GCS / Azure Blob).
-  - KMS Customer Managed Keys (CMK) envelope encryption with automatic 365-day rotation.
+    - Public Access Blocks enabled on all object buckets (S3 / GCS / Azure Blob).
+    - KMS Customer Managed Keys (CMK) envelope encryption with automatic 365-day rotation.
 - **Logging & Monitoring:**
-  - Multi-region CloudTrail / GCP Cloud Audit Logs / Azure Activity Log enabled and immutable.
-  - Metric filters and alerts configured for unauthorized API calls, IAM policy changes, and security group alterations.
+    - Multi-region CloudTrail / GCP Cloud Audit Logs / Azure Activity Log enabled and immutable.
+    - Metric filters and alerts configured for unauthorized API calls, IAM policy changes, and security group alterations.
 - **Networking:**
-  - Security Groups prohibiting unrestricted ingress (`0.0.0.0/0` and `::/0`) on ports 22 (SSH), 3389 (RDP), 3306 (MySQL), 5432 (Postgres), 6379 (Redis).
-  - Default VPC security groups configured with zero ingress and egress rules.
+    - Security Groups prohibiting unrestricted ingress (`0.0.0.0/0` and `::/0`) on ports 22 (SSH), 3389 (RDP), 3306 (MySQL), 5432 (Postgres), 6379 (Redis).
+    - Default VPC security groups configured with zero ingress and egress rules.
 
 ### 2. Kubernetes CIS Benchmark (v1.9)
 See detailed checklist and parameters in [kubernetes-cis-guide.md](references/kubernetes-cis-guide.md).
 
 - **Control Plane Hardening (`kube-apiserver`):**
-  - `--anonymous-auth=false`
-  - `--authorization-mode=Node,RBAC`
-  - `--enable-admission-plugins=NodeRestriction,PodSecurity`
-  - `--audit-log-path` and `--audit-log-maxage=30`
+    - `--anonymous-auth=false`
+    - `--authorization-mode=Node,RBAC`
+    - `--enable-admission-plugins=NodeRestriction,PodSecurity`
+    - `--audit-log-path` and `--audit-log-maxage=30`
 - **etcd Security:**
-  - `--cert-file`, `--key-file`, `--client-cert-auth=true`
-  - Encrypted at rest via `EncryptionConfiguration` with KMS envelope provider.
+    - `--cert-file`, `--key-file`, `--client-cert-auth=true`
+    - Encrypted at rest via `EncryptionConfiguration` with KMS envelope provider.
 - **Worker Node & Kubelet Hardening:**
-  - `--anonymous-auth=false`
-  - `--authorization-mode=Webhook`
-  - `--read-only-port=0`
-  - `--protect-kernel-defaults=true`
+    - `--anonymous-auth=false`
+    - `--authorization-mode=Webhook`
+    - `--read-only-port=0`
+    - `--protect-kernel-defaults=true`
 - **Workload Security (Pod Security Standards):**
-  - Admission enforcement of `restricted` or `baseline` PSS profile on all application namespaces.
+    - Admission enforcement of `restricted` or `baseline` PSS profile on all application namespaces.
 
 ### 3. Linux OS Host Benchmark (Ubuntu / RHEL)
 See detailed configuration parameters in [linux-host-hardening-matrix.md](references/linux-host-hardening-matrix.md).
 
 - **Filesystem Configuration:**
-  - `/tmp`, `/var/tmp`, `/dev/shm` mounted with `nodev,nosuid,noexec`.
-  - Sticky bit set on all world-writable directories.
+    - `/tmp`, `/var/tmp`, `/dev/shm` mounted with `nodev,nosuid,noexec`.
+    - Sticky bit set on all world-writable directories.
 - **Access Control & PAM:**
-  - Password expiration: `PASS_MAX_DAYS 90`, `PASS_MIN_DAYS 7`, `PASS_MIN_LEN 14`.
-  - Failed login lockouts via `pam_faillock` (account locked after 5 failed attempts).
-  - SSH Daemon: `PermitRootLogin no`, `PasswordAuthentication no`, `MaxAuthTries 4`, `X11Forwarding no`.
+    - Password expiration: `PASS_MAX_DAYS 90`, `PASS_MIN_DAYS 7`, `PASS_MIN_LEN 14`.
+    - Failed login lockouts via `pam_faillock` (account locked after 5 failed attempts).
+    - SSH Daemon: `PermitRootLogin no`, `PasswordAuthentication no`, `MaxAuthTries 4`, `X11Forwarding no`.
 - **System Auditing (`auditd`):**
-  - Immutable audit daemon rules tracking changes to system time, user/group databases, network configs, and file deletions.
+    - Immutable audit daemon rules tracking changes to system time, user/group databases, network configs, and file deletions.
 - **Kernel Network Parameters (`sysctl`):**
-  - `net.ipv4.ip_forward = 0` (non-routing hosts).
-  - `net.ipv4.conf.all.send_redirects = 0`
-  - `net.ipv4.conf.all.accept_redirects = 0`
-  - `net.ipv4.conf.all.rp_filter = 1` (reverse path filtering).
+    - `net.ipv4.ip_forward = 0` (non-routing hosts).
+    - `net.ipv4.conf.all.send_redirects = 0`
+    - `net.ipv4.conf.all.accept_redirects = 0`
+    - `net.ipv4.conf.all.rp_filter = 1` (reverse path filtering).
 
 ### 4. Docker Container Runtime Benchmark
 See container daemon parameters in [docker-container-cis-matrix.md](references/docker-container-cis-matrix.md).
 
 - **Daemon Hardening (`/etc/docker/daemon.json`):**
-  - `"icc": false` (inter-container communication restricted).
-  - `"userns-remap": "default"` (user namespace remapping enabled).
-  - `"live-restore": true`
-  - `"no-new-privileges": true`
+    - `"icc": false` (inter-container communication restricted).
+    - `"userns-remap": "default"` (user namespace remapping enabled).
+    - `"live-restore": true`
+    - `"no-new-privileges": true`
 - **Container Execution:**
-  - Containers must not run as user `root` (UID 0).
-  - Read-only root filesystem (`--read-only`) with tmpfs mounts for ephemeral paths.
-  - Resource limits (`--memory`, `--cpus`) enforced to prevent host starvation.
+    - Containers must not run as user `root` (UID 0).
+    - Read-only root filesystem (`--read-only`) with tmpfs mounts for ephemeral paths.
+    - Resource limits (`--memory`, `--cpus`) enforced to prevent host starvation.
 
 ---
 

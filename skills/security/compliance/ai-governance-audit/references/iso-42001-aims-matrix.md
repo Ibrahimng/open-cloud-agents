@@ -35,15 +35,15 @@ This reference matrix provides the Technical Verification Controls required by t
 ### Control B.9.2: AI System Data Provenance & Lineage
 - **Objective:** Maintain complete traceability of the lifecycle of training, validation, and testing datasets to prevent data tampering.
 - **Technical Checklist:**
-  - [ ] Every active training manifest contains a top-level `dataset_provenance` schema metadata block.
-  - [ ] Data files are verified against a static cryptographic hash check (`expected_sha256`).
-  - [ ] Sources are versioned with unique immutable identifiers preventing unversioned overrides.
+    - [ ] Every active training manifest contains a top-level `dataset_provenance` schema metadata block.
+    - [ ] Data files are verified against a static cryptographic hash check (`expected_sha256`).
+    - [ ] Sources are versioned with unique immutable identifiers preventing unversioned overrides.
 
 ### Control B.10.4: Algorithmic Transparency & Logging
 - **Objective:** Capture sufficient technical audit trails to reconstruct inference paths and detect active security incidents.
 - **Technical Checklist:**
-  - [ ] Capture inbound model inputs, token weight variations, and calculated inference responses.
-  - [ ] Route all inference logs to write-once immutable cloud sinks (e.g., AWS CloudWatch with object locks, GCP Security Command Center Enterprise).
+    - [ ] Capture inbound model inputs, token weight variations, and calculated inference responses.
+    - [ ] Route all inference logs to write-once immutable cloud sinks (e.g., AWS CloudWatch with object locks, GCP Security Command Center Enterprise).
 
 ---
 
@@ -65,9 +65,9 @@ This reference matrix provides the Technical Verification Controls required by t
 ### Domain B.6: Data for AI Systems
 - **B.6.1 Data Acquisition & Quality:** Data quality metrics (completeness, accuracy, representativeness) validated before training ingestion.
 - **B.6.2 Data Provenance & Lineage (Control B.9.2):**
-  - All training corpora must possess immutable SHA-256 hashes.
-  - S3 / GCS buckets must enforce versioning, KMS SSE, and object-lock retention policies.
-  - Ingestion manifests must track data origin, license metadata, scraping timestamps, and preprocessing steps.
+    - All training corpora must possess immutable SHA-256 hashes.
+    - S3 / GCS buckets must enforce versioning, KMS SSE, and object-lock retention policies.
+    - Ingestion manifests must track data origin, license metadata, scraping timestamps, and preprocessing steps.
 
 ### Domain B.7: Information for Interested Parties & Transparency
 - **B.7.1 System Documentation:** Model Cards detailing model architecture, parameter count, intended use, limitations, benchmark metrics, and out-of-scope tasks.
