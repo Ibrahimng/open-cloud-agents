@@ -8,12 +8,9 @@ This guide details the design, triggers, and deployment of Security Orchestratio
 
 Sentinel playbooks run as Azure Logic Apps (Standard or Consumption) using the Microsoft Sentinel Connector:
 
-1. **Incident Trigger (`When a Microsoft Sentinel Incident is created or updated`):**
-   Fires once per incident; provides access to all aggregated alerts, entities, and comments.
-2. **Alert Trigger (`When a Microsoft Sentinel Alert is triggered`):**
-   Fires on each individual alert rule execution.
-3. **Entity Trigger (`When an entity is selected in incident`):**
-   Manual analyst trigger executed directly from the investigation pane.
+1. **Incident Trigger (`When a Microsoft Sentinel Incident is created or updated`):** Fires once per incident; provides access to all aggregated alerts, entities, and comments.
+2. **Alert Trigger (`When a Microsoft Sentinel Alert is triggered`):** Fires on each individual alert rule execution.
+3. **Entity Trigger (`When an entity is selected in incident`):** Manual analyst trigger executed directly from the investigation pane.
 
 ---
 

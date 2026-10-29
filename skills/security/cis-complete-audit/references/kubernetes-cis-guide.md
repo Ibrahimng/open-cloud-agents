@@ -22,12 +22,13 @@ Manifest location: `/etc/kubernetes/manifests/kube-apiserver.yaml`
 | **K8S 1.2.22** | `--audit-log-maxage` | `30` | Ensures audit logs are retained for at least 30 days. |
 
 ### 1.2 Controller Manager & Scheduler
+
 - **Controller Manager (`kube-controller-manager`):**
-  - `--terminated-pod-gc-threshold=12500` (avoids resource starvation from dead pods).
-  - `--use-service-account-credentials=true` (ensures individual service account credentials per controller).
-  - `--root-ca-file` pointing to valid CA certificate bundle.
+    - `--terminated-pod-gc-threshold=12500` (avoids resource starvation from dead pods).
+    - `--use-service-account-credentials=true` (ensures individual service account credentials per controller).
+    - `--root-ca-file` pointing to valid CA certificate bundle.
 - **Scheduler (`kube-scheduler`):**
-  - `--profiling=false`
+    - `--profiling=false`
 
 ---
 

@@ -59,6 +59,7 @@ Overall compliance percentage is computed as:
 $$\text{Compliance Score (\%)} = \left( \frac{\sum_{i=1}^{N} \text{Passed}_i \times W_i}{\sum_{i=1}^{N} W_i} \right) \times 100$$
 
 Where:
+
 - $W_i = 3.0$ for **Critical Severity** controls (e.g., open root access keys, public S3 buckets, `0.0.0.0/0` SSH ingress).
 - $W_i = 2.0$ for **High Severity** controls (e.g., missing multi-region trail, unencrypted volumes).
 - $W_i = 1.0$ for **Medium/Low Severity** controls (e.g., log retention thresholds, minor tagging).

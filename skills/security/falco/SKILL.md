@@ -109,7 +109,9 @@ See the full syntax reference in [falco-rules-architecture.md](references/falco-
 ## 🛡️ Real-Time Detection & Active Prevention Patterns
 
 ### High-Priority MITRE ATT&CK Threat Rules
+
 Detailed production rules are in [cloud-native-threat-library.md](references/cloud-native-threat-library.md):
+
 - **T1059 (Command Execution):** Terminal shell or script execution inside production pods.
 - **T1068 (Privilege Escalation):** SUID binary execution or container namespace escape attempt (`setns`).
 - **T1552 (Credential Theft):** Reading service account tokens (`/var/run/secrets/kubernetes.io/serviceaccount/token`) by non-whitelisted processes.

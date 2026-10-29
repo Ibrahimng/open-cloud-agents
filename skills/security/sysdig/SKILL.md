@@ -63,6 +63,7 @@ sysdig-cli-scanner \
 ```
 
 Gate enforcement policies evaluate:
+
 - **CISA Known Exploited Vulnerabilities (KEV):** Reject any image with actively exploited CVEs.
 - **EPSS Score:** Reject images with EPSS score $> 0.35$ and CVSS $\ge 7.0$.
 - **Plaintext Secrets:** Reject images containing embedded private keys, AWS tokens, or `.env` files.
@@ -96,7 +97,9 @@ See full chisel and filter commands in [sysdig-oss-chisel-cheatsheet.md](referen
 ---
 
 ### Step 4: Multi-Cloud Threat Detection (Cloud Connector)
+
 Sysdig Cloud Connector ingests control plane telemetry across AWS CloudTrail, GCP Audit Logs, and Azure Activity Logs:
+
 - Detects cloud IAM credential exfiltration and privilege escalation.
 - Identifies modifications to VPC security groups, Route 53 DNS, or S3 bucket ACLs.
 - Detects console logins from non-MFA sessions or unrecognized IP ranges.

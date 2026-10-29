@@ -28,7 +28,9 @@ Microsoft Sentinel operates on top of an Azure Log Analytics Workspace.
 ## 2. Ingestion Connectors
 
 ### 2.1 Microsoft Entra ID & Microsoft 365 (Zero-Ingestion Cost)
+
 Certain foundational security logs incur zero ingestion cost into Sentinel:
+
 - `SigninLogs` (Entra ID Interactive & Non-Interactive)
 - `AuditLogs` (Entra ID Directory Auditing)
 - `OfficeActivity` (Exchange, SharePoint, OneDrive, Teams audit logs)
