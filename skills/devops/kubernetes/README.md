@@ -3,7 +3,7 @@
 Curated agent skills for managing, troubleshooting, and securing Kubernetes clusters and containerized workloads.
 
 ## Target Skill Areas
-- **`k8s-pod-troubleshooting`**: Diagnosing `CrashLoopBackOff`, `OOMKilled`, pending probes, and ingress routing issues.
-- **`helm-chart-scaffold`**: Production-grade Helm chart authoring, values schema validation, and dry-run linting.
-- **`k8s-resource-quotas`**: CPU/Memory requests/limits tuning, HPA (Horizontal Pod Autoscaler) policies, and PDBs (Pod Disruption Budgets).
+
+- **[`helm-chart-scaffold`](./helm-chart-scaffold/SKILL.md)**: Production-grade Helm chart authoring, values schema validation, the [10 DevSecOps Production Non-Negotiables](./helm-chart-scaffold/references/k8s-production-non-negotiables.md), and automated guardrail auditing (`audit_k8s_guardrails.sh`).
+- **[`k8s-pod-troubleshooting`](./k8s-pod-troubleshooting/SKILL.md)**: Diagnosing `CrashLoopBackOff`, `OOMKilled`, probe deadlocks, DNS latency spikes, and the [10 Non-Negotiables Incident Triage Cheat Sheet](./k8s-pod-troubleshooting/references/k8s-production-troubleshooting-cheatsheet.md).
 

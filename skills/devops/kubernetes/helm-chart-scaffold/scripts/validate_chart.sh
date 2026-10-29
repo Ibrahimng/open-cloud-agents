@@ -17,12 +17,18 @@ helm lint "$CHART_DIR"
 echo "[2/3] Rendering templates with strict dry-run..."
 helm template validate-test "$CHART_DIR" --dry-run --debug > /dev/null
 
-echo "[3/3] Checking for values.schema.json..."
+echo "[3/4] Checking for values.schema.json..."
 if [ -f "$CHART_DIR/values.schema.json" ]; then
   echo "[PASS] values.schema.json detected."
 else
   echo "[WARN] No values.schema.json found in chart root. Adding a schema is recommended."
 fi
+
+echo "[4/4] Auditing Kubernetes 10 DevSecOps Production Non-Negotiables..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+helm template validate-test "$CHART_DIR" | bash "$SCRIPT_DIR/audit_k8s_guardrails.sh" - || {
+  echo "[WARN] Guardrail audit found warnings or non-compliant settings."
+}
 
 echo "[PASS] Helm chart validation completed successfully."
 
