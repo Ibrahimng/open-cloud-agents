@@ -1,0 +1,14 @@
+Source: open-cloud-agents
+Section: utils
+Priority: optional
+Maintainer: Ibrahim Jimoh <Ibrahimng@users.noreply.github.com>
+Build-Depends: debhelper-compat (= 13), python3
+Standards-Version: 4.6.2
+Homepage: https://ibrahimng.github.io/open-cloud-agents/
+
+Package: ocagents
+Architecture: all
+Depends: ${misc:Depends}, python3, git
+Description: Universal CLI and specialist agents for Cloud Architecture and DevSecOps
+ Open Cloud Agents is a local-first, bring-your-own-LLM framework for safer cloud
+ engineering, architecture review, security compliance, SRE, and FinOps.

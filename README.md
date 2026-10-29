@@ -101,6 +101,49 @@ Rules define the non-negotiable boundaries that protect production systems from 
 
 ---
 
+## 🚀 Quickstart: Standalone `ocagents` CLI
+
+Open Cloud Agents provides a standalone command-line tool (`ocagents` / `oca`) that installs in seconds without requiring manual git repository management.
+
+### 🍎 macOS & 🐧 Linux (One-Liner)
+```bash
+curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash
+```
+
+### 🪟 Windows (PowerShell One-Liner)
+```powershell
+irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex
+```
+
+### 📦 System Package Managers
+```bash
+# Homebrew (macOS & Linux)
+brew install Ibrahimng/tap/ocagents
+
+# Python / pipx (Universal)
+pipx install open-cloud-agents
+# or
+pip install open-cloud-agents
+
+# Windows (Winget)
+winget install Ibrahimng.OpenCloudAgents
+```
+
+### ⚡ Essential CLI Commands
+
+| Intent | Command | Shortcut Alias |
+|---|---|---|
+| **List registered agents & skills** | `ocagents -agents list` | `ocagents -a ls` |
+| **Sync all agents for GitHub Copilot** | `ocagents -A -format github --target .` | `oca sync -A -f github` |
+| **Sync single agent + skills for Claude** | `ocagents sync devsecops-reviewer -f claude --sync-skills` | `oca sync devsecops-reviewer -f claude -s` |
+| **Sync all agents as Cursor Rules** | `ocagents sync -A --format cursor --target .` | `oca sync -A -f cursor` |
+| **Validate repo hygiene & agent specs** | `ocagents validate` | `oca validate` |
+| **Simulate multi-agent design task** | `ocagents run --task "Architect multi-region payment DR"` | `oca run` |
+| **Show asset catalog & runtime info** | `ocagents info` | `oca info` |
+| **Update catalog to latest release** | `ocagents update` | `oca update` |
+
+---
+
 ## 🔌 How to Use with Any AI Agent or IDE
 
 You can run Open Cloud Agents across any modern AI coding assistant, IDE, or agent orchestrator:
@@ -121,17 +164,17 @@ Import personas as custom project agents or configure them in your IDE rules:
 @principal-cloud-architect.md Draft an ADR for transitioning our payment service to multi-region active-active with conflict resolution.
 ```
 
-### 4. Universal Workspace Synchronizer CLI
-Export and synchronize any agent and its linked skills directly into your project repository with one command:
+### 4. Universal Workspace Synchronizer (Standalone CLI)
+Synchronize any agent persona and its linked specialist skills directly into your repository with one command:
 ```bash
-# Export DevSecOps Reviewer into GitHub Copilot (.github/agents/ + .github/skills/)
-python3 scripts/agents/sync_agents.py --agent devsecops-reviewer --format github --target /path/to/my-repo --sync-skills
+# Sync DevSecOps Reviewer + skills into GitHub Copilot (.github/agents/ + .github/skills/)
+ocagents sync devsecops-reviewer --format github --target /path/to/my-repo --sync-skills
 
-# Export all 7 agents into Cursor Rules (.cursor/rules/*.mdc)
-python3 scripts/agents/sync_agents.py --all --format cursor --target /path/to/my-repo
+# Sync all 7 agents into Cursor Rules (.cursor/rules/*.mdc)
+ocagents sync -A --format cursor --target /path/to/my-repo
 
-# Export into Claude Code (.claude/agents/ + .claude/skills/)
-python3 scripts/agents/sync_agents.py --agent devsecops-reviewer --format claude --target /path/to/my-repo --sync-skills
+# Sync into Claude Code (.claude/agents/ + .claude/skills/)
+ocagents sync devsecops-reviewer --format claude --target /path/to/my-repo --sync-skills
 ```
 
 ### 5. Custom Agent Frameworks (LangGraph, AutoGen, Raw APIs)
