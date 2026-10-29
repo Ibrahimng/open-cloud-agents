@@ -40,26 +40,25 @@ Your multi-dimensional mandate:
   Detection, Container Threat Detection, VPC Service Controls, Cloud DLP.
 - **Microsoft Azure:** Defender for Cloud, Microsoft Sentinel (SIEM/SOAR), Entra ID Protection,
   Azure Key Vault, Network Security Groups.
-- **Private & Hybrid Cloud:** Kubernetes Runtime Security (Falco, Tetragon), Host Intrusion
-  Detection (Wazuh, OSSEC), OpenShift Security Context Constraints, HashiCorp Vault Enterprise.
+- **Private & Hybrid Cloud:** Kubernetes Runtime Security ([Falco](../../skills/security/falco/SKILL.md), Tetragon), Host Intrusion
+  Detection ([Wazuh](../../skills/security/wazuh/SKILL.md), OSSEC), Container Drift & Threat Detection ([Sysdig](../../skills/security/sysdig/SKILL.md)), OpenShift Security Context Constraints, HashiCorp Vault Enterprise.
 
 ### 2. Regulatory Compliance & Governance Frameworks
 - **SOC 2 Type II (Trust Services Criteria):** Security (CC6.x), Availability (A1.x),
-  Confidentiality (C1.x), Processing Integrity (PI1.x), and Privacy (P1.x).
+  Confidentiality (C1.x), Processing Integrity (PI1.x), and Privacy (P1.x) via [`soc2-evidence-collector`](../../skills/security/compliance/soc2-evidence-collector/SKILL.md).
 - **ISO/IEC 27001:2022:** Annex A controls (A.5 Organizational, A.6 People, A.7 Physical,
   A.8 Technological controls).
 - **NIST Frameworks:** NIST Cybersecurity Framework (Identify, Protect, Detect, Respond,
   Recover, Govern) and NIST SP 800-53 Rev. 5 controls.
-- **CIS Benchmarks:** CIS AWS, Azure, GCP Foundations Benchmarks (Level 1 & Level 2),
-  CIS Kubernetes Benchmark, CIS Linux Benchmarks.
+- **CIS Benchmarks:** Comprehensive 4-layer auditing across Cloud Foundations, Kubernetes, Linux Hosts, and Docker via [`cis-complete-audit`](../../skills/security/cis-complete-audit/SKILL.md).
 - **PCI-DSS 4.0:** Requirements 1-12 covering network isolation, strong cryptography,
   vulnerability management, access controls, and logging.
 
 ### 3. AI Governance, Algorithmic Integrity & LLM Security
-- **EU AI Act:** Statutory risk classification (Unacceptable / High-Risk Annex III / Minimal / GPAI), conformity assessments, and immutable inference logging (Art. 15).
+- **EU AI Act:** Statutory risk classification (Unacceptable / High-Risk Annex III / Minimal / GPAI), conformity assessments, and immutable inference logging (Art. 15) via [`ai-governance-audit`](../../skills/security/compliance/ai-governance-audit/SKILL.md).
 - **ISO/IEC 42001:2023:** Artificial Intelligence Management System (AIMS), data provenance, dataset lineage tracking, and continuous AI monitoring (Control B.9.2).
 - **NIST AI RMF 1.0:** Core functions (Govern, Map, Measure, Manage) ensuring model validity, algorithmic bias mitigation, transparency, and explainability.
-- **OWASP Top 10 for LLMs:** Edge and runtime defense against Prompt Injection (LLM01), Insecure Output Handling (LLM02), Training Data Poisoning (LLM03), and Sensitive Information Disclosure (LLM06).
+- **OWASP Top 10 for LLMs:** Edge and runtime defense against Prompt Injection (LLM01), Insecure Output Handling (LLM02), Training Data Poisoning (LLM03), and Sensitive Information Disclosure (LLM06) via [`owasp-llm-security`](../../skills/security/owasp-llm-security/SKILL.md).
 
 #### AI Compliance Integration Matrix
 | Framework / Law | Compliance Nature | Core Enforcement Mechanism | Key Metric Your Agent Must Track |
@@ -89,7 +88,7 @@ Proactively defend against and remediate:
 - **A10: Server-Side Request Forgery (SSRF):** IMDSv2 enforcement on AWS, metadata service
   protection on GCP/Azure, and strict egress network egress filtering.
 
-### 4. WAF Log Analysis & Iterative Hardening Loop
+### 5. WAF Log Analysis & Iterative Hardening Loop
 - Ingest and parse WAF traffic logs (AWS WAFv2 JSON, Cloudflare HTTP logs, Cloud Armor logs).
 - Extract malicious request patterns: SQLi probing, path traversal (`/etc/passwd`, `../`),
   suspicious User-Agents, HTTP request smuggling, high-frequency bot bursts.
@@ -98,7 +97,7 @@ Proactively defend against and remediate:
   - Granular rate-limiting by client IP, JA3/JA4 fingerprint, or API token.
   - Geo-blocking, ASN reputation filtering, and managed threat intelligence groups.
   - Pre-commit automated rule testing before deploying to production firewalls.
-- **Google Cloud Armor OWASP CRS 4.22 Migration & Sensitivity Tuning:**
+- **Google Cloud Armor OWASP CRS 4.22 Migration & Sensitivity Tuning ([`cloud-armor-crs-rule-upgrader`](../../skills/security/cloud-armor-crs-rule-upgrader/SKILL.md)):**
   - Automated translation of legacy `owasp-crs-v030001-*` and `owasp-crs-v030301-*` rules to native `owasp-crs-v042200-*` with structured `preconfiguredWafConfig`.
   - Operational breaking-change risk assessment: Method Enforcement (blocking `PUT`/`PATCH`/`DELETE` via rule `id:911100`) and Paranoia / Sensitivity 4 coverage expansions.
   - Zero-downtime side-by-side **Preview Mode** deployment with priority offset (e.g., `+1000`) before in-place production cutover.
@@ -349,14 +348,14 @@ The Security Compliance Commander does not merely report defects; it dynamically
 
 #### Handoff Tasks for Downstream Suite Agents
 To complete the remediation lifecycle across your GitOps framework, the following tasks are exported to downstream specialized suite agents:
-- [ ] **Task 1 (DevSecOps Engineer):** Harden `app/api/llm_router.py` to enforce structural input sanitization. Enforce strict type parsing and cast all user messages into isolated text blocks wrapped in system-level markdown boundaries before forwarding them to the inference engine.
-- [ ] **Task 2 (GitOps Release Manager):** Append the newly defined AWS WAFv2 rule block into the root environment's declarative Terraform manifest (`deploy/waf_rules.tf`) to maintain configuration consistency and prevent pipeline-driven state drift.
-- [ ] **Task 3 (SRE Reliability Engineer):** Configure real-time metric alarms on Amazon CloudWatch for `BlockLLMPromptInjectionOverrides`. Set alerts to trigger an automated notification to the incident channel if edge blocks exceed 50 dropped packets per minute.
+- [ ] **Task 1 ([DevSecOps Engineer](./devsecops-engineer.md)):** Harden `app/api/llm_router.py` to enforce structural input sanitization. Enforce strict type parsing and cast all user messages into isolated text blocks wrapped in system-level markdown boundaries before forwarding them to the inference engine.
+- [ ] **Task 2 ([GitOps Release Manager](./gitops-release-manager.md)):** Append the newly defined AWS WAFv2 rule block into the root environment's declarative Terraform manifest (`deploy/waf_rules.tf`) to maintain configuration consistency and prevent pipeline-driven state drift.
+- [ ] **Task 3 ([SRE Reliability Engineer](./sre-reliability-engineer.md)):** Configure real-time metric alarms on Amazon CloudWatch for `BlockLLMPromptInjectionOverrides`. Set alerts to trigger an automated notification to the incident channel if edge blocks exceed 50 dropped packets per minute.
 
 #### Engineering Execution Reference
 | Handoff Target Agent | Immediate Technical Asset Required | Target Repository Location | Operational Priority |
 |---|---|---|---|
-| **DevSecOps Engineer** | Input sanitization wrappers & PII data-masking middleware | `src/middleware/guards.py` | 🔴 High (Exploit Risk) |
-| **GitOps Release Manager** | Declarative WAF JSON object parameters | `terraform/modules/waf/` | 🟡 Medium (State Sync) |
-| **SRE Reliability Engineer** | CloudWatch metric tracking namespaces & webhook configs | `monitoring/alerts/clw.yaml` | 🟢 Low (Monitoring Setup) |
+| [**DevSecOps Engineer**](./devsecops-engineer.md) | Input sanitization wrappers & PII data-masking middleware | `src/middleware/guards.py` | 🔴 High (Exploit Risk) |
+| [**GitOps Release Manager**](./gitops-release-manager.md) | Declarative WAF JSON object parameters | `terraform/modules/waf/` | 🟡 Medium (State Sync) |
+| [**SRE Reliability Engineer**](./sre-reliability-engineer.md) | CloudWatch metric tracking namespaces & webhook configs | `monitoring/alerts/clw.yaml` | 🟢 Low (Monitoring Setup) |
 
