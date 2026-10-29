@@ -354,6 +354,239 @@ def cmd_update(asset_root: Path):
         return 1
 
 
+def cmd_version():
+    """Display CLI and framework version with architectural details."""
+    print(f"\n☁️  \033[1mOpen Cloud Agents CLI (ocagents)\033[0m v{__version__}")
+    print("   AI-Powered Cloud Architecture & Security Review Framework")
+    print("   ─────────────────────────────────────────────────────────")
+    print("   • Master Suite:       7 Specialist Personas (Aligned to Well-Architected)")
+    print("   • Skills Ecosystem:   377+ 3-Tier Enterprise Runbooks")
+    print("   • License:            Apache 2.0 (Open Source)")
+    print("   • Canonical Catalog:  https://github.com/Ibrahimng/open-cloud-agents")
+    print("   • Documentation:      https://ibrahimng.github.io/open-cloud-agents/")
+    print("   • Founding Architect: Ibrahim Jimoh (https://www.linkedin.com/in/ijimoh)\n")
+    return 0
+
+
+def cmd_help(subcommand: str | None = None) -> int:
+    """Render comprehensive, beautifully formatted command guides with real-world examples."""
+    sub = (subcommand or "").lower().strip()
+
+    if sub in ("list", "ls", "agents"):
+        print("""
+☁️  \033[1mocagents list\033[0m: Master Suite Agent & Skills Registry
+
+\033[1mDESCRIPTION:\033[0m
+  Inspect all 7 specialist agents in the Master Suite, their operational mandates,
+  declared tool boundaries (read, search, edit, execute, web), and linked skills.
+
+\033[1mUSAGE:\033[0m
+  ocagents list
+  ocagents ls
+  ocagents -agents list
+  ocagents -a ls
+
+\033[1mEXAMPLES:\033[0m
+  # Standard list of all agents and their linked specialist skills
+  ocagents list
+
+  # Quick shorthand invocation
+  ocagents -a ls
+
+  # Compatible flag syntax
+  ocagents -agents list
+""")
+        return 0
+
+    if sub == "sync":
+        print("""
+☁️  \033[1mocagents sync\033[0m: Universal Workspace Synchronizer
+
+\033[1mDESCRIPTION:\033[0m
+  Exports and synchronizes Open Cloud Agents specialist personas and 3-tier skills
+  directly into your target repository workspace for GitHub Copilot, Claude Code,
+  Cursor, Gemini, or raw custom agent orchestrators.
+
+\033[1mUSAGE:\033[0m
+  ocagents sync [AGENT_SLUG] [options]
+  ocagents -A -format <FORMAT> --target <DIR>
+
+\033[1mTARGET FORMATS (-f, -format, --format):\033[0m
+  • github   Synchronizes to .github/agents/ and .github/skills/ (GitHub Copilot / VS Code)
+  • claude   Synchronizes to .claude/agents/ and .claude/skills/ (Claude Code)
+  • cursor   Converts to Cursor Rules (.cursor/rules/*.mdc) and .cursor/agents/
+  • gemini   Synchronizes to .gemini/agents/ and .gemini/skills/ (Antigravity IDE / Gemini)
+  • raw      Synchronizes directly to agents/ and skills/ in target directory
+
+\033[1mOPTIONS:\033[0m
+  -A, --all              Sync all 7 Master Suite agents at once
+  -f, --format FORMAT    Target format: github, claude, cursor, gemini, raw (default: github)
+  -t, --target DIR       Target repository path (default: current directory '.')
+  -s, --sync-skills      Also synchronize all specialist execution skills linked to agent
+  --symlink              Create relative symlinks instead of copying full files
+  --dry-run              Preview planned file creations without writing changes to disk
+
+\033[1mREAL-WORLD EXAMPLES:\033[0m
+  # 1. Sync all 7 agents for GitHub Copilot (.github/agents/):
+  ocagents -A -format github --target /path/to/my-repo
+
+  # 2. Sync DevSecOps Reviewer + its 9 declared skills for Claude Code:
+  ocagents sync devsecops-reviewer --format claude --target . --sync-skills
+
+  # 3. Export all 7 agents into Cursor Rules (.cursor/rules/*.mdc):
+  ocagents sync -A --format cursor --target /path/to/my-repo
+
+  # 4. Dry-run preview: see what files would be created without touching disk:
+  ocagents sync -A --format github --target . --dry-run
+
+  # 5. Fast development: symlink agents directly to local catalog:
+  ocagents sync -A --format claude --target . --symlink
+""")
+        return 0
+
+    if sub in ("validate", "check"):
+        print("""
+☁️  \033[1mocagents validate\033[0m: Agent Contract & Repository Hygiene Validation
+
+\033[1mDESCRIPTION:\033[0m
+  Executes comprehensive multi-layer automated validation across all agent specifications,
+  skill frontmatter, security guardrails, and repository hygiene invariants.
+
+\033[1mVALIDATION SUITE PHASES:\033[0m
+  1. Agent Spec & Boundaries:  YAML frontmatter, tool boundaries, system prompt token budgets.
+  2. Enterprise Skills Audit:  YAML frontmatter compliance on all 377+ SKILL.md runbooks.
+  3. Zero-Trust Security:      Scans for leaked local developer paths (/Users/<username>/).
+  4. Repository Hygiene:       Checks executable script bits (+x), internal Markdown link integrity,
+                               and scans for Trojan Source invisible unicode confusables.
+
+\033[1mUSAGE:\033[0m
+  ocagents validate
+  ocagents check
+
+\033[1mEXAMPLES:\033[0m
+  # Run full automated validation suite:
+  ocagents validate
+""")
+        return 0
+
+    if sub in ("run", "simulate"):
+        print("""
+☁️  \033[1mocagents run\033[0m: Autonomous Multi-Agent Pipeline Simulator
+
+\033[1mDESCRIPTION:\033[0m
+  Simulates a real-world architectural design, review, and incident triage task
+  through the 7-Agent Master Suite pipeline, exercising the handoff contracts between:
+  1. Principal Cloud Architect ➔ 2. Security Compliance Commander ➔ 3. DevSecOps Reviewer ➔
+  4. DevSecOps Engineer ➔ 5. SRE Reliability Engineer ➔ 6. FinOps Cost Optimizer ➔
+  7. GitOps Release Manager.
+
+\033[1mUSAGE:\033[0m
+  ocagents run [TASK_DESCRIPTION]
+  ocagents run --task "TASK_DESCRIPTION"
+
+\033[1mEXAMPLES:\033[0m
+  # Multi-region payment disaster recovery simulation:
+  ocagents run --task "Architect multi-region payment DR failover with Aurora Global Database"
+
+  # Zero-trust Kubernetes ingress audit simulation:
+  ocagents run "Design zero-trust Kubernetes ingress with Cilium eBPF and Cloud Armor WAF"
+""")
+        return 0
+
+    if sub in ("update", "upgrade"):
+        print("""
+☁️  \033[1mocagents update\033[0m: Catalog Synchronization & Update Channeling
+
+\033[1mDESCRIPTION:\033[0m
+  Pulls the latest canonical Open Cloud Agents catalog (agents, skills, rules)
+  directly from GitHub into your local installation directory (~/.open-cloud-agents).
+
+\033[1mUSAGE:\033[0m
+  ocagents update
+  ocagents upgrade
+
+\033[1mSTREAMLINED UPDATE CHANNELS BY PLATFORM:\033[0m
+  • Catalog Auto-Sync (Fastest):
+      ocagents update
+
+  • macOS & Linux (Homebrew):
+      brew update && brew upgrade ocagents
+
+  • Python / pipx (Universal):
+      pipx upgrade open-cloud-agents
+
+  • Windows (Winget):
+      winget upgrade Ibrahimng.OpenCloudAgents
+
+  • Windows (Chocolatey):
+      choco upgrade ocagents
+
+  • Debian / Ubuntu (APT):
+      sudo apt update && sudo apt install --only-upgrade ocagents
+
+  • Alpine Linux (APK):
+      apk update && apk upgrade ocagents
+
+  • One-Liner Re-Run (macOS/Linux):
+      curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash
+""")
+        return 0
+
+    if sub in ("info", "status", "env"):
+        print("""
+☁️  \033[1mocagents info\033[0m: Environment, Asset Catalog & Runtime Status
+
+\033[1mDESCRIPTION:\033[0m
+  Displays the active installation directory, resolved agent/skill catalog paths,
+  detected Python runtime environment, and number of registered active agents.
+
+\033[1mUSAGE:\033[0m
+  ocagents info
+
+\033[1mEXAMPLES:\033[0m
+  ocagents info
+""")
+        return 0
+
+    # Default Top-Level Help Guide
+    print(f"""
+☁️  \033[1mOpen Cloud Agents CLI (ocagents)\033[0m v{__version__}
+AI-Powered Cloud Architecture & Security Review Framework
+
+\033[1mUSAGE:\033[0m
+  ocagents <subcommand> [options]
+  oca <subcommand> [options]
+
+\033[1mCORE SUBCOMMANDS:\033[0m
+  \033[1mlist, ls\033[0m           List all 7 master suite specialist agents and linked skills
+  \033[1msync\033[0m               Synchronize agents & skills into your repository workspace
+  \033[1mvalidate, check\033[0m    Run complete spec validation, rule verification & repo hygiene
+  \033[1mrun\033[0m                Simulate multi-agent design & review pipeline on a prompt
+  \033[1minfo\033[0m               Display local asset catalog path, registered agents & runtime
+  \033[1mupdate, upgrade\033[0m    Pull latest canonical agent & skill updates from GitHub
+  \033[1mversion, -v\033[0m        Display CLI and agent framework version details
+  \033[1mhelp, -h\033[0m           Show this command guide or detailed help on a subcommand
+
+\033[1mQUICK-START SHORTCUTS:\033[0m
+  \033[36mocagents -agents list\033[0m                     List all agents & declared skills
+  \033[36mocagents -a ls\033[0m                            Short alias to list registered agents
+  \033[36mocagents -A -format github --target .\033[0m     Sync all 7 agents for GitHub Copilot
+  \033[36mocagents sync devsecops-reviewer -s\033[0m       Sync reviewer + 9 skills for Claude Code
+  \033[36mocagents sync -A -f cursor --target .\033[0m     Sync all agents as Cursor Rules (.mdc)
+  \033[36mocagents validate\033[0m                         Validate all agent specs & contracts
+  \033[36mocagents update\033[0m                           Pull latest canonical agents catalog
+
+\033[1mDETAILED SUBCOMMAND GUIDES:\033[0m
+  Run \033[1mocagents help <subcommand>\033[0m or \033[1mocagents <subcommand> --help\033[0m for deep-dive examples:
+    • \033[34mocagents help sync\033[0m       Workspace sync guides for Copilot, Claude, Cursor, Gemini
+    • \033[34mocagents help list\033[0m       Registry listing and inspection options
+    • \033[34mocagents help validate\033[0m   Validation, CIS audit and hygiene test options
+    • \033[34mocagents help run\033[0m        Multi-agent pipeline simulation guides
+    • \033[34mocagents help update\033[0m     Cross-platform package update channeling workflows
+""")
+    return 0
+
+
 def normalize_custom_args(argv: list[str]) -> list[str]:
     """Translates user-friendly short flags like -agents, -format, -target into standard flags."""
     normalized = []
@@ -364,6 +597,10 @@ def normalize_custom_args(argv: list[str]) -> list[str]:
             normalized.append("--format")
         elif arg in ("-target", "--target"):
             normalized.append("--target")
+        elif arg in ("-version", "--version"):
+            normalized.append("--version")
+        elif arg in ("-help", "--help"):
+            normalized.append("--help")
         elif arg == "-agents":
             normalized.append("agents")
         elif arg == "ls":
@@ -377,7 +614,25 @@ def normalize_custom_args(argv: list[str]) -> list[str]:
 def main():
     raw_args = sys.argv[1:]
 
-    # Handle quick top-level invocations matching user request:
+    # 1. Version queries: -v, -version, --version, version
+    if len(raw_args) == 1 and raw_args[0] in ("-v", "-version", "--version", "version"):
+        sys.exit(cmd_version())
+
+    # 2. Top-level Help queries: -h, -help, --help, help
+    if not raw_args or (len(raw_args) == 1 and raw_args[0] in ("-h", "-help", "--help", "help")):
+        sys.exit(cmd_help(None))
+
+    # 3. Subcommand Help queries: e.g. ocagents help sync, ocagents sync -h, ocagents sync -help
+    if raw_args[0] in ("help", "-h", "-help", "--help") and len(raw_args) >= 2:
+        sys.exit(cmd_help(raw_args[1]))
+
+    KNOWN_SUBCOMMANDS = ("list", "ls", "sync", "validate", "check", "run", "simulate", "info", "status", "env", "update", "upgrade")
+    if raw_args[0] in KNOWN_SUBCOMMANDS:
+        for arg in raw_args[1:]:
+            if arg in ("-h", "-help", "--help", "help"):
+                sys.exit(cmd_help(raw_args[0]))
+
+    # 4. Handle quick top-level invocations matching user request:
     # e.g.: ocagents -agents list, ocagents -a ls, ocagents agents list
     if len(raw_args) >= 1 and raw_args[0] in ("-agents", "agents", "-a") and len(raw_args) >= 2 and raw_args[1] in ("list", "ls"):
         raw_args = ["list"]
@@ -385,7 +640,7 @@ def main():
         if len(raw_args) == 1 and raw_args[0] in ("ls", "list"):
             raw_args = ["list"]
 
-    # Handle shortcut: ocagents -A -format github --target /path
+    # 5. Handle shortcut: ocagents -A -format github --target /path
     if len(raw_args) >= 1 and raw_args[0] == "-A":
         raw_args = ["sync", "--all"] + raw_args[1:]
 
@@ -394,8 +649,10 @@ def main():
     parser = argparse.ArgumentParser(
         prog="ocagents",
         description="Open Cloud Agents: Universal CLI for Cloud Architecture & Security Review Agents.",
+        add_help=False,  # Custom rich help handler
     )
-    parser.add_argument("-v", "--version", action="version", version=f"ocagents v{__version__}")
+    parser.add_argument("-v", "--version", action="store_true", help="Show version details")
+    parser.add_argument("-h", "--help", action="store_true", help="Show help guide")
 
     subparsers = parser.add_subparsers(dest="subcommand", help="Available subcommands")
 
@@ -417,21 +674,33 @@ def main():
     subparsers.add_parser("validate", aliases=["check"], help="Validate agent specs, tools, and repo hygiene")
 
     # run
-    p_run = subparsers.add_parser("run", help="Run multi-agent pipeline simulation on an architectural task")
+    p_run = subparsers.add_parser("run", aliases=["simulate"], help="Run multi-agent pipeline simulation on an architectural task")
     p_run.add_argument("task", nargs="?", default="Architect multi-region payment DR failover with Aurora Global Database")
     p_run.add_argument("--task", dest="task_opt", help="Task prompt string")
 
     # info
-    subparsers.add_parser("info", help="Show environment, asset path, and CLI version")
+    subparsers.add_parser("info", aliases=["status", "env"], help="Show environment, asset path, and CLI version")
 
     # update
-    subparsers.add_parser("update", help="Update the canonical agents catalog in ~/.open-cloud-agents")
+    subparsers.add_parser("update", aliases=["upgrade"], help="Update the canonical agents catalog in ~/.open-cloud-agents")
 
-    if not normalized_args:
-        parser.print_help()
-        sys.exit(0)
+    # help
+    p_help = subparsers.add_parser("help", help="Show detailed command guides")
+    p_help.add_argument("topic", nargs="?", help="Subcommand topic to explain")
 
-    parsed = parser.parse_args(normalized_args)
+    # version
+    subparsers.add_parser("version", help="Show version details")
+
+    try:
+        parsed, unknown = parser.parse_known_args(normalized_args)
+    except Exception:
+        sys.exit(cmd_help(None))
+
+    if parsed.version:
+        sys.exit(cmd_version())
+    if parsed.help or not parsed.subcommand:
+        sys.exit(cmd_help(None))
+
     asset_root = resolve_asset_root()
 
     if parsed.subcommand in ("list", "ls"):
@@ -442,16 +711,20 @@ def main():
         sys.exit(cmd_sync(parsed, asset_root))
     elif parsed.subcommand in ("validate", "check"):
         sys.exit(cmd_validate(asset_root))
-    elif parsed.subcommand == "run":
+    elif parsed.subcommand in ("run", "simulate"):
         if getattr(parsed, "task_opt", None):
             parsed.task = parsed.task_opt
         sys.exit(cmd_run(parsed, asset_root))
-    elif parsed.subcommand == "info":
+    elif parsed.subcommand in ("info", "status", "env"):
         sys.exit(cmd_info(asset_root))
-    elif parsed.subcommand == "update":
+    elif parsed.subcommand in ("update", "upgrade"):
         sys.exit(cmd_update(asset_root))
+    elif parsed.subcommand == "help":
+        sys.exit(cmd_help(getattr(parsed, "topic", None)))
+    elif parsed.subcommand == "version":
+        sys.exit(cmd_version())
     else:
-        parser.print_help()
+        sys.exit(cmd_help(None))
 
 
 if __name__ == "__main__":

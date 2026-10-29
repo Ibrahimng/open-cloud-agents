@@ -26,3 +26,4 @@ EOF
     chmod +x "$pkgdir/usr/bin/ocagents"
     ln -s /usr/bin/ocagents "$pkgdir/usr/bin/oca"
 }
+

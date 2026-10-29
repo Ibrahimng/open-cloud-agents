@@ -18,3 +18,4 @@ if exist "%~dp0..\src\ocagents\cli.py" (
 
 python "%OCAGENTS_CLI%" %*
 exit /b %ERRORLEVEL%
+

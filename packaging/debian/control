@@ -12,3 +12,4 @@ Depends: ${misc:Depends}, python3, git
 Description: Universal CLI and specialist agents for Cloud Architecture and DevSecOps
  Open Cloud Agents is a local-first, bring-your-own-LLM framework for safer cloud
  engineering, architecture review, security compliance, SRE, and FinOps.
+

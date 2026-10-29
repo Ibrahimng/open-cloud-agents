@@ -32,3 +32,4 @@ class Ocagents < Formula
     system "#{bin}/ocagents", "list"
   end
 end
+

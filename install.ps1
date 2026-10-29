@@ -109,3 +109,4 @@ Write-Host "  • Update agent catalog:     ocagents update" -ForegroundColor Cy
 Write-Host ""
 Write-Host "Restart your terminal or run: `$env:Path = [System.Environment]::GetEnvironmentVariable('Path','User') + ';' + [System.Environment]::GetEnvironmentVariable('Path','Machine')" -ForegroundColor Yellow
 Write-Host ""
+

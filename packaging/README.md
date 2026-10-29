@@ -20,6 +20,8 @@ This directory contains standalone packaging specifications and distribution met
 
 ## 🚀 Releasing New Versions
 
+For the complete architectural design of our two-tier update system and automated CI/CD release channels, refer to [**Package Distribution & Streamlined Update Channels**](../docs/package-distribution-and-updates.md).
+
 1. Update version number across:
    - `src/ocagents/__init__.py`
    - `src/ocagents/cli.py`
@@ -36,3 +38,4 @@ This directory contains standalone packaging specifications and distribution met
    ```bash
    python3 scripts/docs/prepare_docs.py
    ```
+

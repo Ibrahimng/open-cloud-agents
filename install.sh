@@ -162,3 +162,4 @@ if [ "$PATH_CONFIGURED" = false ]; then
     fi
     printf "\n"
 fi
+
