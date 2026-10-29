@@ -3,7 +3,7 @@ class Ocagents < Formula
   desc "Universal CLI & specialist agents for Cloud Architecture, DevSecOps, SRE, and FinOps"
   homepage "https://open-cloud-agents.github.io/ocagents/"
   url "https://github.com/open-cloud-agents/ocagents/archive/refs/tags/v1.3.0.tar.gz"
-  sha256 "2445b333f84d1bffcb8006723000b9ac44af2559230bb9c2308061b379cf5940"
+  sha256 "7878b85cb6cbe642a21f787601e03d723a5994d04bcf5687714f6d0da474c3a1"
   license "Apache-2.0"
   head "https://github.com/open-cloud-agents/ocagents.git", branch: "main"
 
