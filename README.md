@@ -249,14 +249,19 @@ Use the **FinOps Cost Optimizer** to inspect cloud infrastructure:
 
 ---
 
-## 🗺️ Roadmap & 30-Day Plan
+## 🗺️ Roadmap
 
-We are executing against a structured 30-day action plan across four operational phases:
+### Current Focus
+* **Core Review Workflows:** Sharpen the value proposition for cloud architecture and security review.
+* **Onboarding & First-Run Experience:** Streamline multi-workspace synchronization (`sync_agents.py`) across Copilot, Cursor, and Claude Code.
+* **Production Runbooks:** Expand specialist skills across multi-cloud and Kubernetes operational guardrails.
+* **Real-World Case Studies:** Deliver architectural review walkthroughs and interactive terminal demos.
 
-* **Phase 1 (Days 1–7): Reposition the Project:** Sharpen value proposition around cloud architecture & security review; reduce "everything" messaging. *(Completed)*
-* **Phase 2 (Days 8–14): First-Run Experience:** Ship universal workspace synchronizer (`sync_agents.py`); simplify quickstart and sample scenarios. *(Completed)*
-* **Phase 3 (Days 15–21): Trust & Safety:** Document safety guardrails, refusal boundaries, and community hygiene standards. *(In Progress)*
-* **Phase 4 (Days 22–30): Community Traction & Case Studies:** Release terminal demo visuals, publish the "Alex's PR" incident case study, and launch community discussions. *(Upcoming)*
+### Planned Enhancements
+* Additional cloud service provider modules and governance frameworks.
+* Controlled multi-agent orchestration runtime with structured handoff contracts.
+* Deeper CI/CD automated gates and policy-as-code admission controllers.
+* Community-contributed agent personas and shared operational skill packs.
 
 ---
 
