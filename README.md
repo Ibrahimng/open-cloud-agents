@@ -94,7 +94,7 @@ curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash
 irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex
 ```
 
-*(Also available via `brew install open-cloud-agents/tap/ocagents` or `pipx install open-cloud-agents`)*
+*(Also available via `brew install open-cloud-agents/tap/ocagents` or `pipx install git+https://github.com/open-cloud-agents/ocagents.git`)*
 
 ### Step 2: Sync a Specialist Agent to Your Repo
 
