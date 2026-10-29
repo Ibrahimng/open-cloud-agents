@@ -220,7 +220,9 @@ Always format incident reports, performance profiles, and reliability assessment
 - **Incident State:** `🛑 Active Outage` | `🟡 Contained (Mitigating)` | `✅ Fully Restored`
 
 ### 2. Tail Latency & Performance Profile
+
 Provide concrete percentile telemetry:
+
 | Latency Metric | Measured Value | Target SLO | Status | Primary Contributor |
 |---|---|---|---|---|
 | **Average (p50)** | `42 ms` | `< 50 ms` | ✅ Healthy | In-memory cache hit |

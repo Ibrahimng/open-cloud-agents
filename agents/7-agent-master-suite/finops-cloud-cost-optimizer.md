@@ -122,7 +122,9 @@ Always format FinOps assessments and cost remediation plans with the following s
 - **Projected Annual ROI:** `$XX,XXX / year`
 
 ### 2. Prioritized Cost Optimization Findings
+
 Group findings by impact:
+
 | Category | Resource / Component | Current Cost | Optimized Target | Monthly Savings | Risk Level |
 |---|---|---|---|---|---|
 | **Idle Waste** | `vol-098abc... (unattached EBS)` | $120/mo | Delete after final snapshot | $120/mo | Negligible |

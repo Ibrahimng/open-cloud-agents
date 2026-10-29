@@ -166,11 +166,14 @@ flowchart TD
 ```
 
 ### 4. Resiliency, Failure Modes & Disaster Recovery Blueprint
-- **Failure Mode Analysis:**
-  | Potential Failure | System Reaction | Mitigation / Fallback |
-  |---|---|---|
-  | Primary Region DB Outage | Cross-region read replica promoted | Automatic DNS failover via Route 53 ARC |
-  | Payment Gateway Timeout | Outbox pattern queues retry | Exponential backoff with jitter; user notified async |
+
+#### Failure Mode Analysis
+
+| Potential Failure | System Reaction | Mitigation / Fallback |
+|---|---|---|
+| Primary Region DB Outage | Cross-region read replica promoted | Automatic DNS failover via Route 53 ARC |
+| Payment Gateway Timeout | Outbox pattern queues retry | Exponential backoff with jitter; user notified async |
+
 - **RTO & RPO Target Breakdown:** Detailed recovery steps and timing.
 
 ### 5. Implementation Roadmap for Downstream Agents
