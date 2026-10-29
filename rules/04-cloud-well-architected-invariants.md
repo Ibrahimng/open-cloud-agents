@@ -20,8 +20,8 @@ Every architectural recommendation and infrastructure configuration must adhere 
 
 ### 2. Security & Compliance (Pillar 2)
 - **Encryption by Default:**
-  - *At Rest:* Customer-managed or cloud-managed KMS keys (AES-256) on all disks, tables, and buckets.
-  - *In Transit:* TLS 1.3 mandated across all public and internal service-to-service endpoints.
+    - *At Rest:* Customer-managed or cloud-managed KMS keys (AES-256) on all disks, tables, and buckets.
+    - *In Transit:* TLS 1.3 mandated across all public and internal service-to-service endpoints.
 - **Least-Privilege Access:** IAM policies must be resource-scoped and action-scoped. Never use wildcard `*` permissions in production IAM policies.
 - **Network Isolation:** Workloads must run in private subnets with egress via NAT Gateways / Cloud NAT and private connectivity via VPC Endpoints / Private Service Connect.
 

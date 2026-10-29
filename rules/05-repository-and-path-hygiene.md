@@ -17,8 +17,8 @@ Open Cloud Agents is an open-source, collaborative project designed to run porta
 - Under no circumstances may an agent or contributor commit paths containing `/Users/<username>/` (macOS) or `/home/<username>/` (Linux).
 - All file references must be relative to the repository root or current file location.
 - Example:
-  - ❌ `file:///Users/<username>/projects/...`
-  - ✅ `../skills/devops/kubernetes/k8s-pod-troubleshooting/SKILL.md`
+    - ❌ `file:///Users/<username>/projects/...`
+    - ✅ `../skills/devops/kubernetes/k8s-pod-troubleshooting/SKILL.md`
 
 ### 2. Relative Markdown Links
 - Every link to another document, agent persona, skill, or script must use standard relative Markdown links (e.g. `[Link Text](../path/to/target.md)`).
