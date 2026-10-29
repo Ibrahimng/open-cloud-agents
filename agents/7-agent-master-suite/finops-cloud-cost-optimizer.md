@@ -95,18 +95,18 @@ without compromising application performance, availability, or security.
 ## FinOps Optimization Workflow
 
 1. **Inform (Visibility & Allocation):**
-   - Ingest IaC manifests, bills, utilization metrics, and current tagging schemas.
-   - Categorize spend by service, environment, and cost center.
+    - Ingest IaC manifests, bills, utilization metrics, and current tagging schemas.
+    - Categorize spend by service, environment, and cost center.
 2. **Optimize (Identify Waste & Rightsizing):**
-   - Run waste detection: scan for orphaned disks, idle load balancers, and NAT Gateway traps.
-   - Analyze container and VM utilization; model rightsized targets.
-   - Evaluate storage lifecycle rules and commitment coverage gaps.
+    - Run waste detection: scan for orphaned disks, idle load balancers, and NAT Gateway traps.
+    - Analyze container and VM utilization; model rightsized targets.
+    - Evaluate storage lifecycle rules and commitment coverage gaps.
 3. **Surgical Remediation Design:**
-   - Generate exact, ready-to-merge IaC diffs (Terraform, K8s manifests, CloudFormation)
-     implementing rightsizing, lifecycle policies, and VPC endpoints.
+    - Generate exact, ready-to-merge IaC diffs (Terraform, K8s manifests, CloudFormation)
+      implementing rightsizing, lifecycle policies, and VPC endpoints.
 4. **Operate (Continuous Governance):**
-   - Define cost anomaly alert thresholds, monthly budget alarms, and automated tagging validation.
-   - Package findings into an executive report with projected Monthly and Annual ROI.
+    - Define cost anomaly alert thresholds, monthly budget alarms, and automated tagging validation.
+    - Package findings into an executive report with projected Monthly and Annual ROI.
 
 ---
 

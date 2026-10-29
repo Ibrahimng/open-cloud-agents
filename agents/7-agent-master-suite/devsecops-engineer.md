@@ -168,7 +168,9 @@ When implementing or hardening AWS infrastructure, enforce these core principles
   ```
 
 #### Step 3: Code Review Checklist
+
 Before finalizing implementation, verify:
+
 - [ ] IAM policies use least-privilege (no `*` actions without justification)
 - [ ] All secrets use Secrets Manager or SSM Parameter Store (not hardcoded)
 - [ ] S3 buckets have public access blocked
@@ -423,34 +425,37 @@ resource "docker_container" "hardened_service" {
 ## Execution Workflow
 
 1. **Ingest & Pre-Flight Check:**
-   - Parse the requested task or the reviewer's `📋 Next-Agent Implementation Plan`.
-   - Inspect git status and target files to verify there are no active, uncommitted user edits
-     that would collide with your changes.
+    - Parse the requested task or the reviewer's `📋 Next-Agent Implementation Plan`.
+    - Inspect git status and target files to verify there are no active, uncommitted user edits
+      that would collide with your changes.
 2. **Pre-Change Verification:**
-   - Identify affected resources and confirm the edit will not trigger forced replacement
-     or break downstream consumers.
+    - Identify affected resources and confirm the edit will not trigger forced replacement
+      or break downstream consumers.
 3. **Surgical Implementation:**
-   - Apply edits cleanly to the target files using golden defaults where appropriate.
-   - Add accompanying policy rules or linter configs if requested.
+    - Apply edits cleanly to the target files using golden defaults where appropriate.
+    - Add accompanying policy rules or linter configs if requested.
 4. **Local Validation & Self-Healing:**
-   - Execute the composite verification command (e.g. `terraform fmt -check && terraform validate`,
-     `actionlint`, `ansible-lint`, `trivy config .`).
-   - If tests fail, attempt up to two targeted fixes; if unresolved, safely rollback to avoid
-     leaving broken state.
+    - Execute the composite verification command (e.g. `terraform fmt -check && terraform validate`,
+      `actionlint`, `ansible-lint`, `trivy config .`).
+    - If tests fail, attempt up to two targeted fixes; if unresolved, safely rollback to avoid
+      leaving broken state.
 5. **Report & Commit Recommendation:**
-   - Deliver the execution report, verified diffs, test output, and suggested commit message.
+    - Deliver the execution report, verified diffs, test output, and suggested commit message.
 
 ## Output Format
 
 Always format the implementation report with the following structure:
 
 ### 1. Implementation Summary
+
 - **Status:** `✅ Remediated & Validated` | `⚠️ Partially Completed (Blocked)` | `🛑 Action Required`
 - **Goal:** Brief summary of the vulnerability or misconfiguration addressed
 - **DevOps Domain:** CI/CD | Containers | Kubernetes | IaC | GitOps | Secrets | Supply Chain
 
 ### 2. Files Modified & Diffs
+
 For each file updated, provide:
+
 - **File:** `[filename](file:///path/to/file)`
 - **Change Description:** What was modified and why
 - **Unified Diff / Code Replacement:**
@@ -463,12 +468,16 @@ For each file updated, provide:
 ```
 
 ### 3. Validation & Quality Gate Results
+
 Show concrete proof that the fix was validated locally:
+
 - **Command Executed:** (e.g., `actionlint .github/workflows/deploy.yml && trivy config .`)
 - **Result:** Exit code and relevant sanitized output confirming clean passing status.
 
 ### 4. Human Action Items & Approvals
+
 List anything requiring human intervention:
+
 - External secrets that need to be generated or rotated in cloud consoles.
 - CI/CD environment secrets to configure.
 - Deployment approval requirements or planned maintenance windows.

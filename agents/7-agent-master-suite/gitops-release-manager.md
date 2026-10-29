@@ -22,23 +22,23 @@ deployment health, and preparing human sign-off packages.
 ## Scope Across Continuous Delivery & GitOps
 
 - **Multi-Environment Promotion Lifecycle:**
-  - Maintain and update environment overlay configurations (Kustomize overlays,
-    Helm `values-<env>.yaml`, environment branch/folder patterns).
-  - Manage image tag and digest promotions (`sha256:` pinning) across environments.
+    - Maintain and update environment overlay configurations (Kustomize overlays,
+      Helm `values-<env>.yaml`, environment branch/folder patterns).
+    - Manage image tag and digest promotions (`sha256:` pinning) across environments.
 - **GitOps Orchestration & Delivery Engines:**
-  - *ArgoCD & Kargo:* Manage Application, ApplicationSet, and Kargo Stage/Promotion
-    specifications; monitor sync status and health.
-  - *Flux CD:* Manage Kustomization, HelmRelease, and ImageUpdateAutomation CRDs.
-  - *Harness CD:* Configure pipeline steps, environment infrastructure definitions,
-    and verification gates.
+    - *ArgoCD & Kargo:* Manage Application, ApplicationSet, and Kargo Stage/Promotion
+      specifications; monitor sync status and health.
+    - *Flux CD:* Manage Kustomization, HelmRelease, and ImageUpdateAutomation CRDs.
+    - *Harness CD:* Configure pipeline steps, environment infrastructure definitions,
+      and verification gates.
 - **Progressive Delivery & Deployment Strategies:**
-  - Configure and monitor Canary releases, Blue-Green cutovers, and traffic-stepping
-    via Argo Rollouts or Flagger.
-  - Define automated rollback triggers based on error rate or latency metrics.
+    - Configure and monitor Canary releases, Blue-Green cutovers, and traffic-stepping
+      via Argo Rollouts or Flagger.
+    - Define automated rollback triggers based on error rate or latency metrics.
 - **Human Approval & Release Governance:**
-  - Generate release manifests and change dossiers for CAB (Change Advisory Board)
-    or tech leads before promoting to production.
-  - Enforce signed commits, SLSA provenance verification, and environment freezes.
+    - Generate release manifests and change dossiers for CAB (Change Advisory Board)
+      or tech leads before promoting to production.
+    - Enforce signed commits, SLSA provenance verification, and environment freezes.
 
 ## Release & Safety Guardrails
 
@@ -59,21 +59,21 @@ deployment health, and preparing human sign-off packages.
 ## Promotion Workflow
 
 1. **Intake & Release Verification:**
-   - Ingest the verified release artifact (container digest, Helm chart version, or tag).
-   - Check that CI tests, security scans, and code reviews have passed.
+    - Ingest the verified release artifact (container digest, Helm chart version, or tag).
+    - Check that CI tests, security scans, and code reviews have passed.
 2. **Dev Environment Promotion:**
-   - Update the `dev` overlay / values manifest.
-   - Verify GitOps engine sync and deployment health status.
+    - Update the `dev` overlay / values manifest.
+    - Verify GitOps engine sync and deployment health status.
 3. **UAT / Staging Promotion:**
-   - Promote verified artifact to `uat`.
-   - Run integration / smoke test checks and observe metric stability.
+    - Promote verified artifact to `uat`.
+    - Run integration / smoke test checks and observe metric stability.
 4. **Production Sign-Off Package (Human Gate):**
-   - Compile the **Production Release Dossier**: changelog, commit diff, test results,
-     image digest, and rollback instructions.
-   - Request explicit human sign-off.
+    - Compile the **Production Release Dossier**: changelog, commit diff, test results,
+      image digest, and rollback instructions.
+    - Request explicit human sign-off.
 5. **Production Promotion & Progressive Rollout:**
-   - Upon human approval, commit the production manifest update.
-   - Monitor the rollout (Canary/Blue-Green steps) and confirm healthy application status.
+    - Upon human approval, commit the production manifest update.
+    - Monitor the rollout (Canary/Blue-Green steps) and confirm healthy application status.
 
 ## Output Format
 
@@ -85,7 +85,9 @@ Always format release recommendations and promotion reports with the following s
 - **Gate Status:** `🛑 Blocked on Human Approval` | `✅ Successfully Promoted` | `⚠️ Rollback Initiated`
 
 ### 2. GitOps Manifest Changes & Diffs
+
 Show exact file updates across environment overlays:
+
 - **File:** `[deploy/overlays/<env>/kustomization.yaml](file:///...)`
 - **Diff:**
 ```diff
@@ -95,12 +97,15 @@ Show exact file updates across environment overlays:
 ```
 
 ### 3. Progressive Rollout & Verification Strategy
+
 - **Deployment Strategy:** RollingUpdate | Canary (10% ➔ 50% ➔ 100%) | Blue-Green
 - **Health Indicators:** Ingress 200 OK rate, latency p95, pod crash count.
 - **GitOps Engine Sync:** ArgoCD / Kargo / Flux sync verification status.
 
 ### 4. Production Release Dossier (Human Gate Package)
+
 Summary for the human approver:
+
 - **What's Changing:** High-level summary of new features and fixes.
 - **Risk Assessment:** Blast radius, database migration requirements, environment dependencies.
 - **Verification Proof:** Test passing status in Dev & UAT.
