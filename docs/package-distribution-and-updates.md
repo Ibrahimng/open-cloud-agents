@@ -66,10 +66,10 @@ AI engineering evolves at two different velocities: **agent prompts/skills evolv
 When a new version tag (e.g. `v1.3.1`) is tagged and pushed to GitHub, an automated GitHub Actions release workflow handles cross-platform distribution:
 
 ### 1. Homebrew Tap (`Formula/ocagents.rb`)
-* **Repository:** `Ibrahimng/homebrew-tap`
+* **Repository:** `open-cloud-agents/homebrew-tap`
 * **Automated Action:** Triggers on `release`, downloads the release tarball, calculates SHA256, and commits the updated formula:
   ```bash
-  brew tap Ibrahimng/tap
+  brew tap open-cloud-agents/tap
   brew install ocagents
   # Later:
   brew upgrade ocagents

@@ -3,7 +3,7 @@ class Ocagents < Formula
   desc "Universal CLI & specialist agents for Cloud Architecture, DevSecOps, SRE, and FinOps"
   homepage "https://ibrahimng.github.io/open-cloud-agents/"
   url "https://github.com/Ibrahimng/open-cloud-agents/archive/refs/tags/v1.3.0.tar.gz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000" # Updated on release tagging
+  sha256 "326dc358c36dd8a3d9ee51ad417b3b50476e38228e644fabfe1a239848bfdf5e"
   license "Apache-2.0"
   head "https://github.com/Ibrahimng/open-cloud-agents.git", branch: "main"
 
@@ -28,8 +28,7 @@ class Ocagents < Formula
   end
 
   test do
-    system "#{bin}/ocagents", "info"
-    system "#{bin}/ocagents", "list"
+    assert_match "Open Cloud Agents", shell_output("#{bin}/ocagents info")
+    assert_match "Principal Cloud Architect", shell_output("#{bin}/ocagents list")
   end
 end
-
