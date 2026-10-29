@@ -16,8 +16,15 @@ import os
 import re
 import sys
 import urllib.parse
+from pathlib import Path
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+IGNORED_DIR_NAMES = {".git", "ai_brain", "build_docs", "site", ".venv", "node_modules", "mock", "mocks"}
+
+def should_skip_dir(dirpath: str) -> bool:
+    parts = set(Path(dirpath).parts)
+    return bool(parts & IGNORED_DIR_NAMES)
 
 def log_pass(msg: str):
     print(f"  \033[92m✔\033[0m {msg}")
@@ -34,7 +41,7 @@ def check_skill_frontmatter() -> list[str]:
     errors = []
     count = 0
     for root, _, files in os.walk(REPO_ROOT):
-        if ".git" in root or "ai_brain" in root:
+        if should_skip_dir(root):
             continue
         for f in files:
             if f == "SKILL.md":
@@ -71,7 +78,7 @@ def check_script_permissions() -> list[str]:
     errors = []
     count = 0
     for root, _, files in os.walk(REPO_ROOT):
-        if ".git" in root or "ai_brain" in root:
+        if should_skip_dir(root):
             continue
         for f in files:
             if f.endswith(".sh"):
@@ -97,7 +104,7 @@ def check_markdown_links() -> list[str]:
 
     # We validate root docs, agents, docs, and core skills (excluding 3rd-party vendor dumps)
     for root, _, files in os.walk(REPO_ROOT):
-        if ".git" in root or "ai_brain" in root or "skills/csp" in root:
+        if should_skip_dir(root) or "skills/csp" in root:
             continue
         for f in files:
             if f.endswith(".md"):
@@ -143,7 +150,7 @@ def check_no_absolute_user_paths() -> list[str]:
     user_path_pattern = re.compile(r"/Users/[a-zA-Z0-9_\-]+/")
     count = 0
     for root, _, files in os.walk(REPO_ROOT):
-        if ".git" in root or "ai_brain" in root:
+        if should_skip_dir(root):
             continue
         for f in files:
             if f.endswith((".md", ".sh", ".yaml", ".yml", ".json")):
@@ -201,7 +208,7 @@ def check_character_hygiene() -> list[str]:
     count = 0
 
     for root, _, files in os.walk(REPO_ROOT):
-        if ".git" in root or "ai_brain" in root or "node_modules" in root:
+        if should_skip_dir(root):
             continue
         for f in files:
             if not f.endswith(all_exts):
