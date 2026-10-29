@@ -1,8 +1,8 @@
 # Open Cloud Agents: Windows Universal Installer (PowerShell)
-# https://ibrahimng.github.io/open-cloud-agents/
+# https://open-cloud-agents.github.io/ocagents/
 #
 # Usage:
-#   irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex
+#   irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex
 
 $ErrorActionPreference = "Stop"
 

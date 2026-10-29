@@ -33,7 +33,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 AGENTS_DIR = REPO_ROOT / "agents" / "7-agent-master-suite"
 SKILLS_DIR = REPO_ROOT / "skills"
 
-CANONICAL_DOCS_BASE = "https://ibrahimng.github.io/open-cloud-agents"
+CANONICAL_DOCS_BASE = "https://open-cloud-agents.github.io/ocagents"
 
 AVAILABLE_FORMATS = ["github", "claude", "cursor", "gemini", "raw"]
 

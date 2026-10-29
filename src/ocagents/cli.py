@@ -363,7 +363,7 @@ def cmd_version():
     print("   • Skills Ecosystem:   377+ 3-Tier Enterprise Runbooks")
     print("   • License:            Apache 2.0 (Open Source)")
     print("   • Canonical Catalog:  https://github.com/open-cloud-agents/ocagents")
-    print("   • Documentation:      https://ibrahimng.github.io/open-cloud-agents/")
+    print("   • Documentation:      https://open-cloud-agents.github.io/ocagents/")
     print("   • Founding Architect: Ibrahim Jimoh (https://www.linkedin.com/in/ijimoh)\n")
     return 0
 
@@ -528,7 +528,7 @@ def cmd_help(subcommand: str | None = None) -> int:
       apk update && apk upgrade ocagents
 
   • One-Liner Re-Run (macOS/Linux):
-      curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash
+      curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash
 """)
         return 0
 

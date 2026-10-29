@@ -17,7 +17,7 @@ elif [ -n "$OCAGENTS_HOME" ] && [ -f "$OCAGENTS_HOME/src/ocagents/cli.py" ]; the
     CLI_ENTRY="$OCAGENTS_HOME/src/ocagents/cli.py"
 else
     echo "❌ Error: Open Cloud Agents assets not found." >&2
-    echo "Please run: curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash" >&2
+    echo "Please run: curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash" >&2
     exit 1
 fi
 

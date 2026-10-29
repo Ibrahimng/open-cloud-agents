@@ -112,8 +112,8 @@ When a new version tag (e.g. `v1.3.1`) is tagged and pushed to GitHub, an automa
 |---|---|---|
 | **Any Platform** (Catalog) | `ocagents version` | `ocagents update` |
 | **macOS** (Homebrew) | `ocagents -v` | `brew update && brew upgrade ocagents` |
-| **macOS / Linux** (Script) | `ocagents info` | `curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh \| bash` |
-| **Windows** (PowerShell) | `ocagents -version` | `irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 \| iex` |
+| **macOS / Linux** (Script) | `ocagents info` | `curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh \| bash` |
+| **Windows** (PowerShell) | `ocagents -version` | `irm https://open-cloud-agents.github.io/ocagents/install.ps1 \| iex` |
 | **Windows** (WinGet) | `winget list ocagents` | `winget upgrade Ibrahimng.OpenCloudAgents` |
 | **Windows** (Chocolatey) | `choco list ocagents` | `choco upgrade ocagents` |
 | **Ubuntu / Debian** (APT) | `apt list --installed ocagents` | `sudo apt update && sudo apt install --only-upgrade ocagents` |

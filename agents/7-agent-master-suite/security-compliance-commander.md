@@ -400,7 +400,7 @@ The Security Compliance Commander integrates directly with Open Cloud Agents spe
 ### 2. Dual-Mode Skill Resolution & Workspace Synchronization
 
 - **Local Mode:** Reads runbooks and executes audit scripts directly from `skills/`, `.github/skills/`, `.cursor/skills/`, or `.claude/skills/`.
-- **Remote / Standalone Mode:** Resolves reference runbooks via canonical documentation: `https://ibrahimng.github.io/open-cloud-agents/skills/`.
+- **Remote / Standalone Mode:** Resolves reference runbooks via canonical documentation: `https://open-cloud-agents.github.io/ocagents/skills/`.
 - **Export & Sync:** Use `python3 scripts/agents/sync_agents.py --agent security-compliance-commander --format <github|cursor|claude> --sync-skills`.
 
 

@@ -12,7 +12,7 @@ if exist "%~dp0..\src\ocagents\cli.py" (
     set "OCAGENTS_CLI=%OCAGENTS_HOME%\src\ocagents\cli.py"
 ) else (
     echo [ERROR] Open Cloud Agents assets not found.
-    echo Please install via: irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex
+    echo Please install via: irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex
     exit /b 1
 )
 

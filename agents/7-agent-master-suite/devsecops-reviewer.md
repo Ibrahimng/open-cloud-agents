@@ -282,7 +282,7 @@ When deployed across different developer environments:
 
 - **Local / Monorepo Mode:** If the project includes the Open Cloud Agents `skills/` directory (or symlinked into `.github/skills/`, `.cursor/skills/`, `.claude/skills/`), the agent directly inspects local runbooks and executes verification scripts (`scripts/*.sh`).
 - **Remote / Standalone Project Mode:** When used as a standalone agent file in an external repository (e.g. `.github/agents/devsecops-reviewer.md`, `.claude/agents/devsecops-reviewer.md`, or `.cursor/rules/devsecops-reviewer.mdc`), the agent references the published canonical documentation at:
-  `https://ibrahimng.github.io/open-cloud-agents/skills/<category>/<skill-name>/`
+  `https://open-cloud-agents.github.io/ocagents/skills/<category>/<skill-name>/`
 
 ### 3. Automated Workspace Synchronization
 

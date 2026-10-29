@@ -1,7 +1,7 @@
 # Homebrew Formula for Open Cloud Agents (ocagents)
 class Ocagents < Formula
   desc "Universal CLI & specialist agents for Cloud Architecture, DevSecOps, SRE, and FinOps"
-  homepage "https://ibrahimng.github.io/open-cloud-agents/"
+  homepage "https://open-cloud-agents.github.io/ocagents/"
   url "https://github.com/open-cloud-agents/ocagents/archive/refs/tags/v1.3.0.tar.gz"
   sha256 "2445b333f84d1bffcb8006723000b9ac44af2559230bb9c2308061b379cf5940"
   license "Apache-2.0"

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Open Cloud Agents: Universal Installer (macOS & Linux)
-# https://ibrahimng.github.io/open-cloud-agents/
+# https://open-cloud-agents.github.io/ocagents/
 #
 # Usage:
-#   curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash
+#   curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash
 #
 set -eo pipefail
 

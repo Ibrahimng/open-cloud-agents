@@ -47,8 +47,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://ibrahimng.github.io/open-cloud-agents/"
-Documentation = "https://ibrahimng.github.io/open-cloud-agents/"
+Homepage = "https://open-cloud-agents.github.io/ocagents/"
+Documentation = "https://open-cloud-agents.github.io/ocagents/"
 Repository = "https://github.com/open-cloud-agents/ocagents"
 Changelog = "https://github.com/open-cloud-agents/ocagents/blob/main/CHANGELOG.md"
 

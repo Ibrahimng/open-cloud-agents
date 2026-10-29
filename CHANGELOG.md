@@ -60,8 +60,8 @@ This major feature release introduces an enterprise-grade **Cloud Security, Runt
 #### 9. Standalone `ocagents` Universal CLI & Zero-Friction Package Distribution ([`src/ocagents/`](./src/ocagents/))
 * **Standalone CLI Tooling (`ocagents` / `oca`):** Production command-line tool with zero-dependency execution for listing, syncing, validating, simulating, and updating Open Cloud Agents personas and specialist skills across any repository.
 * **One-Liner Installers:**
-  * macOS & Linux: `curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash`
-  * Windows (PowerShell): `irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex`
+  * macOS & Linux: `curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash`
+  * Windows (PowerShell): `irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex`
 * **Package Manager Distribution Specs:**
   * Homebrew Formula: [`Formula/ocagents.rb`](./Formula/ocagents.rb)
   * Python Packaging: [`pyproject.toml`](./pyproject.toml)
@@ -162,7 +162,7 @@ This minor release introduces the complete **FinOps & Cost Optimization** domain
 * **Non-Destructive Safety Gate:** Strict compliance with Rule 01 (dry-run by default; requires explicit DevSecOps handoff and human sign-off before reclamation).
 
 #### 2. Docs-as-Code Static Site on GitHub Pages
-* **Live Documentation Portal:** Public searchable documentation website hosted at [https://ibrahimng.github.io/open-cloud-agents/](https://ibrahimng.github.io/open-cloud-agents/).
+* **Live Documentation Portal:** Public searchable documentation website hosted at [https://open-cloud-agents.github.io/ocagents/](https://open-cloud-agents.github.io/ocagents/).
 * **Single Source of Truth (`scripts/docs/prepare_docs.py`):** Automatically aggregates in-repo Markdown documents (agents, skills, rules, specs, changelog) with zero documentation drift.
 * **Theme & Features (`mkdocs.yml`):** MkDocs Material with light/dark mode auto-detection, Mermaid diagram rendering, instant client-side search, and hierarchical sidebar navigation.
 * **Automated CD Workflow (`.github/workflows/docs.yml`):** Automatic deployment to GitHub Pages upon pushes to `main`.

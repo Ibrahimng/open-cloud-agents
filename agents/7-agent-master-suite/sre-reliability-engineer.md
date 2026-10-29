@@ -300,6 +300,6 @@ The SRE & Reliability Incident Engineer integrates directly with Open Cloud Agen
 ### 2. Dual-Mode Skill Resolution & Workspace Synchronization
 
 - **Local Mode:** Reads runbooks and executes diagnostic scripts (`pod_diagnose.sh`) directly from `skills/`, `.github/skills/`, `.cursor/skills/`, or `.claude/skills/`.
-- **Remote / Standalone Mode:** Resolves reference runbooks via canonical documentation: `https://ibrahimng.github.io/open-cloud-agents/skills/`.
+- **Remote / Standalone Mode:** Resolves reference runbooks via canonical documentation: `https://open-cloud-agents.github.io/ocagents/skills/`.
 - **Export & Sync:** Use `python3 scripts/agents/sync_agents.py --agent sre-reliability-engineer --format <github|cursor|claude> --sync-skills`.
 

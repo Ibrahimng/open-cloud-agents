@@ -8,8 +8,8 @@ This directory contains standalone packaging specifications and distribution met
 
 | Package Manager | Platform | Spec Path | Install Command |
 |---|---|---|---|
-| **Universal Shell** | macOS / Linux | [`install.sh`](../install.sh) | `curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh \| bash` |
-| **PowerShell** | Windows | [`install.ps1`](../install.ps1) | `irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 \| iex` |
+| **Universal Shell** | macOS / Linux | [`install.sh`](../install.sh) | `curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh \| bash` |
+| **PowerShell** | Windows | [`install.ps1`](../install.ps1) | `irm https://open-cloud-agents.github.io/ocagents/install.ps1 \| iex` |
 | **Homebrew** | macOS / Linux | [`Formula/ocagents.rb`](../Formula/ocagents.rb) | `brew install Ibrahimng/tap/ocagents` |
 | **Python / PyPI** | Universal | [`pyproject.toml`](../pyproject.toml) | `pipx install open-cloud-agents` |
 | **Windows Package Manager** | Windows | [`packaging/winget/manifest.yaml`](./winget/manifest.yaml) | `winget install Ibrahimng.OpenCloudAgents` |

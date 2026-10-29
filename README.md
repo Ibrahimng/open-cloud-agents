@@ -7,7 +7,7 @@
 ### *AI-Powered Cloud Architecture & Security Review for Teams Using Any LLM*
 
 [![Release](https://img.shields.io/badge/Release-v1.3.0-success.svg)](CHANGELOG.md)
-[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-blue.svg)](https://ibrahimng.github.io/open-cloud-agents/)
+[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-blue.svg)](https://open-cloud-agents.github.io/ocagents/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Well-Architected](https://img.shields.io/badge/Architecture-AWS%20%7C%20Azure%20%7C%20GCP-orange.svg)](#the-7-agent-master-suite)
 [![Status](https://img.shields.io/badge/Status-Early--Stage%20Architecture%20Review-blueviolet.svg)](#-project-status--focus)
@@ -88,10 +88,10 @@ Install the standalone CLI in seconds with zero external dependencies:
 
 ```bash
 # macOS & Linux
-curl -fsSL https://ibrahimng.github.io/open-cloud-agents/install.sh | bash
+curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash
 
 # Windows (PowerShell)
-irm https://ibrahimng.github.io/open-cloud-agents/install.ps1 | iex
+irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex
 ```
 
 *(Also available via `brew install open-cloud-agents/tap/ocagents` or `pipx install open-cloud-agents`)*

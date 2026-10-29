@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Ibrahim Jimoh <Ibrahimng@users.noreply.github.com>
 Build-Depends: debhelper-compat (= 13), python3
 Standards-Version: 4.6.2
-Homepage: https://ibrahimng.github.io/open-cloud-agents/
+Homepage: https://open-cloud-agents.github.io/ocagents/
 
 Package: ocagents
 Architecture: all

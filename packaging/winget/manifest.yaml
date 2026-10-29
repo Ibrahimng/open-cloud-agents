@@ -6,7 +6,7 @@ Publisher: Ibrahim Jimoh
 License: Apache-2.0
 LicenseUrl: https://github.com/open-cloud-agents/ocagents/blob/main/LICENSE
 ShortDescription: Universal CLI and multi-agent framework for Cloud Architecture, DevSecOps, SRE, and FinOps.
-PackageUrl: https://ibrahimng.github.io/open-cloud-agents/
+PackageUrl: https://open-cloud-agents.github.io/ocagents/
 Moniker: ocagents
 Tags:
   - cloud
