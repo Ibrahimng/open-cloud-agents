@@ -30,7 +30,7 @@ log_fail() {
     printf "  ${RED}✖${RESET} %s\n" "$1" >&2
 }
 
-REPO_URL="https://github.com/Ibrahimng/open-cloud-agents.git"
+REPO_URL="https://github.com/open-cloud-agents/ocagents.git"
 INSTALL_DIR="${OCAGENTS_INSTALL_DIR:-$HOME/.open-cloud-agents}"
 BIN_DIR="${OCAGENTS_BIN_DIR:-$HOME/.local/bin}"
 

@@ -25,7 +25,7 @@ from pathlib import Path
 
 __version__ = "1.3.0"
 
-CANONICAL_REPO_URL = "https://github.com/Ibrahimng/open-cloud-agents.git"
+CANONICAL_REPO_URL = "https://github.com/open-cloud-agents/ocagents.git"
 AVAILABLE_FORMATS = ["github", "claude", "cursor", "gemini", "raw"]
 
 
@@ -362,7 +362,7 @@ def cmd_version():
     print("   • Master Suite:       7 Specialist Personas (Aligned to Well-Architected)")
     print("   • Skills Ecosystem:   377+ 3-Tier Enterprise Runbooks")
     print("   • License:            Apache 2.0 (Open Source)")
-    print("   • Canonical Catalog:  https://github.com/Ibrahimng/open-cloud-agents")
+    print("   • Canonical Catalog:  https://github.com/open-cloud-agents/ocagents")
     print("   • Documentation:      https://ibrahimng.github.io/open-cloud-agents/")
     print("   • Founding Architect: Ibrahim Jimoh (https://www.linkedin.com/in/ijimoh)\n")
     return 0

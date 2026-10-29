@@ -7,7 +7,7 @@ url="https://ibrahimng.github.io/open-cloud-agents/"
 arch="noarch"
 license="Apache-2.0"
 depends="python3 git"
-source="https://github.com/Ibrahimng/open-cloud-agents/archive/refs/tags/v${pkgver}.tar.gz"
+source="https://github.com/open-cloud-agents/ocagents/archive/refs/tags/v${pkgver}.tar.gz"
 
 package() {
     mkdir -p "$pkgdir/usr/share/open-cloud-agents"

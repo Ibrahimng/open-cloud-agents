@@ -26,7 +26,7 @@ description: Eliminate static cloud credentials and API keys by configuring Work
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
         },
         "StringLike": {
-          "token.actions.githubusercontent.com:sub": "repo:Ibrahimng/open-cloud-agents:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub": "repo:open-cloud-agents/ocagents:ref:refs/heads/main"
         }
       }
     }

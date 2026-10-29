@@ -2,8 +2,8 @@ site_name: Open Cloud Agents
 site_description: Autonomous, Well-Architected Cloud Engineering for Any AI Agent or IDE
 site_author: Ibrahim Jimoh
 site_url: https://ibrahimng.github.io/open-cloud-agents/
-repo_url: https://github.com/Ibrahimng/open-cloud-agents
-repo_name: Ibrahimng/open-cloud-agents
+repo_url: https://github.com/open-cloud-agents/ocagents
+repo_name: open-cloud-agents/ocagents
 edit_uri: edit/main/
 
 docs_dir: build_docs

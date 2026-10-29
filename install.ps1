@@ -36,7 +36,7 @@ Write-Host "  ✔ Found Git: $((git --version).Split([Environment]::NewLine)[0])
 # 3. Setup directories
 $installDir = Join-Path $HOME ".open-cloud-agents"
 $binDir = Join-Path $installDir "bin"
-$repoUrl = "https://github.com/Ibrahimng/open-cloud-agents.git"
+$repoUrl = "https://github.com/open-cloud-agents/ocagents.git"
 
 Write-Host "ℹ Synchronizing canonical agent catalog into: $installDir..." -ForegroundColor Blue
 
