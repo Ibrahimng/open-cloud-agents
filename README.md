@@ -12,7 +12,7 @@
 [![Well-Architected](https://img.shields.io/badge/Architecture-AWS%20%7C%20Azure%20%7C%20GCP-orange.svg)](#the-7-agent-master-suite)
 [![Status](https://img.shields.io/badge/Status-Early--Stage%20Architecture%20Review-blueviolet.svg)](#-project-status--focus)
 
-**Open Cloud Agents** gives engineering teams a safer, structured way to review cloud architecture, audit IaC pull requests, and catch operational risks using any LLM—without handing production infrastructure to an uncontrolled prompt.
+**Open Cloud Agents** gives engineering teams a safer, structured way to review cloud architecture, audit IaC pull requests, and catch operational risks using any LLM - without handing production infrastructure to an uncontrolled prompt.
 
 > [!NOTE]
 > **Project Status:** Early-stage open-source system focused specifically on **cloud architecture reviews, pre-merge IaC security auditing, and operational guardrails**.
@@ -169,7 +169,7 @@ Every formal pillar of the **AWS, Microsoft Azure, and Google Cloud Well-Archite
 | **Cost Optimization (FinOps)** | [`finops-cloud-cost-optimizer.md`](./agents/7-agent-master-suite/finops-cloud-cost-optimizer.md) | Idle waste elimination, container request rightsizing, S3 tiering, NAT egress elimination. |
 | **Code & Pipeline Security** | [`devsecops-reviewer.md`](./agents/7-agent-master-suite/devsecops-reviewer.md) | Pre-merge PR audits, state destruction prevention (`forces replacement`), perimeter checks. |
 | **Operational Excellence** | [`devsecops-engineer.md`](./agents/7-agent-master-suite/devsecops-engineer.md) | Surgical code/IaC fixes, zero-scope-creep hardening, non-destructive tests, Conventional Commits. |
-| **Continuous Delivery** | [`gitops-release-manager.md`](./agents/7-agent-master-suite/gitops-release-manager.md) | Multi-environment promotion (`dev` ➔ `uat` ➔ `prod`) via ArgoCD/Flux, canary rollouts, human gates. |
+| **Continuous Delivery** | [`gitops-release-manager.md`](./agents/7-agent-master-suite/gitops-release-manager.md) | Multi-environment promotion (`dev` -> `uat` -> `prod`) via ArgoCD/Flux, canary rollouts, human gates. |
 | **Reliability & Performance** | [`sre-reliability-engineer.md`](./agents/7-agent-master-suite/sre-reliability-engineer.md) | Four Golden Signals, SLI/SLO burn alerts, client endpoint RCA (`502/503/504`), blameless postmortems. |
 
 *Explore full agent specifications, tool boundaries, and handoff contracts in [`agents/`](./agents/README.md).*
@@ -236,6 +236,6 @@ ocagents validate
 
 ## ⚖️ License & Attribution
 
-* **Core Project:** Licensed under the [Apache License 2.0](./LICENSE) © 2026 Ibrahim Jimoh.
+* **Core Project:** Licensed under the [Apache License 2.0](./LICENSE) (c) 2026 Ibrahim Jimoh.
 * **Attribution:** Collaborative pair co-authorship trailer: `Co-authored-by: Antigravity <antigravity@google.com>`.
 * **Founding Architect:** Ibrahim Jimoh ([GitHub](https://github.com/Ibrahimng) | [LinkedIn](https://www.linkedin.com/in/ijimoh)).

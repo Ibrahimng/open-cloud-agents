@@ -4,7 +4,7 @@
 
 ---
 
-## 🎯 Phase 1: Reposition the Project (Days 1–7)
+## 🎯 Phase 1: Reposition the Project (Days 1-7)
 
 **Primary Objective:** Narrow the story and sharpen the value proposition.
 
@@ -23,7 +23,7 @@
 
 ---
 
-## 🚀 Phase 2: Improve the First-Run Experience (Days 8–14)
+## 🚀 Phase 2: Improve the First-Run Experience (Days 8-14)
 
 **Primary Objective:** Make it effortless for a developer to clone, install, and run a review in under 10 minutes.
 
@@ -44,7 +44,7 @@
 
 ---
 
-## 🛡️ Phase 3: Build Trust, Safety & Proof (Days 15–21)
+## 🛡️ Phase 3: Build Trust, Safety & Proof (Days 15-21)
 
 **Primary Objective:** Establish production readiness, transparency, and operational rigor.
 
@@ -67,7 +67,7 @@
 
 ---
 
-## 📈 Phase 4: Community Traction & Proof (Days 22–30)
+## 📈 Phase 4: Community Traction & Proof (Days 22-30)
 
 **Primary Objective:** Build discovery, gather feedback, and establish an early-adopter growth loop.
 
