@@ -93,7 +93,7 @@ jobs:
           "$hashBin  ${{ matrix.target.binary_name }}" | Out-File -Encoding ASCII -FilePath "${{ matrix.target.binary_name }}.sha256"
 
       - name: Upload Binary Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: binary-${{ matrix.target.binary_name }}
           path: |
