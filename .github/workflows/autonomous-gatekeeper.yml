@@ -282,8 +282,13 @@ jobs:
                   });
                   console.log(`✅ Submitted formal ${targetEvent} review as Antigravity-AI.`);
                 } catch (reviewError) {
-                  if (reviewError.status === 422 && String(reviewError.message).includes('approve your own pull request')) {
-                    console.log('ℹ️ PR was self-authored. Fallback: submitting verification COMMENT review.');
+                  const errorMsg = String(reviewError.message || '');
+                  if (
+                    reviewError.status === 422 &&
+                    (errorMsg.includes('approve your own pull request') ||
+                     errorMsg.includes('not permitted to approve pull requests'))
+                  ) {
+                    console.log(`ℹ️ APPROVE rejected (${errorMsg}). Fallback: submitting verification COMMENT review.`);
                     await github.rest.pulls.createReview({
                       owner: context.repo.owner,
                       repo: context.repo.repo,
