@@ -84,17 +84,50 @@ resource "aws_rds_cluster" "payments" {
 
 ### Step 1: Install the Standalone CLI (`ocagents`)
 
-Install the standalone CLI in seconds with zero external dependencies:
+Install the native `ocagents` binary onto your workstation or private CI runner using your preferred package manager or installation script:
+
+<details open>
+<summary><b>🍺 Homebrew (macOS & Linux)</b></summary>
 
 ```bash
-# macOS & Linux
-curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash
+brew tap open-cloud-agents/tap
+brew trust open-cloud-agents/tap    # Required on Homebrew 4.4+ for third-party taps
+brew install ocagents
+```
+*(Or in a single line: `brew install open-cloud-agents/tap/ocagents`)*
+</details>
 
-# Windows (PowerShell)
+<details>
+<summary><b>🐚 Bash / Curl (macOS & Linux Standalone)</b></summary>
+
+```bash
+curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash
+```
+</details>
+
+<details>
+<summary><b>⚡ PowerShell (Windows Standalone)</b></summary>
+
+```powershell
 irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex
 ```
+</details>
 
-*(Also available via `brew install open-cloud-agents/tap/ocagents` or `pipx install git+https://github.com/open-cloud-agents/ocagents.git`)*
+<details>
+<summary><b>🪟 WinGet (Windows Package Manager)</b></summary>
+
+```powershell
+winget install Ibrahimng.OpenCloudAgents
+```
+</details>
+
+<details>
+<summary><b>🐍 pipx (Python CLI)</b></summary>
+
+```bash
+pipx install git+https://github.com/open-cloud-agents/ocagents.git
+```
+</details>
 
 ### Step 2: Sync a Specialist Agent to Your Repo
 
