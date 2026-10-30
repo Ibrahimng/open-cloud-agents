@@ -20,7 +20,6 @@ jobs:
   build-binaries:
     name: Build Standalone Binary (${{ matrix.target.os }}-${{ matrix.target.arch }})
     runs-on: ${{ matrix.target.runner }}
-    if: ${{ !env.ACT && runner.name != 'Local Actions' }}
     strategy:
       fail-fast: false
       matrix:
@@ -95,7 +94,7 @@ jobs:
           "$hashBin  ${{ matrix.target.binary_name }}" | Out-File -Encoding ASCII -FilePath "${{ matrix.target.binary_name }}.sha256"
 
       - name: Generate Build Provenance Attestation
-        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
+        if: ${{ runner.name != 'Local Actions' }}
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
@@ -161,7 +160,7 @@ jobs:
           "
 
       - name: Download Compiled Binaries
-        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
+        if: ${{ runner.name != 'Local Actions' }}
         uses: actions/download-artifact@v7
         with:
           pattern: binary-*
@@ -169,7 +168,7 @@ jobs:
           path: release_assets
 
       - name: Consolidate Checksums
-        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
+        if: ${{ runner.name != 'Local Actions' }}
         run: |
           if [ -d release_assets ]; then
             cat release_assets/*.sha256 > release_assets/checksums.txt 2>/dev/null || true
@@ -177,7 +176,7 @@ jobs:
           fi
 
       - name: Generate Consolidated Release Provenance Attestation
-        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
+        if: ${{ runner.name != 'Local Actions' }}
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
@@ -186,7 +185,7 @@ jobs:
             release_assets/ocagents-*
 
       - name: Preview Release Notes (Local act mode)
-        if: ${{ env.ACT || runner.name == 'Local Actions' }}
+        if: ${{ runner.name == 'Local Actions' }}
         run: |
           echo "Running in local act runner. Skipping live GitHub API release call."
           echo "=== Extracted Release Notes Preview ==="
@@ -194,7 +193,7 @@ jobs:
           echo "======================================"
 
       - name: Publish GitHub Release
-        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
+        if: ${{ runner.name != 'Local Actions' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.version }}
