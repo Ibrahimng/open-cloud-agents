@@ -2,7 +2,6 @@
 class Ocagents < Formula
   desc "Universal CLI & specialist agents for Cloud Architecture, DevSecOps, SRE, and FinOps"
   homepage "https://open-cloud-agents.github.io/ocagents/"
-  version "1.3.0"
   license "Apache-2.0"
 
   if OS.mac? && Hardware::CPU.arm?
