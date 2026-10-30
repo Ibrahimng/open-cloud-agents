@@ -25,6 +25,12 @@ AI agents frequently cause regressions when attempting unsolicited "cleanups", m
 - Do not introduce new third-party libraries or external dependencies unless the user's task fundamentally requires it.
 - Never bump dependency versions across the entire package manifest (`package.json`, `pom.xml`, `requirements.txt`, `go.mod`) without explicit permission.
 
+### 4. Zero Cold-Start Latency & Deferred Imports (The CLI Packaging Law)
+- Universal CLI routers and command entrypoints (`src/ocagents/cli.py`) must maintain sub-10ms cold-start latency.
+- Never import heavy third-party packages (`boto3`, `google-cloud-sdk`, `torch`, `scipy`, `pandas`, `requests`, `yaml`) at top-level module scope.
+- Top-level module imports are strictly restricted to Python standard library primitives (`argparse`, `os`, `shutil`, `subprocess`, `sys`, `time`, `pathlib`).
+- Any optional or third-party libraries must be defensively and lazily imported inside the specific subcommand function where they are executed.
+
 ---
 
 ## The DevSecOps Engineer Rule

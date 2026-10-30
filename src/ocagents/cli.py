@@ -5,6 +5,11 @@ Open Cloud Agents: Universal CLI (ocagents).
 Production CLI for syncing, listing, validating, and running Open Cloud Agents
 specialist personas and skills across GitHub Copilot, Cursor, Claude Code, and Gemini.
 
+Packaging & Performance Invariants:
+- Zero Top-Level 3P Dependencies: Top-level imports strictly restricted to Python stdlib.
+- Sub-10ms Cold-Start: Defer all heavy imports (PyYAML, SDKs) into subcommand functions.
+- Hermetic Distribution: Supports Homebrew Cellar virtualenv isolation and PyInstaller standalone binaries.
+
 Usage:
     ocagents list
     ocagents -a ls
@@ -36,13 +41,31 @@ def resolve_asset_root() -> Path:
     if env_root and Path(env_root).exists() and (Path(env_root) / "agents").exists():
         return Path(env_root).resolve()
 
-    # 2. Check if running inside the cloned git repository
+    # 2. Check PyInstaller standalone bundle (_MEIPASS)
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        meipass_root = Path(sys._MEIPASS)
+        if (meipass_root / "agents" / "7-agent-master-suite").exists():
+            return meipass_root
+
+    # 3. Check if running inside the cloned git repository
     file_dir = Path(__file__).resolve().parent
     repo_candidate = file_dir.parent.parent
     if (repo_candidate / "agents" / "7-agent-master-suite").exists():
         return repo_candidate
 
-    # 3. Check standard user installation directory (~/.open-cloud-agents)
+    # 4. Check Homebrew Cellar virtualenv share paths & Unix system shares
+    sys_prefix = Path(sys.prefix).resolve()
+    for share_candidate in [
+        sys_prefix.parent / "share" / "ocagents",
+        sys_prefix.parent.parent / "share" / "ocagents",
+        Path("/opt/homebrew/share/ocagents"),
+        Path("/usr/local/share/ocagents"),
+        Path("/usr/share/ocagents"),
+    ]:
+        if (share_candidate / "agents" / "7-agent-master-suite").exists():
+            return share_candidate
+
+    # 5. Check standard user installation directory (~/.open-cloud-agents)
     user_home_candidate = Path.home() / ".open-cloud-agents"
     if (user_home_candidate / "agents" / "7-agent-master-suite").exists():
         return user_home_candidate
@@ -345,10 +368,15 @@ def cmd_validate(asset_root: Path):
     """Runs repository hygiene and agent pipeline validation."""
     log_info("Running Open Cloud Agents contract and spec validation...")
     overall_rc = 0
+    py_bin = (
+        shutil.which("python3") or shutil.which("python") or sys.executable
+        if getattr(sys, "frozen", False)
+        else sys.executable
+    )
 
     pipeline_script = asset_root / "scripts" / "agents" / "agent_pipeline.py"
     if pipeline_script.exists():
-        res = subprocess.run([sys.executable, str(pipeline_script), "--validate"])
+        res = subprocess.run([py_bin, str(pipeline_script), "--validate"])
         if res.returncode != 0:
             overall_rc = res.returncode
     else:
@@ -357,7 +385,7 @@ def cmd_validate(asset_root: Path):
 
     ci_script = asset_root / "scripts" / "ci" / "validate_repo.py"
     if ci_script.exists():
-        res_ci = subprocess.run([sys.executable, str(ci_script)])
+        res_ci = subprocess.run([py_bin, str(ci_script)])
         if res_ci.returncode != 0:
             overall_rc = res_ci.returncode
 
@@ -366,9 +394,14 @@ def cmd_validate(asset_root: Path):
 
 def cmd_run(args, asset_root: Path):
     """Runs the multi-agent pipeline simulation on a task."""
+    py_bin = (
+        shutil.which("python3") or shutil.which("python") or sys.executable
+        if getattr(sys, "frozen", False)
+        else sys.executable
+    )
     pipeline_script = asset_root / "scripts" / "agents" / "agent_pipeline.py"
     if pipeline_script.exists():
-        cmd = [sys.executable, str(pipeline_script), "--task", args.task]
+        cmd = [py_bin, str(pipeline_script), "--task", args.task]
         res = subprocess.run(cmd)
         return res.returncode
     log_fail(f"Pipeline runner script not found at: {pipeline_script}")

@@ -10,77 +10,108 @@ Write-Host ""
 Write-Host "☁️  Installing Open Cloud Agents CLI (ocagents)..." -ForegroundColor Cyan
 Write-Host ("=" * 66)
 
-# 1. Detect Python
-$pythonCmd = $null
-if (Get-Command python -ErrorAction SilentlyContinue) {
-    $pythonCmd = "python"
-} elseif (Get-Command py -ErrorAction SilentlyContinue) {
-    $pythonCmd = "py"
-} else {
-    Write-Host "❌ Error: Python 3 was not found on your system." -ForegroundColor Red
-    Write-Host "   Please install Python from https://www.python.org/ or via 'winget install Python.Python.3.12'"
-    exit 1
-}
-
-$pyVersion = & $pythonCmd -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
-Write-Host "  ✔ Found Python $pyVersion ($pythonCmd)" -ForegroundColor Green
-
-# 2. Detect Git
-if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-    Write-Host "❌ Error: Git was not found on your system." -ForegroundColor Red
-    Write-Host "   Please install Git via 'winget install Git.Git'"
-    exit 1
-}
-Write-Host "  ✔ Found Git: $((git --version).Split([Environment]::NewLine)[0])" -ForegroundColor Green
-
-# 3. Setup directories
 $installDir = Join-Path $HOME ".open-cloud-agents"
 $binDir = Join-Path $installDir "bin"
 $repoUrl = "https://github.com/open-cloud-agents/ocagents.git"
+$repoName = "open-cloud-agents/ocagents"
+$releaseTag = if ($env:OCAGENTS_VERSION) { $env:OCAGENTS_VERSION } else { "latest" }
 
-Write-Host "ℹ Synchronizing canonical agent catalog into: $installDir..." -ForegroundColor Blue
-
-if (Test-Path (Join-Path $installDir ".git")) {
-    git -C "$installDir" fetch origin main --quiet
-    git -C "$installDir" reset --hard origin/main --quiet
-    Write-Host "  ✔ Updated existing installation to latest main branch." -ForegroundColor Green
-} elseif (Test-Path $installDir) {
-    Remove-Item -Recurse -Force $installDir
-    git clone --depth=1 "$repoUrl" "$installDir" --quiet
-    Write-Host "  ✔ Replaced catalog with fresh clone." -ForegroundColor Green
-} else {
-    git clone --depth=1 "$repoUrl" "$installDir" --quiet
-    Write-Host "  ✔ Cloned canonical catalog successfully." -ForegroundColor Green
-}
-
-# 4. Create Launchers in bin/
 if (-not (Test-Path $binDir)) {
     New-Item -ItemType Directory -Path $binDir -Force | Out-Null
 }
 
-$cmdLauncher = Join-Path $binDir "ocagents.cmd"
-$cmdOca = Join-Path $binDir "oca.cmd"
-$psLauncher = Join-Path $binDir "ocagents.ps1"
+# 1. Attempt Standalone Hermetic Binary Download (64-bit Windows)
+$is64Bit = [System.Environment]::Is64BitOperatingSystem
+$installedStandalone = $false
 
-@"
+if ($is64Bit) {
+    $binaryName = "ocagents-windows-amd64.exe"
+    if ($releaseTag -eq "latest") {
+        $downloadUrl = "https://github.com/$repoName/releases/latest/download/$binaryName"
+    } else {
+        $downloadUrl = "https://github.com/$repoName/releases/download/$releaseTag/$binaryName"
+    }
+
+    $targetExe = Join-Path $binDir "ocagents.exe"
+    $aliasExe = Join-Path $binDir "oca.exe"
+
+    try {
+        Write-Host "ℹ Detected 64-bit Windows. Checking for standalone hermetic binary..." -ForegroundColor Blue
+        Invoke-WebRequest -Uri $downloadUrl -OutFile $targetExe -UseBasicParsing -ErrorAction Stop
+        Copy-Item -Path $targetExe -Destination $aliasExe -Force
+        Write-Host "  ✔ Installed standalone binary: $targetExe and alias $aliasExe" -ForegroundColor Green
+        $installedStandalone = $true
+    } catch {
+        Write-Host "  ⚠ Standalone binary not yet published for release '$releaseTag'. Falling back to local catalog installation..." -ForegroundColor Yellow
+    }
+}
+
+# 2. Source Catalog Fallback (Requires Python 3 & Git)
+if (-not $installedStandalone) {
+    # 2a. Detect Python
+    $pythonCmd = $null
+    if (Get-Command python -ErrorAction SilentlyContinue) {
+        $pythonCmd = "python"
+    } elseif (Get-Command py -ErrorAction SilentlyContinue) {
+        $pythonCmd = "py"
+    } else {
+        Write-Host "❌ Error: Python 3 was not found on your system." -ForegroundColor Red
+        Write-Host "   Please install Python from https://www.python.org/ or via 'winget install Python.Python.3.12'"
+        exit 1
+    }
+
+    $pyVersion = & $pythonCmd -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+    Write-Host "  ✔ Found Python $pyVersion ($pythonCmd)" -ForegroundColor Green
+
+    # 2b. Detect Git
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+        Write-Host "❌ Error: Git was not found on your system." -ForegroundColor Red
+        Write-Host "   Please install Git via 'winget install Git.Git'"
+        exit 1
+    }
+    Write-Host "  ✔ Found Git: $((git --version).Split([Environment]::NewLine)[0])" -ForegroundColor Green
+
+    # 2c. Setup directories & clone
+    Write-Host "ℹ Synchronizing canonical agent catalog into: $installDir..." -ForegroundColor Blue
+
+    if (Test-Path (Join-Path $installDir ".git")) {
+        git -C "$installDir" fetch origin main --quiet
+        git -C "$installDir" reset --hard origin/main --quiet
+        Write-Host "  ✔ Updated existing installation to latest main branch." -ForegroundColor Green
+    } elseif (Test-Path $installDir) {
+        Remove-Item -Recurse -Force $installDir
+        git clone --depth=1 "$repoUrl" "$installDir" --quiet
+        Write-Host "  ✔ Replaced catalog with fresh clone." -ForegroundColor Green
+    } else {
+        git clone --depth=1 "$repoUrl" "$installDir" --quiet
+        Write-Host "  ✔ Cloned canonical catalog successfully." -ForegroundColor Green
+    }
+
+    # 2d. Create Launchers in bin/
+    $cmdLauncher = Join-Path $binDir "ocagents.cmd"
+    $cmdOca = Join-Path $binDir "oca.cmd"
+    $psLauncher = Join-Path $binDir "ocagents.ps1"
+
+    @"
 @echo off
 set "OCAGENTS_HOME=%USERPROFILE%\.open-cloud-agents"
 python "%OCAGENTS_HOME%\src\ocagents\cli.py" %*
 "@ | Set-Content -Path $cmdLauncher -Encoding ASCII
 
-@"
+    @"
 @echo off
 "%~dp0ocagents.cmd" %*
 "@ | Set-Content -Path $cmdOca -Encoding ASCII
 
-@"
+    @"
 `$env:OCAGENTS_HOME = "`$HOME\.open-cloud-agents"
 python "`$env:OCAGENTS_HOME\src\ocagents\cli.py" @args
 "@ | Set-Content -Path $psLauncher -Encoding UTF8
 
-Write-Host "  ✔ Created command launchers: ocagents, oca" -ForegroundColor Green
+    Write-Host "  ✔ Created command launchers: ocagents, oca" -ForegroundColor Green
+}
 
-# 5. Configure User PATH
+# 3. Configure User PATH
 $userPath = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
 if ($userPath -split ";" -notcontains $binDir) {
     $newUserPath = "$userPath;$binDir"
@@ -91,10 +122,14 @@ if ($userPath -split ";" -notcontains $binDir) {
     $env:Path = "$env:Path;$binDir"
 }
 
-# 6. Verify Installation
+# 4. Verify Installation
 Write-Host ("-" * 66)
 Write-Host "ℹ Verifying CLI installation..." -ForegroundColor Blue
-& $pythonCmd "$installDir\src\ocagents\cli.py" info
+if ($installedStandalone) {
+    & (Join-Path $binDir "ocagents.exe") info
+} else {
+    & $pythonCmd "$installDir\src\ocagents\cli.py" info
+}
 
 Write-Host ""
 Write-Host "🎉 Open Cloud Agents (ocagents) installed successfully!" -ForegroundColor Green
@@ -107,6 +142,3 @@ Write-Host "  • Sync for Cursor:          ocagents sync -A --format cursor --t
 Write-Host "  • Validate specs & tests:   ocagents validate" -ForegroundColor Cyan
 Write-Host "  • Update agent catalog:     ocagents update" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Restart your terminal or run: `$env:Path = [System.Environment]::GetEnvironmentVariable('Path','User') + ';' + [System.Environment]::GetEnvironmentVariable('Path','Machine')" -ForegroundColor Yellow
-Write-Host ""
-

@@ -1,0 +1,66 @@
+# -*- mode: python ; coding: utf-8 -*-
+"""
+PyInstaller specification for compiling Open Cloud Agents (ocagents)
+into a hermetic, single-file native executable.
+"""
+import os
+import sys
+from pathlib import Path
+
+# When PyInstaller executes this spec, current working directory is the repository root
+REPO_ROOT = Path(os.environ.get("GITHUB_WORKSPACE", Path.cwd())).resolve()
+
+datas = [
+    (str(REPO_ROOT / "agents"), "agents"),
+    (str(REPO_ROOT / "skills"), "skills"),
+    (str(REPO_ROOT / "rules"), "rules"),
+    (str(REPO_ROOT / "scripts"), "scripts"),
+]
+
+a = Analysis(
+    [str(REPO_ROOT / "src" / "ocagents" / "cli.py")],
+    pathex=[str(REPO_ROOT / "src")],
+    binaries=[],
+    datas=datas,
+    hiddenimports=["yaml"],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[
+        "boto3",
+        "botocore",
+        "google",
+        "torch",
+        "scipy",
+        "numpy",
+        "matplotlib",
+        "tkinter",
+        "test",
+        "unittest",
+    ],
+    noarchive=False,
+    optimize=2,
+)
+
+pyz = PYZ(a.pure)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    a.binaries,
+    a.datas,
+    [],
+    name="ocagents",
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)

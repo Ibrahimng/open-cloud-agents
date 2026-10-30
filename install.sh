@@ -31,6 +31,8 @@ log_fail() {
 }
 
 REPO_URL="https://github.com/open-cloud-agents/ocagents.git"
+REPO_NAME="open-cloud-agents/ocagents"
+RELEASE_TAG="${OCAGENTS_VERSION:-latest}"
 INSTALL_DIR="${OCAGENTS_INSTALL_DIR:-$HOME/.open-cloud-agents}"
 BIN_DIR="${OCAGENTS_BIN_DIR:-$HOME/.local/bin}"
 
@@ -38,47 +40,90 @@ printf "\n"
 printf "${BOLD}☁️  Installing Open Cloud Agents CLI (ocagents)...${RESET}\n"
 printf "%s\n" "=================================================================="
 
-# 1. Check Python 3
-if command -v python3 >/dev/null 2>&1; then
-    PY_BIN="python3"
-elif command -v python >/dev/null 2>&1; then
-    PY_BIN="python"
-else
-    log_fail "Python 3 is required but was not found on your system."
-    printf "   Please install Python 3.9+ via your package manager (brew, apt, dnf, apk).\n"
-    exit 1
-fi
+# 1. Attempt Standalone Hermetic Binary Download
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+ARCH="$(uname -m)"
+BINARY_NAME=""
 
-PY_VER=$($PY_BIN -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-log_pass "Found Python ${PY_VER} (${PY_BIN})"
+case "$OS" in
+    darwin)
+        case "$ARCH" in
+            arm64|aarch64) BINARY_NAME="ocagents-darwin-arm64" ;;
+            x86_64) BINARY_NAME="ocagents-darwin-amd64" ;;
+        esac
+        ;;
+    linux)
+        case "$ARCH" in
+            x86_64) BINARY_NAME="ocagents-linux-amd64" ;;
+        esac
+        ;;
+esac
 
-# 2. Check Git
-if ! command -v git >/dev/null 2>&1; then
-    log_fail "Git is required but was not found on your system."
-    exit 1
-fi
-log_pass "Found Git: $(git --version | head -n 1)"
-
-# 3. Clone or update repository assets
-log_info "Synchronizing canonical agent catalog into: ${INSTALL_DIR}..."
-if [ -d "$INSTALL_DIR/.git" ]; then
-    git -C "$INSTALL_DIR" fetch origin main --quiet
-    git -C "$INSTALL_DIR" reset --hard origin/main --quiet
-    log_pass "Updated existing installation to latest main branch."
-elif [ -d "$INSTALL_DIR" ]; then
-    rm -rf "$INSTALL_DIR"
-    git clone --depth=1 "$REPO_URL" "$INSTALL_DIR" --quiet
-    log_pass "Replaced catalog with fresh clone."
-else
-    git clone --depth=1 "$REPO_URL" "$INSTALL_DIR" --quiet
-    log_pass "Cloned canonical catalog successfully."
-fi
-
-# 4. Install binaries
+INSTALLED_STANDALONE=false
 mkdir -p "$BIN_DIR"
 
-LAUNCHER="$BIN_DIR/ocagents"
-cat << 'EOF' > "$LAUNCHER"
+if [ -n "$BINARY_NAME" ]; then
+    log_info "Detected platform: ${OS} (${ARCH}). Checking for standalone hermetic binary..."
+    if [ "$RELEASE_TAG" = "latest" ]; then
+        DOWNLOAD_URL="https://github.com/${REPO_NAME}/releases/latest/download/${BINARY_NAME}"
+    else
+        DOWNLOAD_URL="https://github.com/${REPO_NAME}/releases/download/${RELEASE_TAG}/${BINARY_NAME}"
+    fi
+
+    TMP_BIN="$(mktemp "${TMPDIR:-/tmp}/ocagents-bin.XXXXXX")"
+    if curl -fsSL "$DOWNLOAD_URL" -o "$TMP_BIN" 2>/dev/null; then
+        chmod +x "$TMP_BIN"
+        mv "$TMP_BIN" "$BIN_DIR/ocagents"
+        ln -sf "$BIN_DIR/ocagents" "$BIN_DIR/oca"
+        log_pass "Installed standalone binary to: ${BIN_DIR}/ocagents and alias ${BIN_DIR}/oca"
+        INSTALLED_STANDALONE=true
+    else
+        rm -f "$TMP_BIN"
+        log_warn "Standalone binary not yet published for release '${RELEASE_TAG}'. Falling back to local catalog installation..."
+    fi
+fi
+
+# 2. Source Catalog Fallback (Requires Python 3 & Git)
+if [ "$INSTALLED_STANDALONE" = false ]; then
+    # 2a. Check Python 3
+    if command -v python3 >/dev/null 2>&1; then
+        PY_BIN="python3"
+    elif command -v python >/dev/null 2>&1; then
+        PY_BIN="python"
+    else
+        log_fail "Python 3 is required for source installation but was not found on your system."
+        printf "   Please install Python 3.9+ via your package manager (brew, apt, dnf, apk).\n"
+        exit 1
+    fi
+
+    PY_VER=$($PY_BIN -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    log_pass "Found Python ${PY_VER} (${PY_BIN})"
+
+    # 2b. Check Git
+    if ! command -v git >/dev/null 2>&1; then
+        log_fail "Git is required for source installation but was not found on your system."
+        exit 1
+    fi
+    log_pass "Found Git: $(git --version | head -n 1)"
+
+    # 2c. Clone or update repository assets
+    log_info "Synchronizing canonical agent catalog into: ${INSTALL_DIR}..."
+    if [ -d "$INSTALL_DIR/.git" ]; then
+        git -C "$INSTALL_DIR" fetch origin main --quiet
+        git -C "$INSTALL_DIR" reset --hard origin/main --quiet
+        log_pass "Updated existing installation to latest main branch."
+    elif [ -d "$INSTALL_DIR" ]; then
+        rm -rf "$INSTALL_DIR"
+        git clone --depth=1 "$REPO_URL" "$INSTALL_DIR" --quiet
+        log_pass "Replaced catalog with fresh clone."
+    else
+        git clone --depth=1 "$REPO_URL" "$INSTALL_DIR" --quiet
+        log_pass "Cloned canonical catalog successfully."
+    fi
+
+    # 2d. Install shell launchers
+    LAUNCHER="$BIN_DIR/ocagents"
+    cat << 'EOF' > "$LAUNCHER"
 #!/usr/bin/env bash
 set -eo pipefail
 export OCAGENTS_HOME="${OCAGENTS_HOME:-$HOME/.open-cloud-agents}"
@@ -101,9 +146,10 @@ else
 fi
 EOF
 
-chmod +x "$LAUNCHER"
-ln -sf "$LAUNCHER" "$BIN_DIR/oca"
-log_pass "Installed executable launcher to ${LAUNCHER} and alias ${BIN_DIR}/oca"
+    chmod +x "$LAUNCHER"
+    ln -sf "$LAUNCHER" "$BIN_DIR/oca"
+    log_pass "Installed executable launcher to ${LAUNCHER} and alias ${BIN_DIR}/oca"
+fi
 
 # 5. Check PATH and configure shell profile if needed
 PATH_CONFIGURED=false
@@ -141,7 +187,7 @@ fi
 printf "%s\n" "------------------------------------------------------------------"
 log_info "Verifying CLI installation..."
 export PATH="$BIN_DIR:$PATH"
-"$LAUNCHER" info
+"$BIN_DIR/ocagents" info
 
 printf "\n"
 printf "${BOLD}${GREEN}🎉 Open Cloud Agents (ocagents) installed successfully!${RESET}\n"
