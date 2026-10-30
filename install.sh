@@ -55,6 +55,7 @@ case "$OS" in
     linux)
         case "$ARCH" in
             x86_64) BINARY_NAME="ocagents-linux-amd64" ;;
+            arm64|aarch64) BINARY_NAME="ocagents-linux-arm64" ;;
         esac
         ;;
 esac

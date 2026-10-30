@@ -18,13 +18,13 @@ Tags:
   - cursor
   - claude
 Installers:
-  - Architecture: neutral
+  - Architecture: x64
     InstallerType: portable
-    InstallerUrl: https://github.com/open-cloud-agents/ocagents/archive/refs/tags/v1.3.0.zip
-    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+    InstallerUrl: https://github.com/open-cloud-agents/ocagents/releases/download/v1.3.0/ocagents-windows-amd64.zip
+    InstallerSha256: 66dc120c5248790850a9e4ce5584622373384dcf9784bd67d074289c6aef070f
     Commands:
-      - ocagents
-      - oca
+      - ocagents.exe
+      - oca.exe
 ManifestType: singleton
 ManifestVersion: 1.6.0
 
