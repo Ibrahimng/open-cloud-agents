@@ -96,7 +96,7 @@ jobs:
 
       - name: Generate Build Provenance Attestation
         if: ${{ runner.name != 'Local Actions' }}
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             dist/*.tar.gz
@@ -180,7 +180,7 @@ jobs:
 
       - name: Generate Consolidated Release Provenance Attestation
         if: ${{ runner.name != 'Local Actions' }}
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: release_assets/*
 
