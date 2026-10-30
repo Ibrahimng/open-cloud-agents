@@ -197,7 +197,7 @@ jobs:
           python3 scripts/ci/audit_pr_diff.py "${{ github.base_ref }}"
 
       - name: Antigravity-AI Final Review & Approval Decision
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           NEEDS_CONTEXT: ${{ toJSON(needs) }}
         with:
