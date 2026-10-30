@@ -129,6 +129,18 @@ pipx install git+https://github.com/open-cloud-agents/ocagents.git
 ```
 </details>
 
+<details>
+<summary><b>🛡️ Sigstore / SLSA Level 3 Provenance Verification</b></summary>
+
+All official binary releases and archives are cryptographically attested via GitHub Artifact Attestations and Sigstore. Verify any binary before running:
+
+```bash
+gh attestation verify ocagents-darwin-arm64 --owner open-cloud-agents
+# or for Linux:
+gh attestation verify ocagents-linux-amd64 --owner open-cloud-agents
+```
+</details>
+
 ### Step 2: Sync a Specialist Agent to Your Repo
 
 Export the **DevSecOps Reviewer** into your repository for your preferred AI tool:
@@ -198,7 +210,7 @@ Every formal pillar of the **AWS, Microsoft Azure, and Google Cloud Well-Archite
 | Well-Architected Pillar | Agent Persona | Core Mandate & Primary Focus |
 |---|---|---|
 | **Strategic Architecture** | [`principal-cloud-architect.md`](./agents/7-agent-master-suite/principal-cloud-architect.md) | High-Level Design (HLD), ADRs, multi-region DR (RTO/RPO), and trade-off analysis. |
-| **Security & Compliance** | [`security-compliance-commander.md`](./agents/7-agent-master-suite/security-compliance-commander.md) | Cloud Security Hubs (AWS Hub, GCP SCC, Defender), SOC 2, ISO 27001, CIS Benchmarks, WAF loops. |
+| **Security & Compliance** | [`security-compliance-commander.md`](./agents/7-agent-master-suite/security-compliance-commander.md) | Cloud Security Hubs (AWS Hub, GCP SCC, Defender), Falco eBPF, Wazuh SIEM, Sentinel, ISO 42001, EU AI Act, 4-layer CIS audits. |
 | **Cost Optimization (FinOps)** | [`finops-cloud-cost-optimizer.md`](./agents/7-agent-master-suite/finops-cloud-cost-optimizer.md) | Idle waste elimination, container request rightsizing, S3 tiering, NAT egress elimination. |
 | **Code & Pipeline Security** | [`devsecops-reviewer.md`](./agents/7-agent-master-suite/devsecops-reviewer.md) | Pre-merge PR audits, state destruction prevention (`forces replacement`), perimeter checks. |
 | **Operational Excellence** | [`devsecops-engineer.md`](./agents/7-agent-master-suite/devsecops-engineer.md) | Surgical code/IaC fixes, zero-scope-creep hardening, non-destructive tests, Conventional Commits. |
@@ -218,6 +230,8 @@ ocagents -agents list
 ocagents -a ls
 
 # Sync all 7 agents into your repo for GitHub Copilot
+ocagents sync -A --format github --target .
+# or shorthand:
 ocagents -A -format github --target .
 
 # Sync a specific agent + specialist execution skills for Claude Code
