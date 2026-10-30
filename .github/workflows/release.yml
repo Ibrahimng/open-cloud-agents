@@ -27,18 +27,27 @@ jobs:
             arch: arm64
             runner: macos-latest
             binary_name: ocagents-darwin-arm64
+            archive_name: ocagents-darwin-arm64.tar.gz
           - os: darwin
             arch: amd64
             runner: macos-13
             binary_name: ocagents-darwin-amd64
+            archive_name: ocagents-darwin-amd64.tar.gz
           - os: linux
             arch: amd64
             runner: ubuntu-latest
             binary_name: ocagents-linux-amd64
+            archive_name: ocagents-linux-amd64.tar.gz
+          - os: linux
+            arch: arm64
+            runner: ubuntu-24.04-arm
+            binary_name: ocagents-linux-arm64
+            archive_name: ocagents-linux-arm64.tar.gz
           - os: windows
             arch: amd64
             runner: windows-latest
             binary_name: ocagents-windows-amd64.exe
+            archive_name: ocagents-windows-amd64.zip
 
     steps:
       - name: Checkout Code
@@ -59,12 +68,15 @@ jobs:
         run: |
           pyinstaller packaging/pyinstaller/ocagents.spec
           chmod +x dist/ocagents
-          mv dist/ocagents dist/${{ matrix.target.binary_name }}
+          tar -czf "dist/${{ matrix.target.archive_name }}" -C dist ocagents
+          cp dist/ocagents "dist/${{ matrix.target.binary_name }}"
           cd dist
           if command -v sha256sum >/dev/null 2>&1; then
-            sha256sum ${{ matrix.target.binary_name }} > ${{ matrix.target.binary_name }}.sha256
+            sha256sum "${{ matrix.target.archive_name }}" > "${{ matrix.target.archive_name }}.sha256"
+            sha256sum "${{ matrix.target.binary_name }}" > "${{ matrix.target.binary_name }}.sha256"
           else
-            shasum -a 256 ${{ matrix.target.binary_name }} > ${{ matrix.target.binary_name }}.sha256
+            shasum -a 256 "${{ matrix.target.archive_name }}" > "${{ matrix.target.archive_name }}.sha256"
+            shasum -a 256 "${{ matrix.target.binary_name }}" > "${{ matrix.target.binary_name }}.sha256"
           fi
 
       - name: Compile Hermetic Executable (Windows)
@@ -72,16 +84,21 @@ jobs:
         shell: pwsh
         run: |
           pyinstaller packaging/pyinstaller/ocagents.spec
-          Move-Item dist\ocagents.exe dist\${{ matrix.target.binary_name }}
+          Compress-Archive -Path dist\ocagents.exe -DestinationPath "dist\${{ matrix.target.archive_name }}" -Force
+          Copy-Item dist\ocagents.exe "dist\${{ matrix.target.binary_name }}" -Force
           Set-Location dist
-          $hash = (Get-FileHash -Algorithm SHA256 ${{ matrix.target.binary_name }}).Hash.ToLower()
-          "$hash  ${{ matrix.target.binary_name }}" | Out-File -Encoding ASCII -FilePath "${{ matrix.target.binary_name }}.sha256"
+          $hashArchive = (Get-FileHash -Algorithm SHA256 "${{ matrix.target.archive_name }}").Hash.ToLower()
+          "$hashArchive  ${{ matrix.target.archive_name }}" | Out-File -Encoding ASCII -FilePath "${{ matrix.target.archive_name }}.sha256"
+          $hashBin = (Get-FileHash -Algorithm SHA256 "${{ matrix.target.binary_name }}").Hash.ToLower()
+          "$hashBin  ${{ matrix.target.binary_name }}" | Out-File -Encoding ASCII -FilePath "${{ matrix.target.binary_name }}.sha256"
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
         with:
           name: binary-${{ matrix.target.binary_name }}
           path: |
+            dist/${{ matrix.target.archive_name }}
+            dist/${{ matrix.target.archive_name }}.sha256
             dist/${{ matrix.target.binary_name }}
             dist/${{ matrix.target.binary_name }}.sha256
           retention-days: 2
@@ -168,8 +185,11 @@ jobs:
           prerelease: false
           make_latest: true
           files: |
+            release_assets/*.tar.gz
+            release_assets/*.zip
             release_assets/ocagents-darwin-arm64
             release_assets/ocagents-darwin-amd64
             release_assets/ocagents-linux-amd64
+            release_assets/ocagents-linux-arm64
             release_assets/ocagents-windows-amd64.exe
             release_assets/checksums.txt
