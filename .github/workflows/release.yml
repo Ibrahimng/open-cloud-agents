@@ -174,6 +174,7 @@ jobs:
         run: |
           if [ -d release_assets ]; then
             cat release_assets/*.sha256 > release_assets/checksums.txt 2>/dev/null || true
+            rm -f release_assets/*.sha256
             ls -la release_assets/
           fi
 
@@ -181,10 +182,7 @@ jobs:
         if: ${{ runner.name != 'Local Actions' }}
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: |
-            release_assets/*.tar.gz
-            release_assets/*.zip
-            release_assets/ocagents-*
+          subject-path: release_assets/*
 
       - name: Preview Release Notes (Local act mode)
         if: ${{ runner.name == 'Local Actions' }}
@@ -204,8 +202,4 @@ jobs:
           draft: false
           prerelease: false
           make_latest: true
-          files: |
-            release_assets/*.tar.gz
-            release_assets/*.zip
-            release_assets/ocagents-*
-            release_assets/checksums.txt
+          files: release_assets/*
