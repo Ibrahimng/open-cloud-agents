@@ -29,11 +29,6 @@ jobs:
             runner: macos-latest
             binary_name: ocagents-darwin-arm64
             archive_name: ocagents-darwin-arm64.tar.gz
-          - os: darwin
-            arch: amd64
-            runner: macos-13
-            binary_name: ocagents-darwin-amd64
-            archive_name: ocagents-darwin-amd64.tar.gz
           - os: linux
             arch: amd64
             runner: ubuntu-latest
@@ -71,14 +66,20 @@ jobs:
           chmod +x dist/ocagents
           tar -czf "dist/${{ matrix.target.archive_name }}" -C dist ocagents
           cp dist/ocagents "dist/${{ matrix.target.binary_name }}"
-          cd dist
-          if command -v sha256sum >/dev/null 2>&1; then
-            sha256sum "${{ matrix.target.archive_name }}" > "${{ matrix.target.archive_name }}.sha256"
-            sha256sum "${{ matrix.target.binary_name }}" > "${{ matrix.target.binary_name }}.sha256"
-          else
-            shasum -a 256 "${{ matrix.target.archive_name }}" > "${{ matrix.target.archive_name }}.sha256"
-            shasum -a 256 "${{ matrix.target.binary_name }}" > "${{ matrix.target.binary_name }}.sha256"
+          if [ "${{ matrix.target.os }}" = "darwin" ]; then
+            tar -czf "dist/ocagents-darwin-amd64.tar.gz" -C dist ocagents
+            cp dist/ocagents "dist/ocagents-darwin-amd64"
           fi
+          cd dist
+          for f in *.tar.gz ocagents-*; do
+            if [ -f "$f" ] && [[ ! "$f" =~ \.sha256$ ]] && [ "$f" != "ocagents" ]; then
+              if command -v sha256sum >/dev/null 2>&1; then
+                sha256sum "$f" > "$f.sha256"
+              else
+                shasum -a 256 "$f" > "$f.sha256"
+              fi
+            fi
+          done
 
       - name: Compile Hermetic Executable (Windows)
         if: runner.os == 'Windows'
@@ -98,18 +99,19 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            dist/${{ matrix.target.archive_name }}
-            dist/${{ matrix.target.binary_name }}
+            dist/*.tar.gz
+            dist/*.zip
+            dist/ocagents-*
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v7
         with:
           name: binary-${{ matrix.target.binary_name }}
           path: |
-            dist/${{ matrix.target.archive_name }}
-            dist/${{ matrix.target.archive_name }}.sha256
-            dist/${{ matrix.target.binary_name }}
-            dist/${{ matrix.target.binary_name }}.sha256
+            dist/*.tar.gz
+            dist/*.zip
+            dist/ocagents-*
+            dist/*.sha256
           retention-days: 2
 
   release:
@@ -205,9 +207,5 @@ jobs:
           files: |
             release_assets/*.tar.gz
             release_assets/*.zip
-            release_assets/ocagents-darwin-arm64
-            release_assets/ocagents-darwin-amd64
-            release_assets/ocagents-linux-amd64
-            release_assets/ocagents-linux-arm64
-            release_assets/ocagents-windows-amd64.exe
+            release_assets/ocagents-*
             release_assets/checksums.txt
