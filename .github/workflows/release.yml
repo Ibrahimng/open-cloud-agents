@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -93,7 +93,7 @@ jobs:
           "$hashBin  ${{ matrix.target.binary_name }}" | Out-File -Encoding ASCII -FilePath "${{ matrix.target.binary_name }}.sha256"
 
       - name: Upload Binary Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: binary-${{ matrix.target.binary_name }}
           path: |
@@ -110,7 +110,7 @@ jobs:
     if: always() && (needs.build-binaries.result == 'success' || needs.build-binaries.result == 'skipped')
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -152,7 +152,7 @@ jobs:
 
       - name: Download Compiled Binaries
         if: ${{ !env.ACT && runner.name != 'Local Actions' }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: binary-*
           merge-multiple: true
