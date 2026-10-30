@@ -136,6 +136,7 @@ nav:
           - Azure Specialized Skills: skills/csp/azure/README.md
           - GCP Specialized Skills: skills/csp/gcp/README.md
   - Runtime Architecture:
+      - Project Positioning & Health: docs/project-positioning.md
       - Architecture MVP Spec: docs/architecture-mvp-spec.md
       - Engineering Standards: docs/engineering-standards.md
       - Token Optimization Architecture: docs/token-optimization-architecture.md

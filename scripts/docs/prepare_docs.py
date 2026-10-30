@@ -26,11 +26,27 @@ def prepare_docs():
         shutil.rmtree(BUILD_DOCS)
     BUILD_DOCS.mkdir(parents=True, exist_ok=True)
 
-    # 1. Homepage: Copy README.md as index.md
+    # 1. Homepage: Copy dedicated docs/index.md (or fallback to README.md) as index.md
+    docs_index_src = REPO_ROOT / "docs" / "index.md"
     readme_src = REPO_ROOT / "README.md"
-    if readme_src.exists():
+    if docs_index_src.exists():
+        content = docs_index_src.read_text(encoding="utf-8")
+        # Adjust relative links for the root of build_docs
+        content_transformed = (
+            content.replace("../agents/", "agents/")
+            .replace("../rules/", "rules/")
+            .replace("../skills/", "skills/")
+            .replace("../AGENTS.md", "AGENTS.md")
+            .replace("../CONTRIBUTING.md", "CONTRIBUTING.md")
+            .replace("../LICENSE", "LICENSE")
+            .replace("./package-distribution-and-updates.md", "docs/package-distribution-and-updates.md")
+            .replace("./architecture-mvp-spec.md", "docs/architecture-mvp-spec.md")
+        )
+        (BUILD_DOCS / "index.md").write_text(content_transformed, encoding="utf-8")
+        log("Staged dedicated docs/index.md -> index.md (Docs Landing Page)")
+    elif readme_src.exists():
         shutil.copy2(readme_src, BUILD_DOCS / "index.md")
-        log("Staged README.md -> index.md (Homepage)")
+        log("Staged README.md -> index.md (Homepage Fallback)")
 
     # 2. Core Root Documents
     core_files = [
