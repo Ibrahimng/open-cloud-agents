@@ -13,6 +13,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   build-binaries:
@@ -92,6 +94,14 @@ jobs:
           $hashBin = (Get-FileHash -Algorithm SHA256 "${{ matrix.target.binary_name }}").Hash.ToLower()
           "$hashBin  ${{ matrix.target.binary_name }}" | Out-File -Encoding ASCII -FilePath "${{ matrix.target.binary_name }}.sha256"
 
+      - name: Generate Build Provenance Attestation
+        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            dist/${{ matrix.target.archive_name }}
+            dist/${{ matrix.target.binary_name }}
+
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v7
         with:
@@ -165,6 +175,15 @@ jobs:
             cat release_assets/*.sha256 > release_assets/checksums.txt 2>/dev/null || true
             ls -la release_assets/
           fi
+
+      - name: Generate Consolidated Release Provenance Attestation
+        if: ${{ !env.ACT && runner.name != 'Local Actions' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            release_assets/*.tar.gz
+            release_assets/*.zip
+            release_assets/ocagents-*
 
       - name: Preview Release Notes (Local act mode)
         if: ${{ env.ACT || runner.name == 'Local Actions' }}

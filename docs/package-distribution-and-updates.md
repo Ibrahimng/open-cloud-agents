@@ -106,6 +106,24 @@ When a new version tag (e.g. `v1.3.1`) is tagged and pushed to GitHub, an automa
 
 ---
 
+## 🔒 Cryptographic Supply Chain Security (SLSA Level 3 & Sigstore Attestations)
+
+Every native standalone binary and archive released by Open Cloud Agents is cryptographically signed and attested via GitHub Artifact Attestations (`actions/attest-build-provenance`). This provides verifiable proof of:
+- **Build Integrity:** Guarantees the binary was produced directly by GitHub Actions on the official `open-cloud-agents/ocagents` repository.
+- **Tamper Resistance:** Proves zero third-party injection or MITM tampering between commit and distribution.
+- **Immutable Provenance:** Verifiable against Sigstore's public transparency log (Rekor).
+
+### How to Verify Binary Attestation
+Developers and enterprise DevSecOps pipelines can verify downloaded binaries prior to execution using the GitHub CLI:
+
+```bash
+gh attestation verify ocagents-darwin-arm64 --owner open-cloud-agents
+# or for Linux:
+gh attestation verify ocagents-linux-amd64 --owner open-cloud-agents
+```
+
+---
+
 ## 🛠️ User Update Cheat Sheet
 
 | Platform | Command to Check Version | Command to Update |
