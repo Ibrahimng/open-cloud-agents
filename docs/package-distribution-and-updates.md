@@ -14,7 +14,7 @@ Operating systems rely on distinct, native package management ecosystems. To pro
 | **Linux (Ubuntu / Debian)** | **APT** (`apt`), **Snapcraft** (`snap`) | Shell (`curl \| bash`), `pipx` | `apt update && apt install --only-upgrade ocagents` |
 | **Linux (Alpine / Docker)** | **APK** (`apk`) | Shell (`curl \| bash`) | `apk update && apk upgrade ocagents` |
 | **Linux (Fedora / RHEL)** | **DNF / RPM** (`dnf`) | Homebrew on Linux, `pipx` | `dnf upgrade ocagents` |
-| **Windows 11 / 10** | **WinGet** (`winget`), **Chocolatey** (`choco`) | PowerShell (`irm \| iex`), `scoop` | `winget upgrade Ibrahimng.OpenCloudAgents` |
+| **Windows 11 / 10** | **WinGet** (`winget`), **Chocolatey** (`choco`) | PowerShell (`irm \| iex`), `scoop` | `winget upgrade OpenCloudAgents.ocagents` |
 | **Universal (Python 3.9+)** | **PyPI / pipx** (`pipx`) | `pip` | `pipx upgrade open-cloud-agents` |
 
 > [!NOTE]
@@ -87,9 +87,9 @@ When a new version tag (e.g. `v1.3.1`) is tagged and pushed to GitHub, an automa
 ### 3. Windows Package Manager (WinGet)
 * **Automated Action:** Uses `winget-create submit` GitHub Action to automatically file a pull request to `microsoft/winget-pkgs`:
   ```powershell
-  winget install Ibrahimng.OpenCloudAgents
+  winget install OpenCloudAgents.ocagents
   # Later:
-  winget upgrade Ibrahimng.OpenCloudAgents
+  winget upgrade OpenCloudAgents.ocagents
   ```
 
 ### 4. Chocolatey (`choco`)
@@ -114,7 +114,7 @@ When a new version tag (e.g. `v1.3.1`) is tagged and pushed to GitHub, an automa
 | **macOS** (Homebrew) | `ocagents -v` | `brew update && brew upgrade ocagents` |
 | **macOS / Linux** (Script) | `ocagents info` | `curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh \| bash` |
 | **Windows** (PowerShell) | `ocagents -version` | `irm https://open-cloud-agents.github.io/ocagents/install.ps1 \| iex` |
-| **Windows** (WinGet) | `winget list ocagents` | `winget upgrade Ibrahimng.OpenCloudAgents` |
+| **Windows** (WinGet) | `winget list ocagents` | `winget upgrade OpenCloudAgents.ocagents` |
 | **Windows** (Chocolatey) | `choco list ocagents` | `choco upgrade ocagents` |
 | **Ubuntu / Debian** (APT) | `apt list --installed ocagents` | `sudo apt update && sudo apt install --only-upgrade ocagents` |
 | **Alpine Linux** (APK) | `apk info ocagents` | `apk update && apk upgrade ocagents` |

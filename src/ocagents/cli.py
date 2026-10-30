@@ -516,7 +516,7 @@ def cmd_help(subcommand: str | None = None) -> int:
       pipx upgrade open-cloud-agents
 
   • Windows (Winget):
-      winget upgrade Ibrahimng.OpenCloudAgents
+      winget upgrade OpenCloudAgents.ocagents
 
   • Windows (Chocolatey):
       choco upgrade ocagents

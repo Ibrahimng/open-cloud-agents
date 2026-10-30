@@ -117,7 +117,7 @@ irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex
 <summary><b>🪟 WinGet (Windows Package Manager)</b></summary>
 
 ```powershell
-winget install Ibrahimng.OpenCloudAgents
+winget install OpenCloudAgents.ocagents
 ```
 </details>
 
