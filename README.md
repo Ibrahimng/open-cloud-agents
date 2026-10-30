@@ -141,7 +141,32 @@ gh attestation verify ocagents-linux-amd64 --owner open-cloud-agents
 ```
 </details>
 
-### Step 2: Sync a Specialist Agent to Your Repo
+### Step 2: Verify the Install
+
+```bash
+ocagents --help
+```
+You should see the CLI help and registered commands.
+
+### Step 3: Run a Sample Workflow
+
+Validate the pipeline and contracts:
+```bash
+ocagents validate
+```
+
+Or run a simulated multi-agent cloud review:
+```bash
+ocagents simulate
+```
+
+### Step 4: Run a Custom Architecture Task
+
+```bash
+ocagents run --task "Architect zero-downtime payments failover with Aurora Global Database"
+```
+
+### Step 5: Sync a Specialist Agent to Your Repo
 
 Export the **DevSecOps Reviewer** into your repository for your preferred AI tool:
 
@@ -156,7 +181,7 @@ ocagents sync devsecops-reviewer --format claude --target .
 ocagents sync devsecops-reviewer --format cursor --target .
 ```
 
-### Step 3: Run Your First Review
+### Step 6: Run Your First Review
 
 Open your AI coding tool and invoke the agent against your codebase:
 

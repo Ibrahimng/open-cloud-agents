@@ -82,42 +82,71 @@ Open Cloud Agents is built around operational discipline:
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quickstart
 
-### Install
+### Step 1: Install the CLI
 
-#### Option A: Standalone CLI (`ocagents`)
+Install the standalone `ocagents` CLI on your workstation or private CI runner.
+
+#### Option A: Homebrew (macOS / Linux)
 ```bash
-# macOS & Linux (Homebrew):
-brew install open-cloud-agents/tap/ocagents
+brew tap open-cloud-agents/tap
+brew install ocagents
+```
 
-# Universal Shell (macOS & Linux):
+If your Homebrew version requires trust for third-party taps:
+```bash
+brew trust open-cloud-agents/tap
+brew install ocagents
+```
+
+#### Option B: Bash installer (macOS / Linux)
+```bash
 curl -fsSL https://open-cloud-agents.github.io/ocagents/install.sh | bash
+```
 
-# Windows (PowerShell):
+#### Option C: PowerShell (Windows)
+```powershell
 irm https://open-cloud-agents.github.io/ocagents/install.ps1 | iex
 ```
 
-#### Option B: From Source
+#### Option D: pipx
 ```bash
-git clone https://github.com/open-cloud-agents/ocagents.git
-cd ocagents
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+pipx install git+https://github.com/open-cloud-agents/ocagents.git
 ```
 
-### Validate
-```bash
-python3 scripts/agents/agent_pipeline.py --validate
+#### Option E: Windows Package Manager
+```powershell
+winget install OpenCloudAgents.ocagents
 ```
-*(Or via standalone CLI: `ocagents validate`)*
 
-### Run a Workflow
+### Step 2: Verify the install
 ```bash
-python3 scripts/agents/agent_pipeline.py --simulate
+ocagents --help
 ```
-*(Or via standalone CLI: `ocagents run`)*
+
+You should see the CLI help and supported commands.
+
+### Step 3: Run a sample workflow
+```bash
+ocagents validate
+```
+
+Or run a simulated multi-agent cloud review:
+```bash
+ocagents simulate
+```
+
+### Step 4: Run a custom architecture task
+```bash
+ocagents run --task "Architect zero-downtime payments failover with Aurora Global Database"
+```
+
+### Step 5: Explore the docs
+- **Docs site:** [https://open-cloud-agents.github.io/ocagents/](https://open-cloud-agents.github.io/ocagents/)
+- **Agent catalog:** [https://open-cloud-agents.github.io/ocagents/agents/](https://open-cloud-agents.github.io/ocagents/agents/)
+- **Skills catalog:** [https://open-cloud-agents.github.io/ocagents/skills/](https://open-cloud-agents.github.io/ocagents/skills/)
+- **Rules and guardrails:** [https://open-cloud-agents.github.io/ocagents/rules/](https://open-cloud-agents.github.io/ocagents/rules/)
 
 ---
 
@@ -158,3 +187,4 @@ We welcome:
 - **License:** [Apache License 2.0](../LICENSE)
 - **Co-Authorship:** `Co-authored-by: Antigravity <antigravity@google.com>`
 - **Founding Architect:** Ibrahim Jimoh ([GitHub](https://github.com/Ibrahimng) | [LinkedIn](https://www.linkedin.com/in/ijimoh))
+
