@@ -108,12 +108,67 @@ def get_available_agents(agents_dir: Path) -> dict[str, Path]:
     return agents
 
 
+DOMAIN_COLORS = {
+    "security": "\033[32m",        # Green
+    "devops": "\033[34m",          # Blue
+    "finops": "\033[33m",          # Yellow
+    "csp": "\033[35m",             # Magenta
+    "programming": "\033[36m",     # Cyan
+    "continual-learning": "\033[93m", # Amber / Bright Yellow
+    "data-science": "\033[96m",    # Bright Cyan
+}
+
+
+def colorize_skill(skill: str, use_color: bool = True) -> str:
+    """Color-code skill path by domain prefix."""
+    if not use_color:
+        return skill
+    if "/" not in skill:
+        return f"\033[36m{skill}\033[0m"
+    domain, rest = skill.split("/", 1)
+    color = DOMAIN_COLORS.get(domain, "\033[37m")
+    return f"{color}{domain}\033[0m/{rest}"
+
+
+def format_skill_list(skills: list[str], use_color: bool = True, indent: str = "        ") -> str:
+    """Neatly wraps colorized skill items across lines without awkward wrapping."""
+    if not skills:
+        return f"{indent}\033[90mNone declared\033[0m" if use_color else f"{indent}None declared"
+
+    colored = [colorize_skill(s, use_color) for s in skills]
+    lines = []
+    curr_line = []
+    curr_len = 0
+    max_len = 82 - len(indent)
+
+    for s_colored, s_raw in zip(colored, skills):
+        item_len = len(s_raw) + 2
+        if curr_line and (curr_len + item_len > max_len):
+            lines.append(indent + ", ".join(curr_line) + ",")
+            curr_line = [s_colored]
+            curr_len = item_len
+        else:
+            curr_line.append(s_colored)
+            curr_len += item_len
+    if curr_line:
+        lines.append(indent + ", ".join(curr_line))
+    return "\n".join(lines)
+
+
 def cmd_list(asset_root: Path):
     """List all agents in the Master Suite and their linked skills."""
     agents_dir = get_agents_dir(asset_root)
     agents = get_available_agents(agents_dir)
+    use_color = sys.stdout.isatty() and "NO_COLOR" not in os.environ
 
-    print("\n☁️  Open Cloud Agents: 7-Agent Master Suite Registry")
+    c_bold_cyan = "\033[1;36m" if use_color else ""
+    c_bold_white = "\033[1;37m" if use_color else ""
+    c_dim = "\033[90m" if use_color else ""
+    c_green = "\033[32m" if use_color else ""
+    c_reset = "\033[0m" if use_color else ""
+    c_bold = "\033[1m" if use_color else ""
+
+    print(f"\n☁️  {c_bold}Open Cloud Agents: 7-Agent Master Suite Registry{c_reset}")
     print("=" * 70)
     if not agents:
         log_fail(f"No agents found in {agents_dir}. Run 'ocagents update' to initialize assets.")
@@ -124,14 +179,16 @@ def cmd_list(asset_root: Path):
         name = meta.get("name", slug)
         skills = meta.get("skills", [])
         tools = meta.get("tools", [])
-        print(f"• \033[1m{slug}\033[0m: {name}")
-        print(f"    ↳ Tools: [{', '.join(tools)}]")
+        print(f"{c_bold_cyan}• {slug}{c_reset}: {c_bold_white}{name}{c_reset}")
+        print(f"    {c_dim}↳ Tools:{c_reset} {c_green}[{', '.join(tools)}]{c_reset}")
         if skills:
-            print(f"    ↳ Linked Skills ({len(skills)}): {', '.join(skills)}")
+            print(f"    {c_dim}↳ Linked Skills ({len(skills)}):{c_reset}")
+            print(format_skill_list(skills, use_color=use_color))
         else:
-            print("    ↳ Linked Skills: None declared")
+            print(f"    {c_dim}↳ Linked Skills:{c_reset} {c_dim}None declared{c_reset}")
     print("=" * 70)
-    print("Tip: Sync agents to your repo with: ocagents sync -A --format github --target .")
+    print(f"{c_bold}Tip:{c_reset} Sync all agents:    {c_green}ocagents sync -A --format github --target .{c_reset}")
+    print(f"     Sync a specialist:  {c_green}ocagents sync devsecops-reviewer --format github --target .{c_reset}\n")
     return 0
 
 
